@@ -1,6 +1,7 @@
 "use client"
 import React from 'react';
 import { usePrivy } from '@privy-io/react-auth';
+import { Button } from "@/components/ui/button"
 
 export default function LoginButton() {
     const { ready, authenticated, login } = usePrivy();
@@ -8,8 +9,8 @@ export default function LoginButton() {
     const disableLogin = !ready || (ready && authenticated);
 
     return (
-        <button disabled={disableLogin} onClick={login}>
+        <Button disabled={disableLogin} onClick={login} variant="outline">
             Log in
-        </button>
+        </Button>
     );
 }
