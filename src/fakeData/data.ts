@@ -1,72 +1,82 @@
-[
+export const users = [
     {
-        name: 'Lewis Williamson',
-        walletAddress: '0x82ed0e2b5b3080effa39eabaf209a9f2e5fa5d2f',
-        trustedBy: 471,
-        bio: 'Apud arceo talus textor adhuc ea volaticus ascisco vulgaris. Pecto cernuus tot. Quam vir audeo tempora teres dolores canonicus bis aeneus.',
-        twitter: 'https://incredible-tadpole.info/'
+        name: 'Jaime Aufderhar',
+        walletAddress: '0xfdcc1d4bbae97daa3c520f4e038779d47dfff9e9',
+        trustedBy: 969,
+        bio: 'Tergo delibero arceo amor audio vicinus arca. Articulus desipio sui. Verbera solvo depono carbo decumbo bibo ventito adicio clam debeo.',
+        twitter: 'https://relieved-improvement.com',
+        image: 'https://avatars.githubusercontent.com/u/79646488'
     },
     {
-        name: 'Violet Witting',
-        walletAddress: '0xa424c114e271c5b9ec9b7d41850808db6e4ae6f6',
-        trustedBy: 945,
-        bio: 'Statim sequi sperno tabgo crapula sequi torrens autem. Exercitationem architecto coma torqueo iure aliquam volubilis apparatus antea. Paulatim curto atrocitas crux.',
-        twitter: 'https://thin-congo.org'
+        name: 'Dr. Dennis Graham',
+        walletAddress: '0xb2b3b243bec3e6faca3dfcecbb40151dcbd440d9',
+        trustedBy: 148,
+        bio: 'Nihil adsidue consuasor vulnero animadverto pecto currus causa. Substantia delectus similique crur. Vomica comprehendo utor deleo tabesco amo canto videlicet complectus vix.',
+        twitter: 'https://majestic-patron.biz',
+        image: 'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/982.jpg'
     },
     {
-        name: 'Harry Boyer-Yundt',
-        walletAddress: '0x6aaa5b13a7deedbb38e30ff5aa4df7ce2dece90c',
-        trustedBy: 32,
-        bio: 'Colo coepi defero. Bellum minima doloribus vix talio territo spectaculum ipsam maxime addo. Barba coruscus aer creber clam debeo saepe.',
-        twitter: 'https://impeccable-nightlife.info'
+        name: 'Marshall Franecki',
+        walletAddress: '0xe3dc35dd49509a4f06dbca0496dbdbe506f440a4',
+        trustedBy: 908,
+        bio: 'Adiuvo aspicio amiculum constans certe vitium. Adeo defaeco ullam custodia abundans decimus curvo. Alii atqui ara tertius ex abscido vehemens sursum aequitas.',
+        twitter: 'https://dizzy-equal.info/',
+        image: 'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/990.jpg'
     },
     {
-        name: 'Christopher Senger',
-        walletAddress: '0x8b7d0b4cdc13ca6a3cfbba9f8bc75baeb0db40c4',
-        trustedBy: 825,
-        bio: 'Cognomen dolore acervus desipio. Sub triumphus virga. Laudantium stillicidium peccatus vesco.',
-        twitter: 'https://disgusting-salary.org/'
+        name: 'Alex Mayer',
+        walletAddress: '0xd0ace9ee827cd06d8e3ba72fd824f58edff84bf4',
+        trustedBy: 168,
+        bio: 'Spiculum vobis creptio clamo. Consequuntur congregatio terreo fuga dedecor angelus acer. Corrumpo tersus annus statua sollers placeat absconditus libero.',
+        twitter: 'https://tasty-suspect.biz/',
+        image: 'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/828.jpg'
     },
     {
-        name: 'Kathleen Zboncak',
-        walletAddress: '0x8f42aafb79dfa732687e52fed0fd94508ae29cd6',
-        trustedBy: 484,
-        bio: 'Suscipit somniculosus beatae fugiat temperantia considero aut pecto stips. Amo tempora auctor crur. Decipio deduco apto approbo ceno adficio.',
-        twitter: 'https://artistic-coal.net/'
+        name: 'Terrence Bauch',
+        walletAddress: '0x733406bbdc0fdcbc53a06fc9283814e32da63476',
+        trustedBy: 240,
+        bio: 'Repudiandae dicta aliquam civitas. Perferendis corpus conqueror tempus tempore curvo voveo. Celebrer verbum rerum ancilla nam deleo ustilo.',
+        twitter: 'https://real-governance.net/',
+        image: 'https://avatars.githubusercontent.com/u/41545092'
     },
     {
-        name: 'Seth Larkin',
-        walletAddress: '0xfcb2ec46af4b94d670294996fbc97391ade06d8f',
-        trustedBy: 4,
-        bio: 'Calco non angulus cultellus volubilis adipiscor damnatio cena cubitum admiratio. Universe crustulum appello curso supra aequitas aiunt certus velociter defleo. Adeptio subnecto stillicidium synagoga adhaero.',
-        twitter: 'https://miniature-webmail.name/'
+        name: 'Paula Nikolaus',
+        walletAddress: '0xafed69f927fc4f64c35f25ce261ee0e4cfb05bda',
+        trustedBy: 540,
+        bio: 'Voluptate utilis acies verbera. Adulescens quidem tergiversatio curia. Laudantium terra quasi supra contigo solum triduana.',
+        twitter: 'https://gargantuan-freighter.name/',
+        image: 'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/978.jpg'
     },
     {
-        name: 'Mr. Marvin Franey',
-        walletAddress: '0x8cbcafedd18c0e7f51cce1cadad7c6fbcf29b4a0',
-        trustedBy: 922,
-        bio: 'Amplitudo ascit quia congregatio. Commodo theologus ubi aureus comptus depraedor temptatio volaticus error voro. Canonicus conculco vulgus certus stips curso suscipio.',
-        twitter: 'https://unruly-secrecy.info'
+        name: 'Douglas Grant-Murazik III',
+        walletAddress: '0xa27cd3fbccfbeda52fad0cecb73bcbbbeedff4bb',
+        trustedBy: 214,
+        bio: 'Inventore dicta claustrum. Argumentum totus labore pecto magnam acsi aegrotatio mollitia. Solvo tergo admoneo tertius atrocitas aiunt conor vomica venio.',
+        twitter: 'https://old-fashioned-transplantation.net/',
+        image: 'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1114.jpg'
     },
     {
-        name: 'Lori Parisian-Daugherty',
-        walletAddress: '0xffac7debb8ac2692eab3ea2695ce53496aed8ba6',
-        trustedBy: 478,
-        bio: 'Cenaculum celebrer curso patior incidunt dolore. Pecco pecco tribuo aureus. Depono vehemens annus cohibeo vicinus.',
-        twitter: 'https://detailed-graph.org'
+        name: 'Tricia Ledner',
+        walletAddress: '0xfc802e77a6d2f3eeab8631ce5d6a50ae8cfcdeff',
+        trustedBy: 766,
+        bio: 'Congregatio tunc vorax texo aqua contra sophismata vito deserunt vae. Aro subseco vobis capto bibo desparatus tumultus stipes. Vulgaris defleo copia alias.',
+        twitter: 'https://shadowy-tub.name/',
+        image: 'https://avatars.githubusercontent.com/u/25949094'
     },
     {
-        name: 'Nadine Carroll',
-        walletAddress: '0xbfd6fdbbf75fca1aa3d09c9d6b3b2a5cbcb68fbd',
-        trustedBy: 872,
-        bio: 'Totam dicta tracto aperte demonstro sopor. Brevis attollo turpis civitas somnus explicabo cruentus subito solium cupio. Barba teneo dolorem cauda viridis.',
-        twitter: 'https://boring-conclusion.biz'
+        name: 'Sophie Feil IV',
+        walletAddress: '0x4a12afc9e8a0f3d3a3b8a6e2ff0beb4f39bb7ccc',
+        trustedBy: 940,
+        bio: 'Corrupti ea commodi. Validus cribro nulla decimus eos rem valde casus certus. Altus trado thesis defessus laboriosam benevolentia clibanus.',
+        twitter: 'https://devoted-effort.info',
+        image: 'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1207.jpg'
     },
     {
-        name: 'Teresa Cummerata',
-        walletAddress: '0xe6f6eb3a812c13bffea9cba1f25b20b54d6599db',
-        trustedBy: 977,
-        bio: 'Assentator dolorum terminatio stultus cena. Solum solitudo thymbra magni comes. Deporto utrimque truculenter trans vulgivagus corporis.',
-        twitter: 'https://vigilant-wrestler.info'
+        name: 'Dr. Troy Erdman',
+        walletAddress: '0xbebf6ccd5d5d872e18aeb3c9e20da72f394f773a',
+        trustedBy: 680,
+        bio: 'Dignissimos ullus ver trepide suppono color conculco averto approbo conspergo. Deporto suasoria suus thema villa tamen. Pecco antiquus vestrum cogito copiose doloremque delego.',
+        twitter: 'https://querulous-pence.info',
+        image: 'https://avatars.githubusercontent.com/u/9870100'
     }
 ]
