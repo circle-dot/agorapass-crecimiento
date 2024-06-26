@@ -26,7 +26,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils";
-import { users } from '../../fakeData/data'
+import { users } from '../../../fakeData/data'
 
 const filters = [
     {

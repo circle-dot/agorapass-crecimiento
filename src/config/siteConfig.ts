@@ -2,7 +2,7 @@
 export const navSections = [
     {
         label: "me",
-        href: "/me",
+        href: "/agora/me",
         className: "transition-colors hover:text-foreground"
     },
     {
@@ -12,7 +12,7 @@ export const navSections = [
     },
     {
         label: "Profiles",
-        href: "/profiles",
+        href: "/agora/profiles",
         className: "transition-colors hover:text-foreground"
     },
 ];
