@@ -15,7 +15,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                 appearance: {
                     theme: 'light',
                     accentColor: '#19473f',
-                    logo: 'agora.png',
+                    logo: '/agora.png',
                     landingHeader: 'Hop into Agora City',
                 },
                 // Create embedded wallets for users who don't have a wallet

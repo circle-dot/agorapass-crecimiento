@@ -50,9 +50,9 @@ function LoginButton() {
     const disableLogin = !ready || (ready && authenticated);
 
     return (
-        <button disabled={disableLogin} onClick={login}>
+        <Button disabled={disableLogin} onClick={login} variant="outline" className='bg-accentdark hover:bg-accentdarker'>
             Log in
-        </button>
+        </Button>
     );
 }
 

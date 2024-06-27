@@ -81,7 +81,7 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
                     </div>
                     {twitter && (
                         <div className="flex items-center">
-                            <a href={twitter}><TwitterLogoIcon className="mr-1 h-4 w-4 fill-sky-400 text-sky-400" /></a>
+                            <a target="_blank" href={twitter}><TwitterLogoIcon className="mr-1 h-4 w-4 fill-sky-400 text-sky-400" /></a>
                         </div>
                     )}
                 </div>

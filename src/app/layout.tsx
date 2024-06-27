@@ -3,7 +3,7 @@ import { IBM_Plex_Sans } from 'next/font/google'
 
 import "./globals.css";
 import Providers from '@/components/Providers'
-// import Navbar from "@/components/layout/Navbar";
+import Navbar from "@/components/layout/Navbar";
 
 const Plex_Sans = IBM_Plex_Sans({
   weight: '200',
@@ -25,7 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={Plex_Sans.className}>
         <Providers>
-          {/* <Navbar /> */}
+          <Navbar />
           {children}
         </Providers>
       </body>
