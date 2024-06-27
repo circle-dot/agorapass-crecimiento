@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { CircleUser } from "lucide-react";
 import { usePrivy } from '@privy-io/react-auth';
+import ZupassButton from '@/components/layout/ZupassButton'
 
 function ProfileAvatar() {
     const { user, authenticated, logout } = usePrivy();
@@ -28,6 +29,7 @@ function ProfileAvatar() {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>Settings</DropdownMenuItem>
                     <DropdownMenuItem>Support</DropdownMenuItem>
+                    <DropdownMenuItem><ZupassButton /></DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
                         <button onClick={logout}>

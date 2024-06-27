@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@pcd/passport-interface": "^0.11.3",
+    "@pcd/pcd-types": "^0.11.2",
+    "@pcd/zuauth": "^1.4.2",
     "@privy-io/react-auth": "^1.72.0",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-dialog": "^1.1.1",
