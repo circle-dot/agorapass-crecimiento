@@ -54,31 +54,34 @@ async function login() {
     const result = await zuAuthPopup(args);
     console.log("🚀 ~ login ~ result:", result);
 
-    // if (result && result.type === "multi-pcd" && Array.isArray(result.pcds)) {
-    //     // Prepare the PCDs to send to your endpoint
-    //     const pcds = result.pcds.map((pcd) => ({
-    //         type: pcd.type,
-    //         pcd: JSON.parse(pcd.pcd), // Parse the JSON if necessary
-    //     }));
+    if (result && result.type === "multi-pcd" && Array.isArray(result.pcds)) {
+        // Prepare the PCDs to send to your endpoint
+        console.log(result.pcds)
+        const pcds = result.pcds
+        //sending PCDs and nonce to your endpoint
+        const endpoint = "/api/zupass/auth";
+        const response = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ nonce, pcds }),
+        });
 
-    //     //sending PCDs and nonce to your endpoint
-    //     const endpoint = "/api/auth/authenticate";
-    //     const response = await fetch(endpoint, {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify({ nonce, pcds }),
-    //     });
+        if (!response.ok) {
+            throw new Error(`Failed to send PCDs to endpoint: ${response.status}`);
+        }
 
-    //     if (!response.ok) {
-    //         throw new Error(`Failed to send PCDs to endpoint: ${response.status}`);
-    //     }
+        console.log("PCDs and nonce sent successfully:", response.status);
+        const responseData = await response.json();
+        console.log("Response data from server:", responseData);
 
-    //     console.log("PCDs and nonce sent successfully:", response.status);
-    // } else {
-    //     console.error("Invalid or missing PCDs in the result from zuAuthPopup");
-    // }
+        // Access fields
+        const { attendeeEmail } = responseData;
+        console.log("Attendee Email:", attendeeEmail);
+    } else {
+        console.error("Invalid or missing PCDs in the result from zuAuthPopup");
+    }
 }
 
 export function useZupass(): {
