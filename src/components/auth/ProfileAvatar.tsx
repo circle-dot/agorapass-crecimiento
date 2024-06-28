@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -9,51 +9,95 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { CircleUser } from "lucide-react";
-import { usePrivy } from '@privy-io/react-auth';
-import ZupassButton from '@/components/layout/ZupassButton'
+import { useLogin, usePrivy } from '@privy-io/react-auth';
+import createUser from '@/utils/createUser'
 
-function ProfileAvatar() {
-    const { user, authenticated, logout } = usePrivy();
-
-    if (authenticated) {
-        return (
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="secondary" size="icon" className="rounded-full">
-                        <CircleUser className="h-5 w-5" />
-                        <span className="sr-only">Toggle user menu</span>
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>Settings</DropdownMenuItem>
-                    <DropdownMenuItem>Support</DropdownMenuItem>
-                    <DropdownMenuItem><ZupassButton /></DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                        <button onClick={logout}>
-                            Log out
-                        </button>
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-        );
-    } else {
-        return (
-            <LoginButton />
-        );
-    }
+interface ProfileProps {
+    onLogout: () => void;
 }
 
-function LoginButton() {
-    const { ready, authenticated, login } = usePrivy();
-    // Disable login when Privy is not ready or the user is already authenticated
-    const disableLogin = !ready || (ready && authenticated);
+interface LoginButtonProps {
+    onLoginComplete: (user: any, isNewUser: boolean, wasAlreadyAuthenticated: boolean) => void;
+}
+
+function ProfileAvatar() {
+    const { authenticated, logout, getAccessToken } = usePrivy();
+    const [showProfile, setShowProfile] = useState(authenticated);
+
+    const handleLoginComplete: LoginButtonProps['onLoginComplete'] = async (user, isNewUser, wasAlreadyAuthenticated) => {
+        setShowProfile(true);
+        // console.log('user', user);
+        // Ensure accessToken is a string or handle null case
+        let accessToken: string | null = await getAccessToken();
+        if (!accessToken) {
+            console.error('Access token is null or undefined');
+            return;
+        }
+        createUser(user, accessToken)
+        // console.log('wasAlreadyAuthenticated', wasAlreadyAuthenticated)
+        // console.log('isNewUser', isNewUser)
+    };
+
+    const handleLogout = () => {
+        setShowProfile(false);
+        logout();
+    };
+
+    return showProfile ? <Profile onLogout={handleLogout} /> : <LoginButton onLoginComplete={handleLoginComplete} />;
+}
+
+function Profile({ onLogout }: ProfileProps) {
+    const { user } = usePrivy();
 
     return (
-        <Button disabled={disableLogin} onClick={login} variant="outline" className='bg-accentdark hover:bg-accentdarker'>
-            Log in
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="secondary" size="icon" className="rounded-full">
+                    <CircleUser className="h-5 w-5" />
+                    <span className="sr-only">Toggle user menu</span>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem>Support</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                    <button onClick={onLogout}>
+                        Log out
+                    </button>
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
+}
+
+function LoginButton({ onLoginComplete }: LoginButtonProps) {
+    const { ready } = usePrivy();
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+    const { login } = useLogin({
+        onComplete: (user, isNewUser, wasAlreadyAuthenticated) => {
+            onLoginComplete(user, isNewUser, wasAlreadyAuthenticated);
+            setIsLoggingIn(false);
+        },
+        onError: (error) => {
+            setIsLoggingIn(false);
+            console.error(error);
+        },
+    });
+
+    const handleLogin = () => {
+        setIsLoggingIn(true);
+        login();
+    };
+
+    const disableLogin = !ready || isLoggingIn;
+
+    return (
+        <Button disabled={disableLogin} onClick={handleLogin} variant="outline">
+            {isLoggingIn ? 'Logging in...' : 'Log in'}
         </Button>
     );
 }

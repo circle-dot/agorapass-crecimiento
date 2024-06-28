@@ -7,7 +7,7 @@ import { usePrivy } from '@privy-io/react-auth';
 
 export default function Page() {
     const { user } = usePrivy();
-
+    console.log('ser', user)
     // Check if user is not null
     if (!user) {
         return <div>Loading...</div>;
