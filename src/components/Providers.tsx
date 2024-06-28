@@ -2,7 +2,7 @@
 
 import { PrivyProvider } from '@privy-io/react-auth';
 import React from 'react';
-import { base, polygon, } from 'viem/chains';
+import { base } from 'viem/chains';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
     return (
@@ -10,7 +10,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ''}
             config={{
                 defaultChain: base,
-                supportedChains: [base, polygon],
+                supportedChains: [base],
                 // Customize Privy's appearance in your app
                 appearance: {
                     theme: 'light',
