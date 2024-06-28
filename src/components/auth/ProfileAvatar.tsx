@@ -63,10 +63,8 @@ function Profile({ onLogout }: ProfileProps) {
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuItem>Support</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                    <button onClick={onLogout}>
-                        Log out
-                    </button>
+                <DropdownMenuItem onClick={onLogout}>
+                    Log out
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
