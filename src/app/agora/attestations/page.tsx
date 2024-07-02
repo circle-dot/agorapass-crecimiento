@@ -1,31 +1,8 @@
 "use client";
 import React from "react";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
+import GET_ATTESTATIONS from "@/graphql/Attestations";
 
-const GET_ATTESTATIONS = gql`
-  query Attestations($where: SchemaWhereUniqueInput!) {
-    schema(where: $where) {
-      attestations {
-        id
-        data
-        decodedDataJson
-        recipient
-        attester
-        time
-        timeCreated
-        expirationTime
-        revocationTime
-        refUID
-        revocable
-        revoked
-        txid
-        schemaId
-        ipfsHash
-        isOffchain
-      }
-    }
-  }
-`;
 
 const Attestations = ({ schemaId }) => {
     const { loading, error, data } = useQuery(GET_ATTESTATIONS, {
