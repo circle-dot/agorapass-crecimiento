@@ -3,6 +3,7 @@
 import { PrivyProvider } from '@privy-io/react-auth';
 import React from 'react';
 import { base } from 'viem/chains';
+import { ApolloWrapper } from './layout/ApolloWrapper';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
     return (
@@ -24,7 +25,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                 },
             }}
         >
-            {children}
+            <ApolloWrapper>
+                {children}
+            </ApolloWrapper>
         </PrivyProvider>
     );
 }
