@@ -1,4 +1,3 @@
-// api/createUser.ts
 import prisma from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
 import privy from '@/lib/privy';

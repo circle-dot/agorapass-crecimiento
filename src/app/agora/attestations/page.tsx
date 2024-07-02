@@ -55,7 +55,7 @@ const Attestations = ({ schemaId }) => {
 function Page() {
     return (
         <div>
-            <Attestations schemaId="0x3969bb076acfb992af54d51274c5c868641ca5344e1aacd0b1f5e4f80ac0822f" />
+            <Attestations schemaId={process.env.NEXT_PUBLIC_SCHEMA_ID} />
         </div>
     );
 }

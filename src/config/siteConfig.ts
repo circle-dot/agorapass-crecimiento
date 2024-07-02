@@ -6,8 +6,8 @@ export const navSections = [
         className: "transition-colors hover:text-foreground"
     },
     {
-        label: "Get started",
-        href: "#",
+        label: "Attestations",
+        href: "/agora/attestations",
         className: "transition-colors hover:text-foreground"
     },
     {

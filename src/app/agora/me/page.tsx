@@ -7,14 +7,13 @@ import { usePrivy } from '@privy-io/react-auth';
 
 export default function Page() {
     const { user } = usePrivy();
-    console.log('ser', user)
     // Check if user is not null
     if (!user) {
         return <div>Loading...</div>;
     }
 
     const { email, createdAt } = user;
-    const profileImageUrl = "https://avatars.githubusercontent.com/u/79646488"; // Replace with actual profile image URL if available
+    const profileImageUrl = "https://source.boringavatars.com/"; // Replace with actual profile image URL if available
 
     const formattedDate = new Date(createdAt).toLocaleDateString(undefined, {
         year: 'numeric',
