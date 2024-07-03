@@ -1,8 +1,9 @@
 import { gql } from "@apollo/client";
+
 const GET_ATTESTATIONS = gql`
-  query Attestations($where: SchemaWhereUniqueInput!) {
+  query GetAttestations($where: SchemaWhereUniqueInput!, $skip: Int!, $take: Int!) {
     schema(where: $where) {
-      attestations {
+      attestations(skip: $skip, take: $take) {
         id
         data
         decodedDataJson
@@ -19,8 +20,11 @@ const GET_ATTESTATIONS = gql`
         schemaId
         ipfsHash
         isOffchain
+        __typename
       }
+      __typename
     }
   }
 `;
-export default GET_ATTESTATIONS
+
+export default GET_ATTESTATIONS;
