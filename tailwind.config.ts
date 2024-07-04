@@ -19,6 +19,7 @@ const config = {
     },
     extend: {
       colors: {
+        link: "#4C63B6",
         primarydark: "#468c80",
         accentdark: "#fcd270",
         accentdarker: "#f4c24d",

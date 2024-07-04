@@ -19,7 +19,7 @@ export function DataTablePagination({
 }: DataTablePaginationProps) {
   return (
     <div className="flex items-center justify-between p-4">
-      <select
+      {/* <select
         value={pageSize}
         onChange={(e) => onPageSizeChange(Number(e.target.value))}
         className="border p-1 rounded"
@@ -27,7 +27,7 @@ export function DataTablePagination({
         {[10, 20, 50, 100].map(size => (
           <option key={size} value={size}>{size} per page</option>
         ))}
-      </select>
+      </select> */}
       <div className="flex items-center space-x-2">
         <button
           disabled={page === 0}

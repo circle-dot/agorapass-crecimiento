@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { CircleUser } from "lucide-react";
 import { usePrivy } from '@privy-io/react-auth';
+import Link from 'next/link';
 
 function ProfileAvatar() {
     const { authenticated, logout } = usePrivy();
@@ -26,8 +27,8 @@ function ProfileAvatar() {
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Settings</DropdownMenuItem>
-                    <DropdownMenuItem>Support</DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href='/agora/me'>My Profile</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><a href="#">Support</a></DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={logout}>
                         Log out
