@@ -1,46 +1,29 @@
-"use client"
-import React, { useState, useEffect } from "react";
-import { useQuery } from "@apollo/client";
-import GET_ATTESTATIONS from "@/graphql/Attestations";
-import GET_AGGREGATE_ATTESTATIONS from "@/graphql/AggregateAttestation";
-import { columns } from "./components/columns";
+"use client";
+import React, { useState } from "react";
+import { useQuery } from '@tanstack/react-query';
 import { DataTable } from "./components/data-table";
+import { columns } from "./components/columns";
+import { fetchAttestations, fetchAggregateAttestations } from "@/lib/fetchers/attestations";
 
 const Attestations = () => {
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
 
-    const { loading, error, data } = useQuery(GET_ATTESTATIONS, {
-        variables: {
-            where: { id: process.env.NEXT_PUBLIC_SCHEMA_ID },
-            skip: page * pageSize,
-            take: pageSize
-        },
-        fetchPolicy: "cache-and-network",
+    // Fetch attestations data
+    const { data: attestationsData, isLoading, isError } = useQuery({
+        queryKey: ['attestations', page, pageSize],
+        queryFn: () => fetchAttestations(page, pageSize),
+        placeholderData: (prev) => prev
     });
 
-    const { loading: loadingCount, error: errorCount, data: dataCount } = useQuery(GET_AGGREGATE_ATTESTATIONS, {
-        variables: {
-            where: {
-                schemaId: {
-                    equals: process.env.NEXT_PUBLIC_SCHEMA_ID
-                }
-            }
-        },
-        fetchPolicy: "cache-and-network",
+    // Fetch aggregate count data
+    const { data: aggregateData } = useQuery({
+        queryKey: ['aggregateAttestations'],
+        queryFn: fetchAggregateAttestations,
+        placeholderData: (prev) => prev
     });
 
-    // Log aggregate data whenever it changes
-    useEffect(() => {
-        if (dataCount) {
-            console.log("Aggregate Data:", dataCount.aggregateAttestation._count._all);
-        }
-    }, [dataCount]);
-
-    if (loading || loadingCount) return <p>Loading...</p>;
-    if (error || errorCount) return <p>Error: {error?.message || errorCount?.message}</p>;
-
-    const tasks = data.schema.attestations.map((attestation: any) => ({
+    const tasks = attestationsData?.map((attestation: any) => ({
         id: attestation.id,
         attester: attestation.attester,
         recipient: attestation.recipient,
@@ -49,11 +32,12 @@ const Attestations = () => {
         revocationTime: attestation.revocationTime,
         expirationTime: attestation.expirationTime,
         data: attestation.data,
-    }));
+    })) || [];
 
-    const totalPages = dataCount?.aggregateAttestation._count._all
-        ? Math.ceil(dataCount.aggregateAttestation._count._all / pageSize)
-        : 0;
+    const totalPages = aggregateData ? Math.ceil(aggregateData / pageSize) : 0;
+
+    if (isLoading) return <p>Loading...</p>;
+    if (isError) return <p>Error loading data...</p>;
 
     return (
         <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
@@ -67,6 +51,7 @@ const Attestations = () => {
                     onPageSizeChange: setPageSize,
                     totalPages,
                 }}
+                loading={isLoading}  // Pass the loading state to DataTable
             />
         </div>
     );
