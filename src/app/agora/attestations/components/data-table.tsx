@@ -38,6 +38,7 @@ interface DataTableProps<TData, TValue> {
     onPageSizeChange: (size: number) => void;
     totalPages: number;
   }
+  loading?: boolean;  // Add this line
 }
 
 export function DataTable<TData, TValue>({

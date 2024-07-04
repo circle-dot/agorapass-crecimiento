@@ -20,7 +20,7 @@ const Attestations = () => {
     const { data: aggregateData } = useQuery({
         queryKey: ['aggregateAttestations'],
         queryFn: fetchAggregateAttestations,
-        placeholderData: (prev) => prev
+        placeholderData: (prev) => prev,
     });
 
     const tasks = attestationsData?.map((attestation: any) => ({
