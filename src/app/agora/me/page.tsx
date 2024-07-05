@@ -53,8 +53,8 @@ export default function Page() {
     <div className="flex items-center justify-center p-4">
       <Card className="w-[350px]">
         <CardHeader>
-          <CardTitle>Profile</CardTitle>
-          <CardDescription>Profile information</CardDescription>
+          {/* <CardTitle>Profile</CardTitle>
+          <CardDescription>Profile information</CardDescription> */}
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center space-y-4">
