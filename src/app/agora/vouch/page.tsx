@@ -1,3 +1,4 @@
+//!THIS IS A TEST PAGE, DONT USE IT. Replace ALCHEMY_URL with the actual URL or use NEXT_PUBLIC env variable. This is temp to test out EAS
 "use client";
 import React, { useEffect, useState } from 'react';
 import { EAS } from '@ethereum-attestation-service/eas-sdk';
