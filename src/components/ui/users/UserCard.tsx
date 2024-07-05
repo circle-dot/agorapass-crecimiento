@@ -19,6 +19,19 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
+
 function truncateWallet(walletAddress: string) {
     // Keep the first 6 characters and the last 4 characters
     return walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
@@ -69,7 +82,22 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
                         <div className="flex items-center rounded-md bg-secondary text-secondary-foreground">
                             <Button variant="secondary" className="px-3 shadow-none w-full">
                                 <StarIcon className="mr-2 h-4 w-4" />
-                                Vouch
+                                <AlertDialog>
+                                    <AlertDialogTrigger>Vouch</AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                This action cannot be undone.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            <AlertDialogAction>Vouch them <StarIcon className="ml-2 h-4 w-4" />!</AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+
                             </Button>
                         </div>
                     </CardHeader>
