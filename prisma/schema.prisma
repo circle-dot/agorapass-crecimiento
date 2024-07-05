@@ -14,10 +14,12 @@ datasource db {
 }
 
 model User {
-  id        String  @id
-  email     String? @unique
-  name      String?
-  bio       String?
-  wallet    String
-  chainType String?
+  id                String    @id
+  email             String?   @unique
+  name              String?
+  bio               String?
+  wallet            String
+  chainType         String?
+  vouchesAvailables Int?
+  vouchReset        DateTime?
 }

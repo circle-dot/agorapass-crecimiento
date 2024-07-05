@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { EAS } from '@ethereum-attestation-service/eas-sdk';
 import { ethers } from 'ethers';
 
-const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26
+const EASContractAddress = "0x4200000000000000000000000000000000000021"; // Sepolia v0.26
 
-const attestationUID = '0xff08bbf3d3e6e0992fc70ab9b9370416be59e87897c3d42b20549901d2cccc3e'; // Replace with the actual attestation UID
+const attestationUID = '0x42cdb1a71c0eae5b6bae990ebf828a388b549c80dbad73b72402675af8d9caa2'; // Replace with the actual attestation UID
 
 const fetchAttestation = async (uid: string) => {
     try {
@@ -13,9 +13,10 @@ const fetchAttestation = async (uid: string) => {
         const eas = new EAS(EASContractAddress);
 
         // Set up the Infura provider
-        const provider = new ethers.JsonRpcProvider(process.env.INFURA_URL);
+        const provider = new ethers.JsonRpcProvider(process.env.ALCHEMY_URL);
 
         // Connect the EAS SDK to the provider
+        //@ts-ignore there is some difference between the provider and the signer
         eas.connect(provider);
 
         // Fetch the attestation information
