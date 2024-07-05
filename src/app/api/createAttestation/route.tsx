@@ -1,3 +1,4 @@
+//!This route is under way
 import { NextRequest, NextResponse } from 'next/server';
 import privy from '@/lib/privy';
 
