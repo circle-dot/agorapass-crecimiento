@@ -25,9 +25,9 @@ export default function Home() {
                                 className="select-none pointer-events-none"
                             />
                             <CardTitle className="text-center uppercase tracking-[3.5px] text-4xl font-extralight pb-4">Agorapass</CardTitle>
-                            <CardDescription className="text-center text-xl w-full flex justify-evenly items-center flex-col md:flex-row gap-y-2">
-                                <Button asChild><a target='_blank' href={'https://base.easscan.org/schema/view/' + process.env.NEXT_PUBLIC_SCHEMA_ID}>Check the attestations</a></Button>
-                                <Button><Link href='/agora/profiles'>Vouch for people</Link></Button>
+                            <CardDescription className="text-center w-full flex justify-evenly items-center flex-col gap-y-2">
+                                <Button asChild className="text-xl"><Link href='/agora/profiles'>Start vouching!</Link></Button>
+                                <p>Or check something</p>
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
