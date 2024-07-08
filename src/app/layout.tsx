@@ -25,7 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={Plex_Sans.className}>
         <Providers>
-          <Navbar />
+          {/* <Navbar /> */}
           {children}
         </Providers>
       </body>

@@ -1,4 +1,5 @@
 import { Inter } from "next/font/google";
+import Navbar from "@/components/layout/Navbar";
 
 type Props = {
     children?: React.ReactNode;
@@ -10,5 +11,10 @@ export default function Layout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    return (<div className={inter.className}>{children}</div>);
+    return (
+        <>
+            <Navbar />
+            <div className={inter.className}>{children}</div>
+        </>
+    );
 }

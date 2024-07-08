@@ -1,7 +1,7 @@
-// lib/fetchers.ts
 import client from '../ApolloClient';
 import GET_ATTESTATIONS from '@/graphql/Attestations';
 import GET_AGGREGATE_ATTESTATIONS from '@/graphql/AggregateAttestation';
+import GET_ATTESTATION from '@/graphql/getAttestation';
 
 export const fetchAttestations = async (page: number, pageSize: number) => {
     const { data } = await client.query({
@@ -27,4 +27,14 @@ export const fetchAggregateAttestations = async () => {
         },
     });
     return data.aggregateAttestation._count._all;
+};
+
+export const fetchAttestation = async (id: string) => {
+    const { data } = await client.query({
+        query: GET_ATTESTATION,
+        variables: {
+            where: { id },
+        },
+    });
+    return data.getAttestation;
 };

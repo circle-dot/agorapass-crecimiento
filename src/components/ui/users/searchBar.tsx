@@ -99,7 +99,7 @@ const SearchBar = () => {
         } else if (result.type === "ENS Name") {
             return `/agora/address/${result.id}`; // Use id for the ENS Name link
         } else if (result.type === "Attestation ID") {
-            return `/agora/vouch/${result.value}`;
+            return `/agora/attestation/${result.value}`;
         }
         return "#";
     };
