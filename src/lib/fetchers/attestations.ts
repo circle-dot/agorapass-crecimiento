@@ -2,6 +2,8 @@ import client from '../ApolloClient';
 import GET_ATTESTATIONS from '@/graphql/Attestations';
 import GET_AGGREGATE_ATTESTATIONS from '@/graphql/AggregateAttestation';
 import GET_ATTESTATION from '@/graphql/getAttestation';
+import COUNT_ATTESTATIONS_MADE from '@/graphql/AttestationsMade';
+import COUNT_ATTESTATIONS_RECEIVED from '@/graphql/AttestationsReceived';
 
 export const fetchAttestations = async (page: number, pageSize: number) => {
     const { data } = await client.query({
@@ -37,4 +39,30 @@ export const fetchAttestation = async (id: string) => {
         },
     });
     return data.getAttestation;
+};
+
+export const fetchAttestationsMade = async (schemaId: string, address: string) => {
+    const { data } = await client.query({
+        query: COUNT_ATTESTATIONS_MADE,
+        variables: {
+            where: {
+                schemaId: { equals: schemaId },
+                attester: { equals: address },
+            },
+        },
+    });
+    return data.aggregateAttestation._count.attester;
+};
+
+export const fetchAttestationsReceived = async (schemaId: string, address: string) => {
+    const { data } = await client.query({
+        query: COUNT_ATTESTATIONS_RECEIVED,
+        variables: {
+            where: {
+                schemaId: { equals: schemaId },
+                recipient: { equals: address },
+            },
+        },
+    });
+    return data.aggregateAttestation._count.recipient;
 };
