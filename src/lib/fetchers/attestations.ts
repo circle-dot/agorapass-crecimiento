@@ -4,6 +4,7 @@ import GET_AGGREGATE_ATTESTATIONS from '@/graphql/AggregateAttestation';
 import GET_ATTESTATION from '@/graphql/getAttestation';
 import COUNT_ATTESTATIONS_MADE from '@/graphql/AttestationsMade';
 import COUNT_ATTESTATIONS_RECEIVED from '@/graphql/AttestationsReceived';
+import SEARCH_ENS_NAMES_BY_ADDRESS from '@/graphql/getENSNamebyAddress';
 
 export const fetchAttestations = async (page: number, pageSize: number) => {
     const { data } = await client.query({
@@ -65,4 +66,18 @@ export const fetchAttestationsReceived = async (schemaId: string, address: strin
         },
     });
     return data.aggregateAttestation._count.recipient;
+};
+
+export const fetchEnsNamesByAddress = async (address: string) => {
+    const { data } = await client.query({
+        query: SEARCH_ENS_NAMES_BY_ADDRESS,
+        variables: {
+            where: {
+                id: {
+                    equals: address,
+                },
+            },
+        },
+    });
+    return data.ensNames;
 };
