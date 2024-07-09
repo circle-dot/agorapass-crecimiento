@@ -40,7 +40,7 @@ const Attestations = () => {
     if (isError) return <p>Error loading data...</p>;
 
     return (
-        <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
+        <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex w-screen">
             <DataTable
                 data={tasks}
                 columns={columns}

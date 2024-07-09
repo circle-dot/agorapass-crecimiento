@@ -11,7 +11,7 @@ import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
-
+import SearchBar from "@/components/ui/users/searchBar";
 import {
     Command,
     CommandEmpty,
@@ -51,12 +51,7 @@ function Page() {
 
                 <form className="">
                     <div className="relative">
-                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                        <Input
-                            type="search"
-                            placeholder="Search users..."
-                            className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
-                        />
+                        <SearchBar />
                     </div>
                 </form>
 

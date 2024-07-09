@@ -13,7 +13,7 @@ export const columns: ColumnDef<Attestation>[] = [
       <DataTableColumnHeader column={column} title="UID" />
     ),
     cell: ({ row }) => (
-      <div className="w-[200px] truncate"><a href={'https://base.easscan.org/attestation/view/' + row.getValue("id")} target="_blank" className="text-link">{row.getValue("id")}</a></div>
+      <div className="w-[200px] truncate"><Link href={'/agora/attestation/' + row.getValue("id")} className="text-link">{row.getValue("id")}</Link></div>
     ),
     enableSorting: true,
     enableHiding: false,
@@ -24,7 +24,7 @@ export const columns: ColumnDef<Attestation>[] = [
       <DataTableColumnHeader column={column} title="From" />
     ),
     cell: ({ row }) => (
-      <div className="w-[200px] truncate"><a href={'https://base.easscan.org/address/' + row.getValue("attester")} target="_blank" className="text-link">{row.getValue("attester")}</a></div>
+      <div className="w-[200px] truncate"><Link href={'/agora/address/' + row.getValue("attester")} className="text-link">{row.getValue("attester")}</Link></div>
     ),
     enableSorting: true,
     enableHiding: false,
@@ -35,7 +35,7 @@ export const columns: ColumnDef<Attestation>[] = [
       <DataTableColumnHeader column={column} title="To" />
     ),
     cell: ({ row }) => (
-      <div className="w-[200px] truncate"><a href={'https://base.easscan.org/address/' + row.getValue("recipient")} target="_blank" className="text-link">{row.getValue("recipient")}</a></div>
+      <div className="w-[200px] truncate"><Link href={'/agora/address/' + row.getValue("recipient")} className="text-link">{row.getValue("recipient")}</Link></div>
     ),
     enableSorting: true,
     enableHiding: false,
