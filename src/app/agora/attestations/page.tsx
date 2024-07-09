@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { DataTable } from "./components/data-table";
 import { columns } from "./components/columns";
 import { fetchAttestations, fetchAggregateAttestations } from "@/lib/fetchers/attestations";
-
+import SearchBar from "@/components/ui/users/searchBar";
 const Attestations = () => {
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
@@ -41,6 +41,7 @@ const Attestations = () => {
 
     return (
         <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex w-screen">
+            <SearchBar />
             <DataTable
                 data={tasks}
                 columns={columns}

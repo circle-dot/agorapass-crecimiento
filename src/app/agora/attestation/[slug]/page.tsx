@@ -34,7 +34,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
     // Once data is loaded, display the attestation details
     return (
-        <div className="flex items-center justify-center bg-gray-100 w-full min-h-screen p-4">
+        <div className="flex items-center justify-center bg-gray-100 w-screen p-4">
             <motion.div
                 initial={{
                     opacity: 0,
@@ -53,14 +53,14 @@ export default function Page({ params }: { params: { slug: string } }) {
                 <TooltipProvider>
                     <Card className="bg-white w-full">
                         <CardHeader className="text-center">
-                            <CardTitle className="text-2xl font-semibold">Attestation Details</CardTitle>
+                            <CardTitle className="text-2xl font-semibold">Vouch Details</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="mt-4 space-y-4">
                                 {/* ID Field with Tooltip */}
                                 <div className="flex items-center justify-between">
                                     <span className="font-semibold">ID:</span>
-                                    <div className="truncate w-1/2">
+                                    <div className="truncate max-w-[50%]">
                                         <Tooltip>
                                             <TooltipTrigger asChild>
                                                 <p className="text-link truncate">{data.id}</p>
@@ -74,7 +74,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                                 {/* Attester Field with Tooltip */}
                                 <div className="flex items-center justify-between">
                                     <span className="font-semibold">Attester:</span>
-                                    <div className="truncate w-1/2">
+                                    <div className="truncate max-w-[50%]">
                                         <Tooltip>
                                             <TooltipTrigger asChild>
                                                 <Link href={'/agora/address/' + data.attester} className="text-link block truncate">{data.attester}</Link>
@@ -98,7 +98,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                                 {/* Recipient Field with Tooltip */}
                                 <div className="flex items-center justify-between">
                                     <span className="font-semibold">Recipient:</span>
-                                    <div className="truncate w-1/2">
+                                    <div className="truncate max-w-[50%]">
                                         <Tooltip>
                                             <TooltipTrigger asChild>
                                                 <Link href={'/agora/address/' + data.recipient} className="text-link block truncate">{data.recipient}</Link>
@@ -135,9 +135,9 @@ export default function Page({ params }: { params: { slug: string } }) {
                                     <span className="text-gray-700">{data.revoked ? "Yes" : "No"}</span>
                                 </div>
                                 {/* Schema ID Field with Tooltip */}
-                                {/* <div className="flex items-center justify-between">
+                                <div className="flex items-center justify-between">
                                     <span className="font-semibold">Schema ID:</span>
-                                    <div className="truncate w-1/2">
+                                    <div className="truncate max-w-[50%]">
                                         <Tooltip>
                                             <TooltipTrigger asChild>
                                                 <p className="text-link truncate">{data.schemaId}</p>
@@ -147,7 +147,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                                             </TooltipContent>
                                         </Tooltip>
                                     </div>
-                                </div> */}
+                                </div>
                             </div>
                         </CardContent>
                     </Card>

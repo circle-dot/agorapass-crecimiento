@@ -42,7 +42,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     if (madeError || receivedError || ensNameerror) return <div>Error: {madeError?.message || receivedError?.message}</div>;
 
     return (
-        <div className="flex items-center justify-center bg-gray-100 w-full min-h-screen p-4">
+        <div className="flex items-center justify-center bg-gray-100 w-full  p-4">
             <motion.div
                 initial={{
                     opacity: 0,
