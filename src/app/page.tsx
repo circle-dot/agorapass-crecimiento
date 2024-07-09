@@ -1,4 +1,6 @@
-import Image from "next/image";
+"use client";
+import { motion } from "framer-motion";
+import { HeroHighlight, Highlight } from "@/components/ui/hero-highlight";
 import {
   Card,
   CardContent,
@@ -6,16 +8,28 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import Image from "next/image";
 import SearchBar from "@/components/ui/users/searchBar";
-
-export default function Home() {
+import Link from "next/link";
+export default function Page() {
   return (
-    <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat bg-[url('/agora-bg.png')]" >
-      <div className="absolute inset-0 bg-black opacity-50"></div>
-      <main className="relative z-10 flex items-center justify-center min-h-screen w-full mx-auto p-5 md:max-w-lg md:p-7.5 lg:max-w-2xl lg:p-10">
-        <div className="flex flex-col items-center justify-center w-full">
+    <div className="flex items-center justify-center flex-grow ">
+      <HeroHighlight className="flex-grow">
+        <motion.h1
+          initial={{
+            opacity: 0,
+            y: 20,
+          }}
+          animate={{
+            opacity: 1,
+            y: [20, -5, 0],
+          }}
+          transition={{
+            duration: 0.5,
+            ease: [0.4, 0.0, 0.2, 1],
+          }}
+          className="text-2xl px-4 md:text-4xl lg:text-5xl font-bold text-neutral-700 dark:text-white max-w-4xl leading-relaxed lg:leading-snug text-center mx-auto"
+        >
           <Card className=" bg-white bg-opacity-90 shadow-lg mt-8 flex flex-col items-center justify-center w-full">
             <CardHeader className="items-center justify-center w-full">
               <Image
@@ -34,8 +48,8 @@ export default function Home() {
             <CardContent>
             </CardContent>
           </Card>
-        </div>
-      </main>
+        </motion.h1>
+      </HeroHighlight>
     </div>
   );
-} 
+}
