@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import {
     DropdownMenu,
@@ -8,9 +9,12 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { CircleUser } from "lucide-react";
+// import { CircleUser } from "lucide-react";
 import { usePrivy } from '@privy-io/react-auth';
 import Link from 'next/link';
+import { Wallet } from 'lucide-react';
+import iconLogo from '../../../public/agora.png'
+import Image from 'next/image';
 
 function ProfileAvatar() {
     const { authenticated, logout } = usePrivy();
@@ -20,17 +24,24 @@ function ProfileAvatar() {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="secondary" size="icon" className="rounded-full">
-                        <CircleUser className="h-5 w-5" />
+                        <Image
+                            src={iconLogo}
+                            alt="Company Logo"
+                            width={36}
+                            height={36}
+                            className='cursor-pointer'
+                        />
+                        {/* <CircleUser className="h-5 w-5" /> */}
                         <span className="sr-only">Toggle user menu</span>
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild><Link href='/agora/me'>My Profile</Link></DropdownMenuItem>
-                    <DropdownMenuItem asChild><a href="#">Support</a></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href='/agora/me' className='cursor-pointer'>My Profile</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><a href="#" className='cursor-pointer'>Support</a></DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={logout}>
+                    <DropdownMenuItem onClick={logout} className='cursor-pointer'>
                         Log out
                     </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -50,7 +61,8 @@ function LoginButton() {
 
     return (
         <button disabled={disableLogin} onClick={login}>
-            Log in
+            <Wallet className='h-5 w-5 lg:hidden' />
+            <p className='hidden lg:flex border border-gray-200 bg-gray-50 font-medium px-4 py-2 rounded-full cursor-pointer items-center'>Connect with wallet</p>
         </button>
     );
 }
