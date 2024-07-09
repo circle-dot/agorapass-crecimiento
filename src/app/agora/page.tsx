@@ -1,41 +1,33 @@
-import Image from "next/image";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import SearchBar from "@/components/ui/users/searchBar";
+"use client";
+import { motion } from "framer-motion";
+import { HeroHighlight, Highlight } from "@/components/ui/hero-highlight";
 
-export default function Home() {
+export default function Page() {
     return (
-        <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat bg-[url('/agora-bg.png')]" >
-            <div className="absolute inset-0 bg-black opacity-50"></div>
-            <main className="relative z-10 flex items-center justify-center min-h-screen w-full mx-auto p-5 md:max-w-lg md:p-7.5 lg:max-w-2xl lg:p-10">
-                <div className="flex flex-col items-center justify-center w-full">
-                    <Card className=" bg-white bg-opacity-90 shadow-lg mt-8 flex flex-col items-center justify-center w-full">
-                        <CardHeader className="items-center justify-center w-full">
-                            <Image
-                                src="/agora.png"
-                                alt="Logo"
-                                width={130}
-                                height={130}
-                                className="select-none pointer-events-none"
-                            />
-                            <CardTitle className="text-center uppercase tracking-[3.5px] text-4xl font-extralight pb-4">Agorapass</CardTitle>
-                            <SearchBar />
-                            <CardDescription className="text-center w-full flex justify-evenly items-center flex-col gap-y-2">
-                                <Link href='/agora/profiles' className="underline">Or check some profiles</Link>
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                        </CardContent>
-                    </Card>
-                </div>
-            </main>
+        <div className="flex items-center justify-center flex-grow ">
+            <HeroHighlight className="flex-grow">
+                <motion.h1
+                    initial={{
+                        opacity: 0,
+                        y: 20,
+                    }}
+                    animate={{
+                        opacity: 1,
+                        y: [20, -5, 0],
+                    }}
+                    transition={{
+                        duration: 0.5,
+                        ease: [0.4, 0.0, 0.2, 1],
+                    }}
+                    className="text-2xl px-4 md:text-4xl lg:text-5xl font-bold text-neutral-700 dark:text-white max-w-4xl leading-relaxed lg:leading-snug text-center mx-auto"
+                >
+                    With insomnia, nothing&apos;s real. Everything is far away. Everything
+                    is a{" "}
+                    <Highlight className="text-black dark:text-white">
+                        copy, of a copy, of a copy.
+                    </Highlight>
+                </motion.h1>
+            </HeroHighlight>
         </div>
     );
 }

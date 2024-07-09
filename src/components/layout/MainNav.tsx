@@ -29,7 +29,7 @@ function MainNav() {
                     </Link>
                 </div>
                 <div className='w-full flex justify-center'>
-                    <div className='flex flex-row bg-white rounded-full border border-gray-200  font-medium shadow-md gap-4 lg:text-lg lg:gap-2 px-2'>
+                    <div className='flex flex-row bg-white rounded-full border border-gray-200  font-medium shadow-md lg:gap-4 lg:text-lg  px-2'>
                         {/* <Link href='/'>Welcome</Link>
                         <Link href='/agora/attestations'>Vouches</Link>
                         <Link href='/agora/profiles'>Profiles</Link> */}

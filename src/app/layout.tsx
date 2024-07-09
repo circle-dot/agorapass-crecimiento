@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans } from 'next/font/google'
+import { IBM_Plex_Sans } from 'next/font/google';
 
 import "./globals.css";
-import Providers from '@/components/Providers'
-import Navbar from "@/components/layout/Navbar";
+import Providers from '@/components/Providers';
+// import MainNav from "@/components/layout/MainNav";
 
 const Plex_Sans = IBM_Plex_Sans({
   weight: '200',
   subsets: ['latin'],
-})
-
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,11 +21,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={Plex_Sans.className}>
+    <html lang="en" className="min-h-screen flex flex-col ">
+      <body className={`${Plex_Sans.className} flex-grow flex`}>
         <Providers>
-          {/* <Navbar /> */}
-          {children}
+          {/* <MainNav /> */}
+          <div className="flex flex-col flex-grow">
+            {children}
+          </div>
         </Providers>
       </body>
     </html>
