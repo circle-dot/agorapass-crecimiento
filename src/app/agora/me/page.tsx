@@ -1,16 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { usePrivy } from '@privy-io/react-auth';
 import { DateTime, Interval } from "luxon";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function Page() {
   const { user } = usePrivy();
@@ -50,24 +52,35 @@ export default function Page() {
   });
 
   return (
-    <div className="flex items-center justify-center p-4">
-      <Card className="w-[350px]">
-        <CardHeader>
-          {/* <CardTitle>Profile</CardTitle>
-          <CardDescription>Profile information</CardDescription> */}
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col items-center space-y-4">
-            <Avatar className="w-24 h-24">
-              <AvatarImage src={profileImageUrl} alt="Profile Image" />
-              <AvatarFallback>{email?.address.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div className="text-center flex items-center justify-center flex-col w-full">
+    <div className="flex items-center justify-center p-4 bg-gray-100 w-full">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <Card className="w-[350px] shadow-lg">
+          <CardHeader className="text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
+            >
+              <Avatar className="w-24 h-24 mx-auto mb-4">
+                <AvatarImage src={profileImageUrl} alt="Profile Image" />
+                <AvatarFallback>{email?.address.charAt(0)}</AvatarFallback>
+              </Avatar>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.5, ease: "easeOut" }}
+              className="flex flex-col items-center space-y-2"
+            >
               <p className="text-lg font-medium">{email?.address}</p>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <p className="text-sm text-muted-foreground lg:truncate lg:w-9/12 px-4 break-words w-full border-zinc-400 rounded lg:rounded-full border">{wallet?.address}</p>
+                    <p className="text-sm text-muted-foreground truncate lg:truncate lg:w-9/12 px-4 break-words w-full border-zinc-400 rounded lg:rounded-full border">{wallet?.address}</p>
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>{wallet?.address}</p>
@@ -75,17 +88,31 @@ export default function Page() {
                 </Tooltip>
               </TooltipProvider>
               <p className="text-sm text-muted-foreground">Member since {formattedDate}</p>
-            </div>
-          </div>
-        </CardContent>
-        <CardFooter className="flex justify-center items-center flex-col">
-          <p>Vouches available: 3</p>
-          <p>It refreshes in: {remainingTime}</p>
-          <Button variant="outline" asChild>
-            <a target="_blank" href={'https://base.easscan.org/address/' + wallet?.address}>Check my attestations</a>
-          </Button>
-        </CardFooter>
-      </Card>
+            </motion.div>
+          </CardHeader>
+          <CardContent className="text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.5, ease: "easeOut" }}
+            >
+              <p>Vouches available: 3</p>
+              <p>It refreshes in: {remainingTime}</p>
+            </motion.div>
+          </CardContent>
+          <CardFooter className="flex justify-center items-center flex-col">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.5, ease: "easeOut" }}
+            >
+              <Button variant="outline" asChild>
+                <Link href={'/agora/address/' + wallet?.address}>Check my attestations</Link>
+              </Button>
+            </motion.div>
+          </CardFooter>
+        </Card>
+      </motion.div>
     </div>
   );
 }

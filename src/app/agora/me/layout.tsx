@@ -7,7 +7,7 @@ type Props = {
 export default function Layout({ children }: Props) {
     return (
         <AuthLayout>
-            <main>{children}</main>
+            {children}
         </AuthLayout>
     )
 }

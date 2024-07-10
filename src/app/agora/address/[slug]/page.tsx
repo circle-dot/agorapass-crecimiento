@@ -13,7 +13,6 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 
 //!TODO replace this schemaId
 const schemaId = process.env.NEXT_PUBLIC_SCHEMA_ID || "0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"; // Replace with your schemaId
@@ -42,7 +41,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     if (madeError || receivedError || ensNameerror) return <div>Error: {madeError?.message || receivedError?.message}</div>;
 
     return (
-        <div className="flex items-center justify-center bg-gray-100 w-full  p-4">
+        <div className="flex items-center justify-center bg-gray-100 w-screen p-4">
             <motion.div
                 initial={{
                     opacity: 0,
