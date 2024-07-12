@@ -1,5 +1,7 @@
 "use client"
-import * as React from "react"
+import React from 'react';
+import { useInView } from 'react-intersection-observer';
+import useUsers from '@/hooks/useUsers';
 import UserCard from '@/components/ui/users/UserCard';
 import {
     DropdownMenu,
@@ -26,8 +28,8 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils";
-import { users } from '../../../fakeData/data'
-
+import Image from 'next/image';
+import voteLogo from '@/../../public/vote.svg'
 const filters = [
     {
         valueFilter: "Filter1",
@@ -44,27 +46,34 @@ function Page() {
     const [openFilter, setOpenFilter] = React.useState(false)
     const [valueFilter, setValueFilter] = React.useState("")
     const [openSort, setOpenSort] = React.useState(false)
-    const [valueSort, setValueSort] = React.useState("")
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useUsers();
+    const { ref, inView } = useInView();
+
+    React.useEffect(() => {
+        const handleFetchNextPage = () => {
+            if (inView && hasNextPage) {
+                console.log('Fetching next page...');
+                fetchNextPage();
+            }
+        };
+
+        // Debounce function to avoid rapid calls
+        const debounceFetch = debounce(handleFetchNextPage, 300);
+        debounceFetch();
+
+        return () => {
+            debounceFetch.cancel();
+        };
+    }, [inView, fetchNextPage, hasNextPage]);
+
     return (
-        <div className='flex flex-col'>
+        <div className='flex flex-col w-full p-4'>
             <div className='flex flex-col md:flex-row md:justify-center md:items-center gap-4 p-4'>
 
-                <form className="">
-                    <div className="relative">
-                        <SearchBar />
-                    </div>
-                </form>
+                <div className="relative">
+                    <SearchBar />
+                </div>
 
-
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild><Button variant="outline">Filters</Button></DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuItem>Profile</DropdownMenuItem>
-                        <DropdownMenuItem>Billing</DropdownMenuItem>
-                        <DropdownMenuItem>Team</DropdownMenuItem>
-                        <DropdownMenuItem>Subscription</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
 
                 <Popover open={openFilter} onOpenChange={setOpenFilter}>
                     <PopoverTrigger asChild>
@@ -113,15 +122,53 @@ function Page() {
 
 
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
-                {users.map((user, index) => (
-                    <UserCard key={index} user={user} />
-                ))}
+            <div className="flex flex-col md:flex-row w-full">
+                <div className="w-full md:w-1/2 p-2">
+                    <h2 className='font-extrabold text-xl pb-6'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid, iure.</h2>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eveniet placeat, in ipsum delectus ab ad quam eaque velit, autem earum, fugiat dicta quos quas neque labore quasi error ea molestiae!
+                    </p>
+                </div>
+                <div className="w-full md:w-1/2 p-2">
+                    <Image
+                        src={voteLogo}
+                        alt='Thinking about voting'
+                        width={100}
+                        className='w-full max-h-[200px]'
+                    />
+                </div>
+            </div>
+
+
+            <div className='flex flex-col justify-center items-center'>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-4">
+                    {data?.pages.map((page, i) =>
+                        page.users.map((user: any, index: number) => (
+                            <UserCard key={`${i}-${index}`} user={user} />
+                        ))
+                    )}
+                </div>
+                <div ref={ref}>
+                    {isFetchingNextPage && <p>Loading more...</p>}
+                </div>
             </div>
         </div>
     );
 }
 
+// Debounce function implementation
+function debounce(func: (...args: any[]) => void, wait: number) {
+    let timeout: NodeJS.Timeout | null;
+    const debounced = (...args: any[]) => {
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            func.apply(null, args);
+        }, wait);
+    };
+    debounced.cancel = () => {
+        if (timeout) clearTimeout(timeout);
+    };
+    return debounced;
+}
+
 export default Page;
-
-

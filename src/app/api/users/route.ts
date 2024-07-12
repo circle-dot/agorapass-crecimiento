@@ -57,3 +57,39 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Failed to create user' }, { status: 500 });
     }
 }
+
+export async function GET(req: NextRequest, res: NextResponse) {
+    const searchParams = req.nextUrl.searchParams
+    const page = searchParams.get('page')
+    const limit = searchParams.get('limit')
+    // const { page, limit } = req.query;
+    const pageNumber = parseInt(page as string) || 1;
+    const pageSize = parseInt(limit as string) || 12;
+    const skip = (pageNumber - 1) * pageSize;
+
+    try {
+
+        const users = await prisma.user.findMany({
+            skip,
+            take: pageSize,
+            orderBy: {
+                createdAt: 'desc', // Change this to your desired sorting field and order
+            },
+        });
+
+        const totalUsers = await prisma.user.count();
+        const hasMore = skip + pageSize < totalUsers;
+        const nextPage = hasMore ? pageNumber + 1 : undefined;
+
+        return NextResponse.json({
+            users,
+            total: totalUsers,
+            hasMore,
+            nextPage,
+        });
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        // Return error response if something goes wrong
+        return NextResponse.json({ error: 'Failed to fetch user' }, { status: 500 });
+    }
+}

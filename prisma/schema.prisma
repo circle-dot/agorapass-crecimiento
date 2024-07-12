@@ -15,11 +15,13 @@ datasource db {
 
 model User {
   id                String    @id
-  email             String?   @unique
+  email             String?
   name              String?
   bio               String?
-  wallet            String
+  wallet            String    @unique
   chainType         String?
   vouchesAvailables Int?
   vouchReset        DateTime?
+  createdAt         DateTime  @default(now())
+  rankScore         Int?
 }
