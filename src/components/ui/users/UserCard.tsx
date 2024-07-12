@@ -30,6 +30,9 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import redAvatar from '@/../../public/agora-red.png'
+import noirAvatar from '@/../../public/agora-noir.png'
+import regularAvatar from '@/../../public/agora.png'
 
 function truncateWallet(walletAddress: string) {
     // Keep the first 6 characters and the last 4 characters
@@ -46,14 +49,19 @@ function truncateName(name: string) {
 }
 
 const UserCard: React.FC<{ user: User }> = ({ user }) => {
-    const { name, walletAddress, trustedBy, bio, twitter, image } = user;
+    const { name, walletAddress, trustedBy, bio, twitter, image, rankScore } = user;
 
     // Determine the display name: use name if available, otherwise use wallet address
     const displayName = truncateName(name) || truncateWallet(walletAddress);
     const fullName = name || walletAddress;
     // Determine the bio: use provided bio, otherwise default to "No bio provided"
     const displayBio = bio || "No bio provided";
-
+    const getAvatar = () => {
+        const score = rankScore ?? 0; // Default to 0 if rankScore is null or undefined
+        if (score < 50) return redAvatar.src;
+        if (score >= 100) return noirAvatar.src;
+        return regularAvatar.src;
+    };
     return (
         <Card>
             <CardContent className="flex flex-col justify-between h-full">
@@ -62,7 +70,7 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
                         <div className="space-y-1">
                             <CardTitle className='flex flex-row items-center gap-4'>
                                 <Avatar>
-                                    <AvatarImage src={image} />
+                                    <AvatarImage src={getAvatar()} />
                                     <AvatarFallback>{name ? name.charAt(0) : 'U'}</AvatarFallback>
                                 </Avatar>
                                 <TooltipProvider>

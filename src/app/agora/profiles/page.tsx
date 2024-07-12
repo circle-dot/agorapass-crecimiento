@@ -3,22 +3,12 @@ import React from 'react';
 import { useInView } from 'react-intersection-observer';
 import useUsers from '@/hooks/useUsers';
 import UserCard from '@/components/ui/users/UserCard';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Search } from 'lucide-react';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import SearchBar from "@/components/ui/users/searchBar";
 import {
     Command,
-    CommandEmpty,
     CommandGroup,
-    CommandInput,
     CommandItem,
     CommandList,
 } from "@/components/ui/command"
