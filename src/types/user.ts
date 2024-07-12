@@ -5,5 +5,6 @@ export interface User {
     bio?: string;
     twitter?: string;
     image?: string;
-    rankScore?: number
+    rankScore?: number;
+    attestationReceived?: number;
 }

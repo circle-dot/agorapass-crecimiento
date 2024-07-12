@@ -11,7 +11,6 @@ const useUsers = () => {
         queryFn: fetchUsers,
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
-            console.log("Last Page in getNextPageParam:", lastPage);
             return lastPage.hasMore ? lastPage.nextPage : undefined;
         },
     });

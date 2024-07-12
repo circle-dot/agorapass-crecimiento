@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
 }
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams
     const page = searchParams.get('page')
     const limit = searchParams.get('limit')
@@ -73,7 +73,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
             skip,
             take: pageSize,
             orderBy: {
-                createdAt: 'desc', // Change this to your desired sorting field and order
+                attestationReceived: 'desc', // Change this to your desired sorting field and order
             },
         });
 

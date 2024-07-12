@@ -33,7 +33,7 @@ import {
 import redAvatar from '@/../../public/agora-red.png'
 import noirAvatar from '@/../../public/agora-noir.png'
 import regularAvatar from '@/../../public/agora.png'
-
+import { ThumbsUp } from 'lucide-react';
 function truncateWallet(walletAddress: string) {
     // Keep the first 6 characters and the last 4 characters
     return walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
@@ -49,7 +49,7 @@ function truncateName(name: string) {
 }
 
 const UserCard: React.FC<{ user: User }> = ({ user }) => {
-    const { name, walletAddress, trustedBy, bio, twitter, image, rankScore } = user;
+    const { name, walletAddress, bio, twitter, rankScore, attestationReceived } = user;
 
     // Determine the display name: use name if available, otherwise use wallet address
     const displayName = truncateName(name) || truncateWallet(walletAddress);
@@ -112,8 +112,8 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
                 </div>
                 <div className="flex space-x-4 text-sm text-muted-foreground justify-between mt-auto">
                     <div className="flex items-center">
-                        <StarIcon className="mr-1 h-3 w-3" />
-                        Trusted by {trustedBy}
+                        <ThumbsUp className="mr-1 h-3 w-3" />
+                        Trusted by {attestationReceived}
                     </div>
                     {twitter && (
                         <div className="flex items-center">

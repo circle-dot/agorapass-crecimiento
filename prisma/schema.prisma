@@ -14,14 +14,16 @@ datasource db {
 }
 
 model User {
-  id                String    @id
-  email             String?
-  name              String?
-  bio               String?
-  wallet            String    @unique
-  chainType         String?
-  vouchesAvailables Int?
-  vouchReset        DateTime?
-  createdAt         DateTime  @default(now())
-  rankScore         Int?
+  id                  String    @id
+  email               String?
+  name                String?
+  bio                 String?
+  wallet              String    @unique
+  chainType           String?
+  vouchesAvailables   Int?
+  vouchReset          DateTime?
+  createdAt           DateTime  @default(now())
+  rankScore           Int       @default(0)
+  attestationsDone    Int       @default(0)
+  attestationReceived Int       @default(0)
 }
