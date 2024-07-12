@@ -96,7 +96,7 @@ const SearchBar = () => {
                     )}
                     {searchResults.map((result, index) => (
                         <Link key={index} href={getLinkForResult(result)} passHref>
-                            <p className="block p-2 hover:bg-gray-200 truncate">
+                            <p className="block p-2 hover:bg-gray-200 truncate text-xl">
                                 <p>
                                     {result.value}
                                 </p>
