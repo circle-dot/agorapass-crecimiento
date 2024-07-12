@@ -5,33 +5,10 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import client from "@/lib/ApolloClient";
 import Link from 'next/link';
+import SEARCH_ENS_NAMES from "@/graphql/searchBar/searchENSName";
+import SEARCH_WALLETS from "@/graphql/searchBar/searchWallets";
+import SEARCH_ATTESTATIONS from "@/graphql/searchBar/searchAttestation";
 
-const SEARCH_ENS_NAMES = gql`
-  query SearchEnsNames($query: String!) {
-    ensNames(where: { name: { contains: $query } }) {
-      name
-      id
-    }
-  }
-`;
-
-const SEARCH_ATTESTATIONS = gql`
-  query SearchAttestations($query: String!) {
-    attestations(where: { id: { contains: $query } }) {
-      id
-      recipient
-    }
-  }
-`;
-
-const SEARCH_WALLETS = gql`
-  query SearchWallets($query: String!) {
-    attestations(where: { recipient: { contains: $query } }) {
-      recipient
-      id
-    }
-  }
-`;
 
 const SearchBar = () => {
     const [searchTerm, setSearchTerm] = useState("");
