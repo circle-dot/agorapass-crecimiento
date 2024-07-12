@@ -20,25 +20,24 @@ import {
 import { cn } from "@/lib/utils";
 import Image from 'next/image';
 import voteLogo from '@/../../public/vote.svg'
+
 const filters = [
     {
-        valueFilter: "Filter1",
-        label: "Order by: Des",
+        valueFilter: "desc" as const,
+        label: "Order by: Desc",
     },
     {
-        valueFilter: "Filter2",
+        valueFilter: "asc" as const,
         label: "Order by: Asc",
     },
 ]
 
-
 function Page() {
-    const [openFilter, setOpenFilter] = React.useState(false)
-    const [valueFilter, setValueFilter] = React.useState("")
-    const [openSort, setOpenSort] = React.useState(false)
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useUsers();
+    const [openFilter, setOpenFilter] = React.useState(false);
+    const [valueFilter, setValueFilter] = React.useState<'asc' | 'desc'>("desc");
+    const [openSort, setOpenSort] = React.useState(false);
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useUsers(valueFilter);
     const { ref, inView } = useInView();
-
     React.useEffect(() => {
         const handleFetchNextPage = () => {
             if (inView && hasNextPage) {
@@ -64,7 +63,6 @@ function Page() {
                     <SearchBar />
                 </div>
 
-
                 <Popover open={openFilter} onOpenChange={setOpenFilter}>
                     <PopoverTrigger asChild>
                         <Button
@@ -81,17 +79,15 @@ function Page() {
                     </PopoverTrigger>
                     <PopoverContent className="w-[200px] p-0">
                         <Command>
-                            {/* <CommandInput placeholder="Order by..." className="h-9" /> */}
                             <CommandList>
-                                {/* <CommandEmpty>No filter found.</CommandEmpty> */}
                                 <CommandGroup>
                                     {filters.map((filter) => (
                                         <CommandItem
                                             key={filter.valueFilter}
                                             value={filter.valueFilter}
-                                            onSelect={(currentvalueFilter) => {
-                                                setValueFilter(currentvalueFilter === valueFilter ? "" : currentvalueFilter)
-                                                setOpenFilter(false)
+                                            onSelect={(currentValueFilter) => {
+                                                setValueFilter(currentValueFilter as 'asc' | 'desc');
+                                                setOpenFilter(false);
                                             }}
                                         >
                                             {filter.label}
@@ -108,8 +104,6 @@ function Page() {
                         </Command>
                     </PopoverContent>
                 </Popover>
-
-
 
             </div>
             <div className="flex flex-col md:flex-row w-full">
@@ -128,7 +122,6 @@ function Page() {
                     />
                 </div>
             </div>
-
 
             <div className='flex flex-col justify-center items-center'>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-4">

@@ -59,21 +59,21 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-    const searchParams = req.nextUrl.searchParams
-    const page = searchParams.get('page')
-    const limit = searchParams.get('limit')
-    // const { page, limit } = req.query;
-    const pageNumber = parseInt(page as string) || 1;
-    const pageSize = parseInt(limit as string) || 12;
+    const searchParams = req.nextUrl.searchParams;
+    const page = searchParams.get('page') ?? '1';
+    const limit = searchParams.get('limit') ?? '12';
+    const sortOrder = searchParams.get('sortOrder') as 'asc' | 'desc' || 'desc';
+
+    const pageNumber = parseInt(page, 10);
+    const pageSize = parseInt(limit, 10);
     const skip = (pageNumber - 1) * pageSize;
 
     try {
-
         const users = await prisma.user.findMany({
             skip,
             take: pageSize,
             orderBy: {
-                attestationReceived: 'desc', // Change this to your desired sorting field and order
+                attestationReceived: sortOrder,
             },
         });
 
@@ -88,8 +88,7 @@ export async function GET(req: NextRequest) {
             nextPage,
         });
     } catch (error) {
-        console.error('Error fetching user:', error);
-        // Return error response if something goes wrong
-        return NextResponse.json({ error: 'Failed to fetch user' }, { status: 500 });
+        console.error('Error fetching users:', error);
+        return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 });
     }
 }

@@ -1,13 +1,15 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-const fetchUsers = async ({ pageParam = 1 }) => {
-    const response = await fetch(`/api/users?page=${pageParam}`);
+const fetchUsers = async ({ pageParam = 1, queryKey }: any) => {
+    const [, sortOrder] = queryKey;
+    const response = await fetch(`/api/users?page=${pageParam}&sortOrder=${sortOrder}`);
     return response.json();
 };
 
-const useUsers = () => {
+
+const useUsers = (sortOrder: 'asc' | 'desc') => {
     return useInfiniteQuery({
-        queryKey: ['users'],
+        queryKey: ['users', sortOrder],
         queryFn: fetchUsers,
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
