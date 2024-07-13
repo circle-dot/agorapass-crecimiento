@@ -20,7 +20,7 @@ import {
 import { cn } from "@/lib/utils";
 import Image from 'next/image';
 import voteLogo from '@/../../public/vote.svg'
-
+import { Skeleton } from '@/components/ui/skeleton';
 const filters = [
     {
         valueFilter: "desc" as const,
@@ -36,12 +36,12 @@ function Page() {
     const [openFilter, setOpenFilter] = React.useState(false);
     const [valueFilter, setValueFilter] = React.useState<'asc' | 'desc'>("desc");
     const [openSort, setOpenSort] = React.useState(false);
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useUsers(valueFilter);
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useUsers(valueFilter);
     const { ref, inView } = useInView();
+
     React.useEffect(() => {
         const handleFetchNextPage = () => {
             if (inView && hasNextPage) {
-                console.log('Fetching next page...');
                 fetchNextPage();
             }
         };
@@ -58,7 +58,6 @@ function Page() {
     return (
         <div className='flex flex-col w-full p-4'>
             <div className='flex flex-col md:flex-row md:justify-center md:items-center gap-4 p-4'>
-
                 <div className="relative">
                     <SearchBar />
                 </div>
@@ -104,8 +103,8 @@ function Page() {
                         </Command>
                     </PopoverContent>
                 </Popover>
-
             </div>
+
             <div className="flex flex-col md:flex-row w-full">
                 <div className="w-full md:w-1/2 p-2">
                     <h2 className='font-extrabold text-xl pb-6'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid, iure.</h2>
@@ -124,16 +123,35 @@ function Page() {
             </div>
 
             <div className='flex flex-col justify-center items-center'>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-4">
-                    {data?.pages.map((page, i) =>
-                        page.users.map((user: any, index: number) => (
-                            <UserCard key={`${i}-${index}`} user={user} />
-                        ))
-                    )}
-                </div>
-                <div ref={ref}>
-                    {isFetchingNextPage && <p>Loading more...</p>}
-                </div>
+                {isLoading ? (
+                    <div className="flex items-center space-x-4">
+                        <Skeleton className="h-12 w-12 rounded-full" />
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-[250px]" />
+                            <Skeleton className="h-4 w-[200px]" />
+                        </div>
+                    </div> // Replace this with a skeleton component if needed
+                ) : (
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-4">
+                            {data?.pages.map((page, i) =>
+                                page.users.map((user: any, index: number) => (
+                                    <UserCard key={`${i}-${index}`} user={user} />
+                                ))
+                            )}
+                        </div>
+                        <div ref={ref}>
+                            {isFetchingNextPage &&
+                                <div className="flex items-start justify-start space-x-4">
+                                    <Skeleton className="h-12 w-12 rounded-full" />
+                                    <div className="space-y-2">
+                                        <Skeleton className="h-4 w-[250px]" />
+                                        <Skeleton className="h-4 w-[200px]" />
+                                    </div>
+                                </div>}
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );
