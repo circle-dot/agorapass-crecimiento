@@ -3,7 +3,7 @@ import { IBM_Plex_Sans } from 'next/font/google';
 
 import "./globals.css";
 import Providers from '@/components/Providers';
-// import MainNav from "@/components/layout/MainNav";
+import MainNav from "@/components/layout/MainNav";
 
 const Plex_Sans = IBM_Plex_Sans({
   weight: '200',
@@ -26,7 +26,10 @@ export default function RootLayout({
         <Providers>
           {/* <MainNav /> */}
           <div className="flex flex-col flex-grow">
-            {children}
+            <MainNav />
+            <div className="flex flex-grow">
+              {children}
+            </div>
           </div>
         </Providers>
       </body>

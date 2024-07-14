@@ -11,7 +11,11 @@ import {
 import Image from "next/image";
 import SearchBar from "@/components/ui/users/searchBar";
 import Link from "next/link";
+import { FlipWords } from "@/components/ui/flip-words";
+
 export default function Page() {
+  const words = ["everyone", "everywhere", "all", "anyone"];
+
   return (
     <div className="flex items-center justify-center flex-grow ">
       <HeroHighlight className="flex-grow">
@@ -39,7 +43,17 @@ export default function Page() {
                 height={130}
                 className="select-none pointer-events-none"
               />
-              <CardTitle className="text-center uppercase tracking-[3.5px] text-4xl font-extralight pb-4">Agorapass</CardTitle>
+              <CardTitle className="text-center uppercase tracking-[3.5px] text-4xl font-extralight pb-4">
+                <div className="text-4xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
+                  Vouch
+                  <FlipWords words={words} /> <br />
+                  an build  <br />
+                  <Highlight className="text-black dark:text-white">
+                    Agora City
+                  </Highlight>
+                </div>
+              </CardTitle>
+
               <SearchBar />
               <CardDescription className="text-center w-full flex justify-evenly items-center flex-col gap-y-2">
                 <Link href='/agora/profiles' className="underline">Or check some profiles</Link>

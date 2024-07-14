@@ -2,7 +2,7 @@
 export const navSections = [
     {
         label: "Welcome",
-        href: "/agora",
+        href: "/",
         className: "transition-colors hover:text-foreground"
     },
     {

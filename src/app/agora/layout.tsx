@@ -10,10 +10,10 @@ type Props = {
 export default function Layout({ children }: Props) {
     return (
         <>
-            <MainNav />
-            <div className="flex flex-grow">
-                {children}
-            </div>
+            {/* <MainNav />
+            <div className="flex flex-grow"> */}
+            {children}
+            {/* </div> */}
         </>
     );
 }

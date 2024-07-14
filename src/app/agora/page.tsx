@@ -1,3 +1,4 @@
+//!!TO DO Later on remove this page if we find no use for it
 "use client";
 import { motion } from "framer-motion";
 import { HeroHighlight, Highlight } from "@/components/ui/hero-highlight";
