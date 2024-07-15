@@ -1,6 +1,6 @@
 export interface User {
     name: string;
-    walletAddress: string;
+    wallet: string;
     trustedBy: number;
     bio?: string;
     twitter?: string;

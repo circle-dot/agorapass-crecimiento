@@ -1,9 +1,8 @@
 "use client"
 import Link from "next/link";
 import { usePathname } from 'next/navigation'
-import { Menu, Search } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import React from "react";
 import { navSections } from '@/config/siteConfig';

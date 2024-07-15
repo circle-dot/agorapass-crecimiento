@@ -86,7 +86,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <p className="whitespace-nowrap">{ensName?.length > 0 ? ensName[0].name : params.slug || "No Data Available"}</p>
+                                        <p className="whitespace-nowrap truncate">{ensName?.length > 0 ? ensName[0].name : params.slug || "No Data Available"}</p>
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         <p>{ensName?.length > 0 ? ensName[0].name : params.slug || "No Data Available"}</p>

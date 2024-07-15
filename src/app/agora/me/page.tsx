@@ -10,46 +10,66 @@ import {
 } from "@/components/ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { usePrivy } from '@privy-io/react-auth';
-import { DateTime, Interval } from "luxon";
+import { DateTime, Duration } from "luxon";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useFetchUser } from '@/hooks/useFetchUser';
+import { getAvatar } from "@/utils/getAvatarImg";
 
 export default function Page() {
   const { user } = usePrivy();
   const [remainingTime, setRemainingTime] = useState('');
 
-  useEffect(() => {
-    if (!user) return;
+  const { data, isLoading, error } = useFetchUser();
 
-    const targetDate = DateTime.now().plus({ weeks: 1 });
+  useEffect(() => {
+    if (!user || !data?.vouchReset) return;
+
+    const vouchResetDate = DateTime.fromISO(data.vouchReset);
 
     const updateRemainingTime = () => {
       const now = DateTime.now();
-      const interval = Interval.fromDateTimes(now, targetDate);
-      const { days, hours, minutes, seconds } = interval.toDuration(['days', 'hours', 'minutes', 'seconds']).toObject();
-      //@ts-expect-error !TODO double check this, is temp until we use the db
-      setRemainingTime(`${Math.floor(days * 24 + hours).toString().padStart(2, '0')}:${Math.floor(minutes).toString().padStart(2, '0')}:${Math.floor(seconds).toString().padStart(2, '0')}`);
+      if (now > vouchResetDate) {
+        setRemainingTime("00:00:00"); // Time has expired
+        return;
+      }
+
+      const duration = vouchResetDate.diff(now, ['days', 'hours', 'minutes', 'seconds']).toObject();
+      const days = duration.days ?? 0;
+      const hours = duration.hours ?? 0;
+      const minutes = duration.minutes ?? 0;
+      const seconds = duration.seconds ?? 0;
+
+      setRemainingTime(
+        `${Math.floor(days * 24 + hours).toString().padStart(2, '0')}:${Math.floor(minutes).toString().padStart(2, '0')}:${Math.floor(seconds).toString().padStart(2, '0')}`
+      );
     };
 
     updateRemainingTime();
     const intervalId = setInterval(updateRemainingTime, 1000);
 
     return () => clearInterval(intervalId);
-  }, [user]);
+  }, [user, data?.vouchReset]);
 
-  // Check if user is not null
   if (!user) {
     return <div>Loading...</div>;
   }
 
-  const { email, createdAt, wallet } = user;
-  const profileImageUrl = "https://source.boringavatars.com/"; // Replace with actual profile image URL if available
+  if (isLoading) {
+    return <div>Loading user data...</div>;
+  }
 
-  const formattedDate = new Date(createdAt).toLocaleDateString(undefined, {
+  if (error) {
+    return <div>Error fetching user data</div>;
+  }
+
+  const { email, wallet, rankScore, vouchesAvailables, createdAt } = data || {};
+
+  const formattedDate = createdAt ? new Date(createdAt).toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  });
+  }) : '';
 
   return (
     <div className="flex items-center justify-center p-4 bg-gray-100 w-full">
@@ -66,8 +86,8 @@ export default function Page() {
               transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
             >
               <Avatar className="w-24 h-24 mx-auto mb-4">
-                <AvatarImage src={profileImageUrl} alt="Profile Image" />
-                <AvatarFallback>{email?.address.charAt(0)}</AvatarFallback>
+                <AvatarImage src={getAvatar(rankScore)} alt="Profile Image" />
+                <AvatarFallback>{email?.charAt(0)}</AvatarFallback>
               </Avatar>
             </motion.div>
             <motion.div
@@ -76,14 +96,14 @@ export default function Page() {
               transition={{ delay: 0.4, duration: 0.5, ease: "easeOut" }}
               className="flex flex-col items-center space-y-2"
             >
-              <p className="text-lg font-medium">{email?.address}</p>
+              <p className="text-lg font-medium">{email}</p>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <p className="text-sm text-muted-foreground truncate lg:truncate lg:w-9/12 px-4 break-words w-full border-zinc-400 rounded lg:rounded-full border">{wallet?.address}</p>
+                    <p className="text-sm text-muted-foreground truncate lg:truncate lg:w-9/12 px-4 break-words w-full border-zinc-400 rounded lg:rounded-full border">{wallet}</p>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{wallet?.address}</p>
+                    <p>{wallet}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -96,7 +116,7 @@ export default function Page() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.5, ease: "easeOut" }}
             >
-              <p>Vouches available: 3</p>
+              <p>Vouches available: {vouchesAvailables}</p>
               <p>It refreshes in: {remainingTime}</p>
             </motion.div>
           </CardContent>
@@ -107,7 +127,7 @@ export default function Page() {
               transition={{ delay: 0.8, duration: 0.5, ease: "easeOut" }}
             >
               <Button variant="outline" asChild>
-                <Link href={'/agora/address/' + wallet?.address}>Check my attestations</Link>
+                <Link href={'/agora/address/' + wallet}>Check my attestations</Link>
               </Button>
             </motion.div>
           </CardFooter>

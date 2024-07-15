@@ -45,7 +45,8 @@ export async function POST(request: NextRequest) {
                 email: userEmail,
                 bio,
                 wallet: walletAddress,
-                id
+                id,
+                privyId: verifiedClaims.userId
             },
         });
 
