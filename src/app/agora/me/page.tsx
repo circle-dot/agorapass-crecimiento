@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { usePrivy } from '@privy-io/react-auth';
-import { DateTime, Duration } from "luxon";
+import { DateTime } from "luxon";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useFetchUser } from '@/hooks/useFetchUser';
@@ -24,13 +24,47 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { Textarea } from "@/components/ui/textarea"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+
+const FormSchema = z.object({
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+  bio: z.string().max(160, {
+    message: "Bio must not be longer than 160 characters.",
+  }).optional(),
+})
 
 export default function Page() {
   const { user } = usePrivy();
+  const { getAccessToken } = usePrivy();
   const [remainingTime, setRemainingTime] = useState('');
-
-  const { data, isLoading, error } = useFetchUser();
-
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [updateTrigger, setUpdateTrigger] = useState(false);
+  const { data, isLoading, error } = useFetchUser(updateTrigger);
 
   useEffect(() => {
     if (!user || !data?.vouchReset) return;
@@ -40,7 +74,7 @@ export default function Page() {
     const updateRemainingTime = () => {
       const now = DateTime.now();
       if (now > vouchResetDate) {
-        setRemainingTime("00:00:00"); // Time has expired
+        setRemainingTime("00:00:00");
         return;
       }
 
@@ -61,7 +95,59 @@ export default function Page() {
     return () => clearInterval(intervalId);
   }, [user, data?.vouchReset]);
 
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      username: data?.name || "",
+      bio: data?.bio || "",
+    },
+  });
 
+  useEffect(() => {
+    if (data) {
+      form.reset({
+        username: data.name || "",
+        bio: data.bio || "",
+      });
+    }
+  }, [data, form]);
+
+  function onSubmit(formData: z.infer<typeof FormSchema>) {
+    const { username, bio } = formData;
+
+    const updateUser = async () => {
+      const token = await getAccessToken();
+
+      if (!token) {
+        console.error('Authorization token is missing');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/user', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token,
+          },
+          body: JSON.stringify({ name: username, bio: bio }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error('Error updating user:', errorData);
+        } else {
+          const updatedUser = await response.json();
+          console.log('User updated successfully:', updatedUser);
+          setUpdateTrigger(prev => !prev);  // Update the trigger to refetch data
+        }
+      } catch (error) {
+        console.error('Error updating user:', error);
+      }
+    };
+
+    updateUser();
+  }
 
   if (!user) {
     return <div>Loading...</div>;
@@ -75,14 +161,13 @@ export default function Page() {
     return <div>Error fetching user data</div>;
   }
 
-  const { email, wallet, rankScore, vouchesAvailables, createdAt } = data || {};
+  const { email, wallet, rankScore, vouchesAvailables, createdAt, name, bio } = data || {};
 
   const formattedDate = createdAt ? new Date(createdAt).toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   }) : '';
-
 
   const vouches = [
     { attesterWallet: '0x123...abc', vouchId: '1', date: '2024-07-01T00:00:00.000Z' },
@@ -117,7 +202,7 @@ export default function Page() {
                   transition={{ delay: 0.4, duration: 0.5, ease: "easeOut" }}
                   className="flex flex-col items-center space-y-2"
                 >
-                  <p className="text-lg font-medium">{email}</p>
+                  <p className="text-lg font-medium">{name ? name : email}</p>
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -137,6 +222,9 @@ export default function Page() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6, duration: 0.5, ease: "easeOut" }}
                 >
+                  <div>
+                    {bio}
+                  </div>
                   <p>Vouches available: {vouchesAvailables}</p>
                   <p>It refreshes in: {remainingTime}</p>
                 </motion.div>
@@ -147,9 +235,71 @@ export default function Page() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8, duration: 0.5, ease: "easeOut" }}
                 >
-                  <Button variant="outline" asChild>
-                    <Link href={'/agora/address/' + wallet}>Check my attestations</Link>
-                  </Button>
+                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline">Edit my profile</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Edit Profile</DialogTitle>
+                      </DialogHeader>
+                      <Form {...form}>
+                        <form
+                          onSubmit={form.handleSubmit(onSubmit)}
+                          className="space-y-4"
+                        >
+                          <FormField
+                            control={form.control}
+                            name="username"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Username</FormLabel>
+                                <FormControl>
+                                  <Input {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="bio"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Bio</FormLabel>
+                                <FormControl>
+                                  <Textarea {...field} maxLength={160} />
+                                </FormControl>
+                                <FormDescription>
+                                  Max 160 characters
+                                </FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <DialogFooter>
+                            <Button
+                              type="submit"
+                              onClick={() => {
+                                // Prevent closing the dialog if there are validation errors
+                                if (form.formState.isValid) {
+                                  setIsDialogOpen(false);
+                                }
+                              }}
+                            >
+                              Save changes
+                            </Button>
+                            <Button
+                              variant="outline"
+                              onClick={() => setIsDialogOpen(false)}
+                            >
+                              Cancel
+                            </Button>
+                          </DialogFooter>
+                        </form>
+                      </Form>
+                    </DialogContent>
+                  </Dialog>
                 </motion.div>
               </CardFooter>
             </Card>
@@ -185,7 +335,7 @@ export default function Page() {
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem asChild>
-                            <Button variant="outline" className="p-2" asChild>
+                            <Button variant="outline" className="p-2 cursor-pointer" asChild>
                               <Link href={`/agora/attestation/${vouch.vouchId}`}>
                                 Check vouch
                                 <CheckCircle className="text-green-500 w-4 h-4 ml-2" />
@@ -194,7 +344,7 @@ export default function Page() {
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem asChild>
-                            <Button variant="outline" className="p-2" onClick={() => {/* Add revoke vouch logic here */ }}>
+                            <Button variant="outline" className="p-2 cursor-pointer" onClick={() => {/* Add revoke vouch logic here */ }}>
                               Remove vouch
                               <XCircle className="text-red-500 w-4 h-4 ml-2" />
                             </Button>

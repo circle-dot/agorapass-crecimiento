@@ -21,10 +21,15 @@ const fetchUser = async (getAccessToken: () => Promise<string | null>) => {
     return response.json();
 };
 
-export const useFetchUser = () => {
+export const useFetchUser = (updateTrigger?: boolean) => {
     const { getAccessToken } = usePrivy();
+
     return useQuery({
-        queryKey: ['user'],
+        queryKey: ['user', updateTrigger],  // Include `updateTrigger` in the query key
         queryFn: () => fetchUser(getAccessToken),
+        placeholderData: true,  // Keep previous data while fetching new data
+        refetchOnWindowFocus: false,  // Prevent refetch on window focus, if desired
+        refetchOnReconnect: true,  // Refetch data when reconnecting to the internet
+        refetchInterval: false,  // Disable interval-based refetching
     });
 };
