@@ -6,6 +6,8 @@ import GET_ATTESTATION from '@/graphql/getAttestation';
 import COUNT_ATTESTATIONS_MADE from '@/graphql/AttestationsMade';
 import COUNT_ATTESTATIONS_RECEIVED from '@/graphql/AttestationsReceived';
 import SEARCH_ENS_NAMES_BY_ADDRESS from '@/graphql/getENSNamebyAddress';
+import LAST_THREE_ATTESTATIONS from '@/graphql/LastThreeAttestations';
+
 import { Attestation } from "@/types/attestations";
 
 export const fetchAttestations = async (page: number, pageSize: number) => {
@@ -95,4 +97,16 @@ export const fetchAttestationsReduced = async (page: number, pageSize: number): 
     });
 
     return data?.schema?.attestations ?? [];
+};
+
+export const LastThreeAttestations = async (schemaId: string, attester: string) => {
+    const { data } = await client.query({
+        query: LAST_THREE_ATTESTATIONS,
+        variables: {
+            schemaId,
+            attester,
+            take: 3
+        },
+    });
+    return data.attestations;
 };

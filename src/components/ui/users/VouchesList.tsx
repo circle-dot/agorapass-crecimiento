@@ -6,9 +6,11 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 interface Vouch {
+    id: string;
+    schemaId: string;
     attesterWallet: string;
-    vouchId: string;
-    date: string;
+    recipient: string;
+    timeCreated: number;  // UNIX timestamp
 }
 
 interface VouchesListProps {
@@ -16,6 +18,11 @@ interface VouchesListProps {
 }
 
 export function VouchesList({ vouches }: VouchesListProps) {
+    function truncateWallet(wallet: string) {
+        // Keep the first 6 characters and the last 4 characters
+        return wallet.slice(0, 6) + '...' + wallet.slice(-4);
+    }
+
     return (
         <div className="bg-white p-4 rounded-lg shadow-md">
             <h2 className="text-xl font-bold mb-4">Your latest vouches</h2>
@@ -30,10 +37,11 @@ export function VouchesList({ vouches }: VouchesListProps) {
                     >
                         <div className="flex flex-col md:flex-row items-start md:items-center justify-between space-y-2 md:space-y-0 md:space-x-2">
                             <div>
-                                <p className="font-semibold">You vouched for <Link href={`/agora/address/${vouch.attesterWallet}`} className="text-blue-500 hover:underline">{vouch.attesterWallet}</Link> on {new Date(vouch.date).toLocaleDateString()}</p>
+                                <p className="font-semibold">
+                                    You vouched for <Link href={`/agora/address/${vouch.recipient}`} className="text-blue-500 hover:underline truncate">{truncateWallet(vouch.recipient)}</Link> on {new Date(vouch.timeCreated * 1000).toLocaleDateString()}
+                                </p>
                             </div>
                             <div className="flex flex-row space-x-2">
-
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <div>
@@ -46,7 +54,7 @@ export function VouchesList({ vouches }: VouchesListProps) {
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem asChild>
                                             <Button variant="outline" className="p-2 cursor-pointer" asChild>
-                                                <Link href={`/agora/attestation/${vouch.vouchId}`}>
+                                                <Link href={`/agora/attestation/${vouch.id}`}>
                                                     Check vouch
                                                     <CheckCircle className="text-green-500 w-4 h-4 ml-2" />
                                                 </Link>
@@ -61,9 +69,6 @@ export function VouchesList({ vouches }: VouchesListProps) {
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
-
-
-
                             </div>
                         </div>
                     </motion.div>
