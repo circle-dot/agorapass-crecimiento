@@ -14,7 +14,6 @@ export async function GET(request: NextRequest) {
         let verifiedClaims;
         try {
             verifiedClaims = await privy.verifyAuthToken(authorization);
-            console.log('verifiedClaims', verifiedClaims);
         } catch (error) {
             console.error('Token verification failed:', error);
             return NextResponse.json({ error: 'Token verification failed' }, { status: 401 });
