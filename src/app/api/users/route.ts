@@ -63,6 +63,7 @@ export async function GET(req: NextRequest) {
     const page = searchParams.get('page') ?? '1';
     const limit = searchParams.get('limit') ?? '12';
     const sortOrder = searchParams.get('sortOrder') as 'asc' | 'desc' || 'desc';
+    const searchQuery = searchParams.get('searchQuery') || '';
 
     const pageNumber = parseInt(page, 10);
     const pageSize = parseInt(limit, 10);
@@ -75,9 +76,23 @@ export async function GET(req: NextRequest) {
             orderBy: {
                 attestationReceived: sortOrder,
             },
+            where: {
+                name: {
+                    contains: searchQuery,
+                    mode: 'insensitive', // Case-insensitive search
+                },
+            },
         });
 
-        const totalUsers = await prisma.user.count();
+        const totalUsers = await prisma.user.count({
+            where: {
+                name: {
+                    contains: searchQuery,
+                    mode: 'insensitive',
+                },
+            },
+        });
+
         const hasMore = skip + pageSize < totalUsers;
         const nextPage = hasMore ? pageNumber + 1 : undefined;
 

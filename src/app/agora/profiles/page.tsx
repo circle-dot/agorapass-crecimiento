@@ -1,11 +1,10 @@
-"use client"
+"use client";
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
 import useUsers from '@/hooks/useUsers';
 import UserCard from '@/components/ui/users/UserCard';
 import { Button } from '@/components/ui/button';
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
-import SearchBar from "@/components/ui/users/searchBar";
 import {
     Command,
     CommandGroup,
@@ -18,9 +17,8 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils";
-import Image from 'next/image';
-import voteLogo from '@/../../public/vote.svg'
 import { Skeleton } from '@/components/ui/skeleton';
+
 const filters = [
     {
         valueFilter: "desc" as const,
@@ -36,7 +34,8 @@ function Page() {
     const [openFilter, setOpenFilter] = React.useState(false);
     const [valueFilter, setValueFilter] = React.useState<'asc' | 'desc'>("desc");
     const [openSort, setOpenSort] = React.useState(false);
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useUsers(valueFilter);
+    const [searchQuery, setSearchQuery] = React.useState<string>("");
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useUsers(valueFilter, searchQuery);
     const { ref, inView } = useInView();
 
     React.useEffect(() => {
@@ -58,8 +57,14 @@ function Page() {
     return (
         <div className='flex flex-col w-full p-4'>
             <div className='flex flex-col md:flex-row md:justify-center md:items-center gap-4 p-4'>
-                <div className="relative">
-                    <SearchBar />
+                <div className="relative w-full md:w-[300px]">
+                    <input
+                        type="text"
+                        placeholder="Search by name"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="border p-2 rounded-md w-full"
+                    />
                 </div>
 
                 <Popover open={openFilter} onOpenChange={setOpenFilter}>
@@ -103,23 +108,6 @@ function Page() {
                         </Command>
                     </PopoverContent>
                 </Popover>
-            </div>
-
-            <div className="flex flex-col md:flex-row w-full">
-                <div className="w-full md:w-1/2 p-2">
-                    <h2 className='font-extrabold text-xl pb-6'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid, iure.</h2>
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eveniet placeat, in ipsum delectus ab ad quam eaque velit, autem earum, fugiat dicta quos quas neque labore quasi error ea molestiae!
-                    </p>
-                </div>
-                <div className="w-full md:w-1/2 p-2">
-                    <Image
-                        src={voteLogo}
-                        alt='Thinking about voting'
-                        width={100}
-                        className='w-full max-h-[200px]'
-                    />
-                </div>
             </div>
 
             <div className='flex flex-col justify-center items-center'>
