@@ -33,7 +33,6 @@ const filters = [
 function Page() {
     const [openFilter, setOpenFilter] = React.useState(false);
     const [valueFilter, setValueFilter] = React.useState<'asc' | 'desc'>("desc");
-    const [openSort, setOpenSort] = React.useState(false);
     const [searchQuery, setSearchQuery] = React.useState<string>("");
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useUsers(valueFilter, searchQuery);
     const { ref, inView } = useInView();
