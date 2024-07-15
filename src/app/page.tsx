@@ -46,7 +46,7 @@ export default function Page() {
                 <div className="text-4xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
                   Vouch
                   <FlipWords words={words} /> <br />
-                  an build  <br />
+                  and build  <br />
                   <Highlight className="text-black dark:text-white">
                     Agora City
                   </Highlight>

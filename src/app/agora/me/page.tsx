@@ -16,12 +16,21 @@ import Link from "next/link";
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { getAvatar } from "@/utils/getAvatarImg";
 import { XCircle, CheckCircle } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export default function Page() {
   const { user } = usePrivy();
   const [remainingTime, setRemainingTime] = useState('');
 
   const { data, isLoading, error } = useFetchUser();
+
 
   useEffect(() => {
     if (!user || !data?.vouchReset) return;
@@ -52,6 +61,8 @@ export default function Page() {
     return () => clearInterval(intervalId);
   }, [user, data?.vouchReset]);
 
+
+
   if (!user) {
     return <div>Loading...</div>;
   }
@@ -75,7 +86,8 @@ export default function Page() {
 
   const vouches = [
     { attesterWallet: '0x123...abc', vouchId: '1', date: '2024-07-01T00:00:00.000Z' },
-    { attesterWallet: '0x456...def', vouchId: '2', date: '2024-07-05T00:00:00.000Z' }
+    { attesterWallet: '0x456...def', vouchId: '2', date: '2024-07-05T00:00:00.000Z' },
+    { attesterWallet: '0x123...abc', vouchId: '1', date: '2024-07-01T00:00:00.000Z' },
   ];
 
   return (
@@ -146,7 +158,7 @@ export default function Page() {
         <div className="md:col-span-2">
           {/* Your new section for vouches */}
           <div className="bg-white p-4 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold mb-4">Your Vouches</h2>
+            <h2 className="text-xl font-bold mb-4">Your latest vouches</h2>
             <div className="space-y-4">
               {vouches.map((vouch, index) => (
                 <motion.div
@@ -161,21 +173,49 @@ export default function Page() {
                       <p className="font-semibold">You vouched for <Link href={`/agora/address/${vouch.attesterWallet}`} className="text-blue-500 hover:underline">{vouch.attesterWallet}</Link> on {new Date(vouch.date).toLocaleDateString()}</p>
                     </div>
                     <div className="flex flex-row space-x-2">
-                      <Button variant="outline" className="p-2" asChild>
-                        <Link href={`/agora/attestation/${vouch.vouchId}`}>
-                          Check vouch
-                          <CheckCircle className="text-green-500 w-4 h-4 ml-2" />
-                        </Link>
-                      </Button>
-                      <Button variant="outline" className="p-2" onClick={() => {/* Add revoke vouch logic here */ }}>
-                        Remove vouch
-                        <XCircle className="text-red-500 w-4 h-4 ml-2" />
-                      </Button>
+
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <div>
+                            <Button variant="outline" className="font-extrabold hidden md:block">...</Button>
+                            <Button variant="outline" className="font-extrabold block md:hidden">Actions</Button>
+                          </div>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem asChild>
+                            <Button variant="outline" className="p-2" asChild>
+                              <Link href={`/agora/attestation/${vouch.vouchId}`}>
+                                Check vouch
+                                <CheckCircle className="text-green-500 w-4 h-4 ml-2" />
+                              </Link>
+                            </Button>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem asChild>
+                            <Button variant="outline" className="p-2" onClick={() => {/* Add revoke vouch logic here */ }}>
+                              Remove vouch
+                              <XCircle className="text-red-500 w-4 h-4 ml-2" />
+                            </Button>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+
+
+
                     </div>
                   </div>
                 </motion.div>
               ))}
             </div>
+          </div>
+          <div className="mt-4">
+            <Link href={'/agora/address/' + wallet} className="w-full flex ">
+              <button className="px-4 py-2 w-full font-bold rounded-md border border-black bg-white text-black text-sm hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200">
+                Check all your vouches
+              </button>
+            </Link>
           </div>
         </div>
       </div>
