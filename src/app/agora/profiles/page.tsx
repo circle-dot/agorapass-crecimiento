@@ -34,6 +34,13 @@ function Page() {
     const [openFilter, setOpenFilter] = React.useState(false);
     const [valueFilter, setValueFilter] = React.useState<'asc' | 'desc'>("desc");
     const [searchQuery, setSearchQuery] = React.useState<string>("");
+
+    // Debounce function for search query
+    const debouncedSearchQuery = React.useMemo(
+        () => debounce((query: string) => setSearchQuery(query), 300),
+        []
+    );
+
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useUsers(valueFilter, searchQuery);
     const { ref, inView } = useInView();
 
@@ -60,8 +67,7 @@ function Page() {
                     <input
                         type="text"
                         placeholder="Search by name"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => debouncedSearchQuery(e.target.value)}
                         className="border p-2 rounded-md w-full"
                     />
                 </div>
