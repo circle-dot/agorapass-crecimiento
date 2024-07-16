@@ -10,11 +10,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 // import { CircleUser } from "lucide-react";
-import { usePrivy } from '@privy-io/react-auth';
+import { usePrivy, useLogin } from '@privy-io/react-auth';
 import Link from 'next/link';
 import { Wallet } from 'lucide-react';
 import iconLogo from '../../../public/agora.png'
 import Image from 'next/image';
+import createUser from '@/utils/createUser';
 
 function ProfileAvatar() {
     const { authenticated, logout } = usePrivy();
@@ -55,7 +56,26 @@ function ProfileAvatar() {
 }
 
 function LoginButton() {
-    const { ready, authenticated, login } = usePrivy();
+    const { ready, authenticated } = usePrivy();
+
+    const { login } = useLogin({
+        onComplete: async (user, isNewUser, wasAlreadyAuthenticated, loginMethod) => {
+            // console.log(user, isNewUser, wasAlreadyAuthenticated, loginMethod);
+
+            if (isNewUser) {
+                // Call createUser function for new users
+                await createUser(user);
+            }
+
+            // Any logic you'd like to execute if the user is/becomes authenticated while this
+            // component is mounted
+        },
+        onError: (error) => {
+            console.log(error);
+            // Any logic you'd like to execute after a user exits the login flow or there is an error
+        },
+    });
+
     // Disable login when Privy is not ready or the user is already authenticated
     const disableLogin = !ready || (ready && authenticated);
 

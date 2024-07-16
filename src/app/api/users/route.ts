@@ -1,37 +1,18 @@
 import prisma from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
-import privy from '@/lib/privy';
 
 export async function POST(request: NextRequest) {
     try {
-        // Verify Privy token
-        const authorization = request.headers.get('authorization');
 
-        if (!authorization || typeof authorization !== 'string') {
-            console.error('Authorization header is missing or invalid');
-            return NextResponse.json({ error: 'Authorization header missing or invalid' }, { status: 401 });
-        }
-        let verifiedClaims;
-        try {
-            verifiedClaims = await privy.verifyAuthToken(authorization);
-            console.log('verifiedClaims', verifiedClaims);
-        } catch (error) {
-            console.error('Token verification failed:', error);
-            return NextResponse.json({ error: 'Token verification failed' }, { status: 401 });
-        }
-        console.log('verifiedClaims', verifiedClaims);
-        // Extract user data from request body
-        const { name, email, bio, wallet } = await request.json();
+        const { name, email, bio, wallet, id } = await request.json();
         console.log('Received data:', { name, email, bio, wallet });
 
-        const id = verifiedClaims.userId
+        // const id = verifiedClaims.userId
         const userEmail = email?.address || ''
         const walletAddress = wallet.address
-        console.log(walletAddress)
-        console.log(wallet)
         // Check if user already exists
         const existingUser = await prisma.user.findUnique({
-            where: { id },
+            where: { id: id },
         });
 
         if (existingUser) {
@@ -46,7 +27,7 @@ export async function POST(request: NextRequest) {
                 bio,
                 wallet: walletAddress,
                 id,
-                privyId: verifiedClaims.userId
+                chainType: wallet.chainType
             },
         });
 

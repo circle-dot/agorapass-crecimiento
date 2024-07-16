@@ -11,12 +11,6 @@ import Link from "next/link";
 import { LastThreeAttestations } from "@/lib/fetchers/attestations";
 import { useQuery } from '@tanstack/react-query';
 
-// const vouches = [
-//   { attesterWallet: '0x123...abc', vouchId: '1', date: '2024-07-01T00:00:00.000Z' },
-//   { attesterWallet: '0x456...def', vouchId: '2', date: '2024-07-05T00:00:00.000Z' },
-//   { attesterWallet: '0x123...abc', vouchId: '1', date: '2024-07-01T00:00:00.000Z' },
-// ];
-
 export default function Page() {
   const { getAccessToken } = usePrivy();
   const [remainingTime, setRemainingTime] = useState('');
@@ -25,15 +19,14 @@ export default function Page() {
 
   // Define schemaId and address to be used in the query
   const schemaId = process.env.NEXT_PUBLIC_SCHEMA_ID || "0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"; // Replace with your schemaId
-  // const attester = '0x357458739F90461b99789350868CD7CF330Dd7EE'
   const attester = data?.wallet;
 
   // Define the query for last three attestations
   const { data: vouches, error: receivedError, isLoading: receivedLoading } = useQuery({
     queryKey: ['lastThreeAttestations', schemaId, attester],
     queryFn: () => LastThreeAttestations(schemaId, attester),
+    enabled: !!attester, // Ensure the query only runs if attester is defined
   });
-
 
   useEffect(() => {
     if (!data?.vouchReset) return;
@@ -102,9 +95,9 @@ export default function Page() {
   }
 
   if (isLoading || receivedLoading) return <p>Loading...</p>;
-  if (error) return <p>Error loading profile</p>;
-  if (receivedError) return <p>Error loading attestations</p>;
-
+  if (error) return <p>Error loading profile: {error.message}</p>;
+  if (!data) return <p>User not found</p>;
+  if (receivedError) return <p>Error loading attestations: {receivedError.message}</p>;
 
   return (
     <div className="p-6 bg-gray-100 w-full">
@@ -116,10 +109,14 @@ export default function Page() {
           />
         </div>
         <div className="md:col-span-2 space-y-4">
-          <VouchesList vouches={vouches} />
+          {vouches && vouches.length > 0 ? (
+            <VouchesList vouches={vouches} />
+          ) : (
+            <p>No recent vouches found.</p>
+          )}
 
           <div className="mt-4">
-            <Link href={'/agora/address/' + data?.wallet} className="w-full flex ">
+            <Link href={'/agora/address/' + data?.wallet} className="w-full flex">
               <button className="px-4 py-2 w-full font-bold rounded-md border border-black bg-white text-black text-sm hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200">
                 Check all your vouches
               </button>

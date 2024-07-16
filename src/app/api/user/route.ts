@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
 
         const user = await prisma.user.findUnique({
             where: {
-                privyId: verifiedClaims.userId,
+                id: verifiedClaims.userId,
             },
         });
 
@@ -62,7 +62,7 @@ export async function PATCH(request: NextRequest) {
 
         const updatedUser = await prisma.user.update({
             where: {
-                privyId: verifiedClaims.userId,
+                id: verifiedClaims.userId,
             },
             data: {
                 name: name.trim(),
@@ -76,3 +76,4 @@ export async function PATCH(request: NextRequest) {
         return NextResponse.json({ error: 'Failed to update user' }, { status: 500 });
     }
 }
+

@@ -1,10 +1,10 @@
-const createUser = async (user: any, accessToken: string) => {
+const createUser = async (user: any) => {
     try {
-        const response = await fetch('/api/users', {
+        const response = await fetch('/api/user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`,
+                // 'Authorization': `Bearer ${accessToken}`,
             },
             body: JSON.stringify(user),
         });
