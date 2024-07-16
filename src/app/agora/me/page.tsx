@@ -10,11 +10,13 @@ import { FormSchema } from "@/components/ui/users/ProfileCard";
 import Link from "next/link";
 import { LastThreeAttestations } from "@/lib/fetchers/attestations";
 import { useQuery } from '@tanstack/react-query';
+import Loader from "@/components/ui/Loader";
 
 export default function Page() {
   const { getAccessToken } = usePrivy();
   const [remainingTime, setRemainingTime] = useState('');
   const [updateTrigger, setUpdateTrigger] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const { data, isLoading, error } = useFetchUser(updateTrigger);
 
   // Define schemaId and address to be used in the query
@@ -57,6 +59,13 @@ export default function Page() {
     return () => clearInterval(intervalId);
   }, [data?.vouchReset]);
 
+  // Effect to handle loading state for last three attestations
+  useEffect(() => {
+    if (!receivedLoading && !isLoading) {
+      setInitialLoading(false);
+    }
+  }, [receivedLoading, isLoading]);
+
   function onSubmit(formData: z.infer<typeof FormSchema>) {
     const { username, bio } = formData;
 
@@ -94,11 +103,14 @@ export default function Page() {
     updateUser();
   }
 
-  if (isLoading || receivedLoading) return <p>Loading...</p>;
+  if (initialLoading) return <Loader />;
+
+  // Handle errors
   if (error) return <p>Error loading profile: {error.message}</p>;
   if (!data) return <p>User not found</p>;
   if (receivedError) return <p>Error loading attestations: {receivedError.message}</p>;
 
+  // Render the content once data is loaded
   return (
     <div className="p-6 bg-gray-100 w-full">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

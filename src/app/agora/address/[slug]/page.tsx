@@ -13,6 +13,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { motion } from 'framer-motion';
+import Loader from '@/components/ui/Loader';
 
 //!TODO replace this schemaId
 const schemaId = process.env.NEXT_PUBLIC_SCHEMA_ID || "0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"; // Replace with your schemaId
@@ -37,7 +38,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         queryFn: () => fetchEnsNamesByAddress(id),
     });
 
-    if (madeLoading || receivedLoading || ensNameLoading) return <div>Loading...</div>;
+    if (madeLoading || receivedLoading || ensNameLoading) return <div className="w-screen flex items-center justify-center"><Loader /></div>;
     if (madeError || receivedError || ensNameerror) return <div>Error: {madeError?.message || receivedError?.message}</div>;
 
     return (

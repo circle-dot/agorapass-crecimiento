@@ -25,7 +25,7 @@ function MainNav() {
                             width={20}
                             height={20}
                         />
-                        <span className="hidden lg:flex">Agora City</span>
+                        <span className="hidden lg:flex">Agora City <sup>Beta</sup></span>
                     </Link>
                 </div>
                 <div className='w-full flex justify-center'>

@@ -15,7 +15,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import Link from "next/link";
-
+import Loader from "@/components/ui/Loader";
 const truncateAddress = (address: string, length: number) => {
     if (address.length <= length) return address;
     return `${address.slice(0, length)}...`;
@@ -52,7 +52,7 @@ const Attestations: React.FC = () => {
         }
     }, [inView, hasNextPage, fetchNextPage]);
 
-    if (isLoading) return <p>Loading...</p>;
+    if (isLoading) return <div className="flex items-center justify-center w-screen"><Loader /></div>;
     if (isError) return <p>Error loading data...</p>;
 
     return (

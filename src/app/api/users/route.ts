@@ -1,5 +1,6 @@
 import prisma from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
+import { DateTime } from 'luxon';
 
 export async function POST(request: NextRequest) {
     try {
@@ -27,7 +28,8 @@ export async function POST(request: NextRequest) {
                 bio,
                 wallet: walletAddress,
                 id,
-                chainType: wallet.chainType
+                chainType: wallet.chainType,
+                vouchReset: DateTime.now().plus({ days: 30 }).toISO(), // Calculate 30 days from now
             },
         });
 

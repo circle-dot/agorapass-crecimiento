@@ -66,6 +66,11 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
         return () => clearInterval(intervalId);
     }, [vouchResetDate]);
 
+    const handleFormSubmit = (data: z.infer<typeof FormSchema>) => {
+        onSubmit(data);
+        setIsDialogOpen(false);
+    };
+
     return (
         <Card className="shadow-lg">
             <CardHeader className="text-center">
@@ -128,7 +133,7 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                             </DialogHeader>
                             <Form {...form}>
                                 <form
-                                    onSubmit={form.handleSubmit(onSubmit)}
+                                    onSubmit={form.handleSubmit(handleFormSubmit)}
                                     className="space-y-4"
                                 >
                                     <FormField
@@ -161,15 +166,7 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                                         )}
                                     />
                                     <DialogFooter>
-                                        <Button
-                                            type="submit"
-                                            onClick={() => {
-                                                // Prevent closing the dialog if there are validation errors
-                                                if (form.formState.isValid) {
-                                                    setIsDialogOpen(false);
-                                                }
-                                            }}
-                                        >
+                                        <Button type="submit">
                                             Save changes
                                         </Button>
                                         <DialogClose asChild>

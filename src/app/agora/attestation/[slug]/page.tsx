@@ -12,7 +12,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
-
+import Loader from "@/components/ui/Loader";
 export default function Page({ params }: { params: { slug: string } }) {
     // Fetch attestation data
     const { data, error, isLoading } = useQuery({
@@ -24,13 +24,13 @@ export default function Page({ params }: { params: { slug: string } }) {
     });
 
     // Check isLoading first to display "Loading..." message
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <div className="w-screen flex items-center justify-center"><Loader /></div>;
 
     // Handle errors
     if (error) return <div>Error: {error.message}</div>;
 
     // Handle case where data is not yet loaded
-    if (!data) return <div>Loading...</div>; // Alternatively, you can customize this message
+    if (!data) return <div className="w-screen flex items-center justify-center"><Loader /></div>; // Alternatively, you can customize this message
 
     // Once data is loaded, display the attestation details
     return (

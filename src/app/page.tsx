@@ -50,7 +50,7 @@ export default function Page() {
                   <Highlight className="text-black dark:text-white">
                     Agora City
                   </Highlight>
-                </div>
+                </div><sup className="text-xs">Beta</sup>
               </CardTitle>
 
 
