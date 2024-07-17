@@ -7,4 +7,5 @@ export interface User {
     image?: string;
     rankScore?: number;
     attestationReceived?: number;
+    avatarType: "metamask" | "blockies";
 }

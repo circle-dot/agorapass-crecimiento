@@ -27,4 +27,5 @@ model User {
   rankScore           Int       @default(0)
   attestationsDone    Int       @default(0)
   attestationReceived Int       @default(0)
+  avatarType          String    @default("blockies")
 }

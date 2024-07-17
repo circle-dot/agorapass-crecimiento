@@ -1,4 +1,4 @@
-"use client";
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -9,41 +9,39 @@ import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { getAvatar } from "@/utils/getAvatarImg";
+import { getAvatar } from './getAvatarImg';
 import { motion } from "framer-motion";
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@radix-ui/react-tooltip";
 import { DateTime } from "luxon";
-import { useState, useEffect } from "react";
 
 export const FormSchema = z.object({
     username: z.string().min(2, { message: "Username must be at least 2 characters." }),
     bio: z.string().max(160, { message: "Bio must not be longer than 160 characters." }).optional(),
+    avatarType: z.enum(['metamask', 'blockies']).default('metamask'),
 });
 
 interface ProfileCardProps {
-    data: any;
+    data: any;  // Replace `any` with the actual type if available
     onSubmit: (data: z.infer<typeof FormSchema>) => void;
 }
 
 export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
-    const { email, wallet, rankScore, vouchesAvailables, createdAt, vouchReset, name, bio } = data || {};
+    const { email, wallet, rankScore, vouchesAvailables, createdAt, vouchReset, name, bio, avatarType } = data || {};
 
     const [remainingTime, setRemainingTime] = useState('00:00:00');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const formattedDate = DateTime.fromISO(createdAt).toLocaleString(DateTime.DATE_FULL);
-
-    // Convert `vouchReset` to DateTime
     const vouchResetDate = DateTime.fromISO(vouchReset);
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
-        defaultValues: { username: name || "", bio: bio || "" }, // Ensure default values are set
+        defaultValues: { username: name || "", bio: bio || "", avatarType: avatarType || "metamask" },
     });
 
     useEffect(() => {
-        form.reset({ username: name || "", bio: bio || "" }); // Reset form with new data when `data` changes
-    }, [name, bio, form]);
+        form.reset({ username: name || "", bio: bio || "", avatarType: avatarType || "metamask" });
+    }, [name, bio, avatarType, form]);
 
     useEffect(() => {
         const updateRemainingTime = () => {
@@ -67,9 +65,17 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
     }, [vouchResetDate]);
 
     const handleFormSubmit = (data: z.infer<typeof FormSchema>) => {
+        console.log('Form submitted with data:', data);
         onSubmit(data);
         setIsDialogOpen(false);
     };
+
+    // Check if data is available before rendering the avatar
+    if (!wallet || !avatarType) {
+        return <div>Loading...</div>;
+    }
+
+    const avatar = getAvatar(wallet, avatarType);
 
     return (
         <Card className="shadow-lg">
@@ -80,8 +86,12 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                     transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
                 >
                     <Avatar className="w-24 h-24 mx-auto mb-4">
-                        <AvatarImage src={getAvatar(rankScore)} alt="Profile Image" />
-                        <AvatarFallback>{email?.charAt(0)}</AvatarFallback>
+                        {typeof avatar === 'string' ? (
+                            <AvatarImage src={avatar} alt="Avatar Image" />
+                        ) : (
+                            avatar
+                        )}
+                        {/* <AvatarFallback className="flex items-center justify-center">{email?.charAt(0)}</AvatarFallback> */}
                     </Avatar>
                 </motion.div>
                 <motion.div

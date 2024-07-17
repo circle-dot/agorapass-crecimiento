@@ -1,4 +1,6 @@
 import React from 'react';
+import { MetaMaskAvatar } from 'react-metamask-avatar';
+import blockies from 'ethereum-blockies';
 import {
     StarIcon,
     TwitterLogoIcon
@@ -30,9 +32,10 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { getAvatar } from '@/utils/getAvatarImg';
+import { getAvatar } from './getAvatarImg';
 import { ThumbsUp } from 'lucide-react';
 import Link from 'next/link';
+
 function truncateWallet(wallet: string) {
     // Keep the first 6 characters and the last 4 characters
     return wallet.slice(0, 6) + '...' + wallet.slice(-4);
@@ -48,13 +51,16 @@ function truncateName(name: string) {
 }
 
 const UserCard: React.FC<{ user: User }> = ({ user }) => {
-    const { name, wallet, bio, twitter, rankScore, attestationReceived } = user;
+    const { name, wallet, bio, twitter, rankScore, attestationReceived, avatarType } = user;
 
     // Determine the display name: use name if available, otherwise use wallet address
     const displayName = truncateName(name) || truncateWallet(wallet);
     const fullName = name || wallet;
     // Determine the bio: use provided bio, otherwise default to "No bio provided"
     const displayBio = bio || "No bio provided";
+
+    // Generate the avatar based on the avatarType
+    const avatar = getAvatar(wallet, avatarType);
 
     return (
         <Card>
@@ -64,7 +70,11 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
                         <div className="space-y-1">
                             <CardTitle className='flex flex-row items-center gap-4'>
                                 <Avatar>
-                                    <AvatarImage src={getAvatar(rankScore)} />
+                                    {typeof avatar === 'string' ? (
+                                        <AvatarImage src={avatar} alt="Avatar Image" />
+                                    ) : (
+                                        avatar
+                                    )}
                                     <AvatarFallback>{name ? name.charAt(0) : 'U'}</AvatarFallback>
                                 </Avatar>
                                 <TooltipProvider>
@@ -119,4 +129,5 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
         </Card>
     );
 }
+
 export default UserCard;
