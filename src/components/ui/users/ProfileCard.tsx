@@ -188,7 +188,7 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                                                     <RadioGroup
                                                         onValueChange={field.onChange}
                                                         defaultValue={field.value}
-                                                        className="flex flex-col space-y-1"
+                                                        className="flex flex-col md:flex-row md:items-start md:justify-start space-y-1 "
                                                     >
                                                         <FormItem className="flex items-center space-x-3 space-y-0">
                                                             <FormControl>
@@ -196,18 +196,22 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                                                             </FormControl>
                                                             <FormLabel className="font-normal">
                                                                 <Avatar className="w-24 h-24 mx-auto mb-4">
-                                                                    <AvatarImage src={icon} alt="Avatar Image" />
+                                                                    <AvatarImage src={getAvatar(wallet, 'blockies') as string} alt="Blockies Avatar" className="w-full h-full object-cover" />
+                                                                    <AvatarFallback>{email?.charAt(0)}</AvatarFallback>
                                                                 </Avatar>
                                                             </FormLabel>
                                                         </FormItem>
-                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                        <FormItem className="flex items-center space-x-3 space-y-0 p-0 m-0">
                                                             <FormControl>
                                                                 <RadioGroupItem value="metamask" />
                                                             </FormControl>
                                                             <FormLabel className="font-normal">
-                                                                <MetaMaskAvatar address={wallet} size={100} />
+                                                                <div className="w-24 h-24 mx-auto mb-4">
+                                                                    <MetaMaskAvatar address={wallet} size={96} className="w-full h-full object-cover" />
+                                                                </div>
                                                             </FormLabel>
                                                         </FormItem>
+
                                                     </RadioGroup>
                                                 </FormControl>
                                                 <FormMessage />
