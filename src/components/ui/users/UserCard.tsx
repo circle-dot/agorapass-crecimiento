@@ -75,7 +75,7 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
                                     ) : (
                                         avatar
                                     )}
-                                    <AvatarFallback>{name ? name.charAt(0) : 'U'}</AvatarFallback>
+                                    {/* <AvatarFallback>{name ? name.charAt(0) : 'U'}</AvatarFallback> */}
                                 </Avatar>
                                 <TooltipProvider>
                                     <Tooltip>

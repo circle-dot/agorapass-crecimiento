@@ -67,7 +67,7 @@ export default function Page() {
   }, [receivedLoading, isLoading]);
 
   function onSubmit(formData: z.infer<typeof FormSchema>) {
-    const { username, bio } = formData;
+    const { username, bio, avatarType } = formData;
 
     const updateUser = async () => {
       const token = await getAccessToken();
@@ -84,7 +84,7 @@ export default function Page() {
             'Content-Type': 'application/json',
             'Authorization': token,
           },
-          body: JSON.stringify({ name: username, bio: bio }),
+          body: JSON.stringify({ name: username, bio: bio, avatarType }),
         });
 
         if (!response.ok) {

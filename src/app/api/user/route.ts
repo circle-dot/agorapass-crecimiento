@@ -54,19 +54,20 @@ export async function PATCH(request: NextRequest) {
         }
 
 
-        const { name, bio } = await request.json();
+        const { name, bio, avatarType } = await request.json();
 
         if (!name || typeof name !== 'string' || name.trim().length < 2) {
             return NextResponse.json({ error: 'Invalid name' }, { status: 400 });
         }
-
+        console.log(avatarType)
         const updatedUser = await prisma.user.update({
             where: {
                 id: verifiedClaims.userId,
             },
             data: {
                 name: name.trim(),
-                bio
+                bio,
+                avatarType
             },
         });
 

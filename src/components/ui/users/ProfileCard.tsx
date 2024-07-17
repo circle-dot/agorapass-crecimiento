@@ -13,6 +13,9 @@ import { getAvatar } from './getAvatarImg';
 import { motion } from "framer-motion";
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@radix-ui/react-tooltip";
 import { DateTime } from "luxon";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { MetaMaskAvatar } from 'react-metamask-avatar';
+import blockies from 'ethereum-blockies';
 
 export const FormSchema = z.object({
     username: z.string().min(2, { message: "Username must be at least 2 characters." }),
@@ -27,7 +30,7 @@ interface ProfileCardProps {
 
 export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
     const { email, wallet, rankScore, vouchesAvailables, createdAt, vouchReset, name, bio, avatarType } = data || {};
-
+    const icon = blockies.create({ seed: wallet, size: 8, scale: 4 }).toDataURL();
     const [remainingTime, setRemainingTime] = useState('00:00:00');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -175,6 +178,43 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                                             </FormItem>
                                         )}
                                     />
+                                    <FormField
+                                        control={form.control}
+                                        name="avatarType"
+                                        render={({ field }) => (
+                                            <FormItem className="space-y-3">
+                                                <FormLabel>Choose an avatar</FormLabel>
+                                                <FormControl>
+                                                    <RadioGroup
+                                                        onValueChange={field.onChange}
+                                                        defaultValue={field.value}
+                                                        className="flex flex-col space-y-1"
+                                                    >
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value="blockies" />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                <Avatar className="w-24 h-24 mx-auto mb-4">
+                                                                    <AvatarImage src={icon} alt="Avatar Image" />
+                                                                </Avatar>
+                                                            </FormLabel>
+                                                        </FormItem>
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value="metamask" />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                <MetaMaskAvatar address={wallet} size={100} />
+                                                            </FormLabel>
+                                                        </FormItem>
+                                                    </RadioGroup>
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
                                     <DialogFooter>
                                         <Button type="submit">
                                             Save changes
