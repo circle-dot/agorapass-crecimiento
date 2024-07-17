@@ -6,7 +6,7 @@ import blockies from 'ethereum-blockies';
 export function getAvatar(wallet: string, avatarType: 'metamask' | 'blockies'): JSX.Element | string | null {
     if (avatarType === 'metamask') {
         // MetaMaskAvatar is a component, so return the JSX element
-        return <MetaMaskAvatar address={wallet} size={100} className='w-full h-full' />;
+        return <MetaMaskAvatar address={wallet} size={100} className='!w-full !h-full' />;
     }
     if (avatarType === 'blockies') {
         // Generate a blockies avatar and return the data URL string

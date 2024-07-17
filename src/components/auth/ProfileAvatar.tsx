@@ -13,15 +13,22 @@ import { Button } from "@/components/ui/button";
 import { usePrivy, useLogin } from '@privy-io/react-auth';
 import Link from 'next/link';
 import { Wallet } from 'lucide-react';
-import iconLogo from '../../../public/agora.png'
-import Image from 'next/image';
 import createUser from '@/utils/createUser';
 import Swal from 'sweetalert2';
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { getAvatar } from '../ui/users/getAvatarImg';
+import { useFetchUser } from '@/hooks/useFetchUser';
+import { useState } from 'react';
 
 function ProfileAvatar() {
+    const [updateTrigger, setUpdateTrigger] = useState(false);
+    const { data, isLoading, error } = useFetchUser(updateTrigger);
+    const { name, wallet, bio, twitter, rankScore, attestationReceived, avatarType } = data;
+
     const { authenticated, logout, ready } = usePrivy();
+    const avatar = getAvatar(wallet, avatarType);
     const { login } = useLogin({
-        onComplete: async (user, isNewUser, wasAlreadyAuthenticated, loginMethod) => {
+        onComplete: async (user, isNewUser) => {
             if (isNewUser) {
                 // Show loading Swal
                 Swal.fire({
@@ -76,13 +83,14 @@ function ProfileAvatar() {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="secondary" size="icon" className="rounded-full">
-                            <Image
-                                src={iconLogo}
-                                alt="Company Logo"
-                                width={36}
-                                height={36}
-                                className='cursor-pointer'
-                            />
+                            <Avatar className="w-9 h-9 mx-auto ">
+                                {typeof avatar === 'string' ? (
+                                    <AvatarImage src={avatar} alt="Avatar Image" />
+                                ) : (
+                                    avatar
+                                )}
+                                {/* <AvatarFallback className="flex items-center justify-center">{email?.charAt(0)}</AvatarFallback> */}
+                            </Avatar>
                             <span className="sr-only">Toggle user menu</span>
                         </Button>
                     </DropdownMenuTrigger>
