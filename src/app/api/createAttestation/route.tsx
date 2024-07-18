@@ -7,31 +7,19 @@ import { toBigInt } from 'ethers';
 
 const easContractAddress = "0x4200000000000000000000000000000000000021";
 const schemaUID = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3";
-const privateKey = process.env.PRIVATE_KEY!;
-// Initialize the EAS SDK with the address of the EAS contract
 
-// Set up the Infura provider
-const provider = new ethers.JsonRpcProvider(process.env.ALCHEMY_URL);
-
-// Connect the EAS SDK to the provider
-//@ts-ignore there is some difference between the provider and the signer
-const signer = new ethers.Wallet(privateKey, provider);
 const eas = new EAS(easContractAddress);
-eas.connect(signer);
+// Signer must be an ethers-like signer.
+const PRIVATE_KEY = process.env.PRIVATE_KEY!;
+const ALCHEMY_URL = process.env.ALCHEMY_URL!
 
 
-// // Initialize the EAS SDK with the address of the EAS contract
-// const eas = new EAS(easContractAddress);
+const provider = new ethers.JsonRpcProvider(ALCHEMY_URL);
 
-// // Set up the Infura provider
-// const provider = new ethers.JsonRpcProvider(process.env.ALCHEMY_URL);
+const signer = new ethers.Wallet(PRIVATE_KEY, provider);
+await eas.connect(signer);
 
-// // Create the sender signer
-// const sender = new ethers.Wallet(privateKey, provider);
 
-// // Connect the EAS SDK to the provider
-// //@ts-ignore there is some difference between the provider and the signer
-// eas.connect(sender);
 
 export async function POST(request: NextRequest) {
     try {
@@ -83,7 +71,7 @@ export async function POST(request: NextRequest) {
 
 
         // Create signer
-        const signer = new ethers.Wallet(privateKey, provider);
+        const signer = new ethers.Wallet(PRIVATE_KEY, provider);
 
         // Get delegated attestation
         const delegated = await eas.getDelegated();
