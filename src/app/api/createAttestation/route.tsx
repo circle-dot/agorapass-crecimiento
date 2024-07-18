@@ -10,14 +10,16 @@ const schemaId = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe233
 const privateKey = process.env.PRIVATE_KEY!
 
 // Initialize the EAS SDK with the address of the EAS contract
-const eas = new EAS(EASContractAddress);
 
 // Set up the Infura provider
 const provider = new ethers.JsonRpcProvider(process.env.ALCHEMY_URL);
 
 // Connect the EAS SDK to the provider
 //@ts-ignore there is some difference between the provider and the signer
-eas.connect(provider);
+const signer = new ethers.Wallet(privateKey, provider);
+const eas = new EAS(EASContractAddress);
+eas.connect(signer);
+
 
 // // Initialize the EAS SDK with the address of the EAS contract
 // const eas = new EAS(EASContractAddress);
@@ -91,6 +93,8 @@ export async function POST(request: NextRequest) {
         console.log('schemaId:', schemaId);
         console.log('walletAddress:', walletAddress);
         console.log('encodedData:', encodedData);
+        const easnonce = await eas.getNonce(walletAddress);
+
         const options =
         {
             schema: schemaId,
@@ -100,7 +104,8 @@ export async function POST(request: NextRequest) {
             refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
             data: encodedData,
             deadline: toBigInt(0), // Unix timestamp of when signature expires (0 for no expiration)
-            value: toBigInt(0)
+            value: toBigInt(0),
+            nonce: easnonce,
         }
         console.log(options)
         // Sign the delegated attestation
