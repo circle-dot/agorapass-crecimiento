@@ -15,4 +15,9 @@ export const navSections = [
         href: "/agora/attestations",
         className: "transition-colors hover:text-foreground"
     },
+    {
+        label: "About",
+        href: "/agora/about",
+        className: "transition-colors hover:text-foreground"
+    },
 ];
