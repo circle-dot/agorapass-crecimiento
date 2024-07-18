@@ -1,9 +1,6 @@
 "use client";
 import React from "react";
 import { IBM_Plex_Sans } from 'next/font/google';
-
-import Image from "next/image";
-import { twMerge } from "tailwind-merge";
 import { TracingBeam } from "@/components/ui/tracing-beam";
 import FeaturesSection from "@/components/ui/sections/featureSection";
 const Plex_Sans = IBM_Plex_Sans({

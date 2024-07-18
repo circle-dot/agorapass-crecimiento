@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -18,15 +18,23 @@ import Swal from 'sweetalert2';
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { getAvatar } from '../ui/users/getAvatarImg';
 import { useFetchUser } from '@/hooks/useFetchUser';
-import { useState } from 'react';
 
 function ProfileAvatar() {
     const [updateTrigger, setUpdateTrigger] = useState(false);
     const { data, isLoading, error } = useFetchUser(updateTrigger);
-    const { name, wallet, bio, twitter, rankScore, attestationReceived, avatarType } = data;
-
     const { authenticated, logout, ready } = usePrivy();
-    const avatar = getAvatar(wallet, avatarType);
+
+    const name = data?.name || 'Unknown';
+    const wallet = data?.wallet || 'Unknown';
+    const bio = data?.bio || '';
+    const twitter = data?.twitter || '';
+    const rankScore = data?.rankScore || 0;
+    const attestationReceived = data?.attestationReceived || 0;
+    const avatarType = data?.avatarType || 'blockies';
+
+    // Check if running on client side before calling getAvatar
+    const avatar = typeof window !== 'undefined' ? getAvatar(wallet, avatarType) : null;
+
     const { login } = useLogin({
         onComplete: async (user, isNewUser) => {
             if (isNewUser) {
