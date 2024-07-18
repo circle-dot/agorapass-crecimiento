@@ -63,7 +63,7 @@ const Attestations: React.FC = () => {
                     <TableCaption>A list of vouches.</TableCaption>
                     <TableHeader >
                         <TableRow className="bg-primarydark hover:bg-primarydark">
-                            <TableHead className="w-[150px] md:w-auto rounded-r-sm text-black">UID</TableHead>
+                            <TableHead className="w-[150px] md:w-auto text-black">UID</TableHead>
                             <TableHead className="w-[200px] md:w-auto text-black">From</TableHead>
                             <TableHead className="w-[200px] md:w-auto text-black">To</TableHead>
                             <TableHead className="w-[150px] md:w-[200px] text-black">Date</TableHead>
