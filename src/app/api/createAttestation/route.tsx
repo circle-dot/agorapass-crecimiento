@@ -11,15 +11,11 @@ const schemaUID = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23
 const eas = new EAS(easContractAddress);
 // Signer must be an ethers-like signer.
 const PRIVATE_KEY = process.env.PRIVATE_KEY!;
-const ALCHEMY_URL = process.env.ALCHEMY_URL!
-
+const ALCHEMY_URL = process.env.ALCHEMY_URL!;
 
 const provider = new ethers.JsonRpcProvider(ALCHEMY_URL);
-
 const signer = new ethers.Wallet(PRIVATE_KEY, provider);
 await eas.connect(signer);
-
-
 
 export async function POST(request: NextRequest) {
     try {
@@ -41,45 +37,42 @@ export async function POST(request: NextRequest) {
         }
 
         // Extract user data from request body
-        const { name, email, bio, wallet } = await request.json();
-        console.log('Received data:', { name, email, bio, wallet });
+        const { platform, endorsementType, power, wallet } = await request.json();
 
         const id = verifiedClaims.userId;
-        const userEmail = email?.address || '';
-        const walletAddress = wallet.address;
-
-        console.log(walletAddress);
-        console.log(wallet);
-
+        const recipient = wallet.address;
+        console.log('recipient', recipient)
         const user = await prisma.user.findUnique({
             where: { id: id },
-            select: { vouchesAvailables: true }
+            select: {
+                vouchesAvailables: true,
+                wallet: true
+            }
         });
 
         if (!user || user.vouchesAvailables <= 0) {
             return new Response('You have no vouches available.', {
                 status: 550,
-            })
+            });
         }
+
+        const walletAddress = user.wallet;
+        console.log(walletAddress);
 
         // Encode the data using SchemaEncoder
         const schemaEncoder = new SchemaEncoder("uint8 power,string endorsementType,string platform");
         const encodedData = schemaEncoder.encodeData([
-            { name: "power", value: "1", type: "uint8" },
-            { name: "endorsementType", value: "social", type: "string" },
-            { name: "platform", value: "agoraCity", type: "string" }
+            { name: "power", value: power, type: "uint8" },
+            { name: "endorsementType", value: endorsementType, type: "string" },
+            { name: "platform", value: platform, type: "string" }
         ]);
-
 
         // Create signer
         const signer = new ethers.Wallet(PRIVATE_KEY, provider);
 
-        // const attester = await signer.getAddress()
+        const attester = await signer.getAddress();
+        console.log(attester);
 
-        const attester = await signer.getAddress()
-        // const attester = "0x55795567D4E13FCAf30515fd6E0d93f62c297557"
-        console.log(attester)
-        const recipient = "0xb97214755c216B482A298Aec26075dcd7bCEFB86"
         // Get delegated attestation
         const delegated = await eas.getDelegated();
 
@@ -87,14 +80,11 @@ export async function POST(request: NextRequest) {
         console.log('schemaUID:', schemaUID);
         console.log('walletAddress:', walletAddress);
         console.log('encodedData:', encodedData);
-        // const nonce = await signer.getNonce();
-        // console.log('nonce', nonce)
-        const easnonce = await eas.getNonce(attester);
-        console.log('easnonce', easnonce)
 
-        // const easnonce = 2n
-        const options =
-        {
+        const easnonce = await eas.getNonce(attester);
+        console.log('easnonce', easnonce);
+        console.log(attester)
+        const options = {
             schema: schemaUID,
             recipient: recipient,
             expirationTime: toBigInt(0), // Unix timestamp of when attestation expires (0 for no expiration)
@@ -104,8 +94,9 @@ export async function POST(request: NextRequest) {
             deadline: toBigInt(0), // Unix timestamp of when signature expires (0 for no expiration)
             value: toBigInt(0),
             nonce: easnonce,
-        }
-        console.log(options)
+        };
+        console.log(options);
+
         // Sign the delegated attestation
         const response = await delegated.signDelegatedAttestation(
             options,
