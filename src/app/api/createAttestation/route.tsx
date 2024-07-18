@@ -5,10 +5,9 @@ import { ethers } from 'ethers';
 import prisma from '@/lib/db';
 import { toBigInt } from 'ethers';
 
-const EASContractAddress = "0x4200000000000000000000000000000000000021"; // base sepolia v0.26
-const schemaId = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3"
-const privateKey = process.env.PRIVATE_KEY!
-
+const easContractAddress = "0x4200000000000000000000000000000000000021";
+const schemaUID = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3";
+const privateKey = process.env.PRIVATE_KEY!;
 // Initialize the EAS SDK with the address of the EAS contract
 
 // Set up the Infura provider
@@ -17,12 +16,12 @@ const provider = new ethers.JsonRpcProvider(process.env.ALCHEMY_URL);
 // Connect the EAS SDK to the provider
 //@ts-ignore there is some difference between the provider and the signer
 const signer = new ethers.Wallet(privateKey, provider);
-const eas = new EAS(EASContractAddress);
+const eas = new EAS(easContractAddress);
 eas.connect(signer);
 
 
 // // Initialize the EAS SDK with the address of the EAS contract
-// const eas = new EAS(EASContractAddress);
+// const eas = new EAS(easContractAddress);
 
 // // Set up the Infura provider
 // const provider = new ethers.JsonRpcProvider(process.env.ALCHEMY_URL);
@@ -90,14 +89,14 @@ export async function POST(request: NextRequest) {
         const delegated = await eas.getDelegated();
 
         // Print values for debugging
-        console.log('schemaId:', schemaId);
+        console.log('schemaUID:', schemaUID);
         console.log('walletAddress:', walletAddress);
         console.log('encodedData:', encodedData);
         const easnonce = await eas.getNonce(walletAddress);
 
         const options =
         {
-            schema: schemaId,
+            schema: schemaUID,
             recipient: walletAddress,
             expirationTime: toBigInt(0), // Unix timestamp of when attestation expires (0 for no expiration)
             revocable: true,
@@ -119,7 +118,7 @@ export async function POST(request: NextRequest) {
 
         // Create the delegated attestation
         const transaction = await eas.attestByDelegation({
-            schema: schemaId,
+            schema: schemaUID,
             data: {
                 recipient: walletAddress,
                 expirationTime: toBigInt(0), // Unix timestamp of when attestation expires (0 for no expiration)
