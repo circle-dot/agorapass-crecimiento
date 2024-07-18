@@ -17,7 +17,7 @@ const createUser = async ({ id, name, email, bio, wallet }: CreateUserParams) =>
             bio,
             wallet,
             chainType: null,
-            vouchesAvailables: null,
+            vouchesAvailables: 3,
             vouchReset: null,
             createdAt: new Date(),
             rankScore: 0,
