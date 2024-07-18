@@ -75,9 +75,9 @@ export async function POST(request: NextRequest) {
         // Encode the data using SchemaEncoder
         const schemaEncoder = new SchemaEncoder("uint8 power,string endorsementType,string platform");
         const encodedData = schemaEncoder.encodeData([
-            { name: "power", value: "0", type: "uint8" },
-            { name: "endorsementType", value: "", type: "string" },
-            { name: "platform", value: "", type: "string" }
+            { name: "power", value: "1", type: "uint8" },
+            { name: "endorsementType", value: "social", type: "string" },
+            { name: "platform", value: "agoraCity", type: "string" }
         ]);
 
 
