@@ -21,7 +21,7 @@ model User {
   wallet              String //@unique
   // privyId             String    @unique
   chainType           String?   @default("ethereum")
-  vouchesAvailables   Int?      @default(3)
+  vouchesAvailables   Int       @default(3)
   vouchReset          DateTime?
   createdAt           DateTime  @default(now())
   rankScore           Int       @default(0)
