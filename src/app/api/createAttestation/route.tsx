@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
         const id = verifiedClaims.userId;
         const userEmail = email?.address || '';
         const walletAddress = wallet.address;
+
         console.log(walletAddress);
         console.log(wallet);
 
@@ -73,6 +74,12 @@ export async function POST(request: NextRequest) {
         // Create signer
         const signer = new ethers.Wallet(PRIVATE_KEY, provider);
 
+        // const attester = await signer.getAddress()
+
+        const attester = await signer.getAddress()
+        // const attester = "0x55795567D4E13FCAf30515fd6E0d93f62c297557"
+        console.log(attester)
+        const recipient = "0xb97214755c216B482A298Aec26075dcd7bCEFB86"
         // Get delegated attestation
         const delegated = await eas.getDelegated();
 
@@ -80,12 +87,16 @@ export async function POST(request: NextRequest) {
         console.log('schemaUID:', schemaUID);
         console.log('walletAddress:', walletAddress);
         console.log('encodedData:', encodedData);
-        const easnonce = await eas.getNonce(walletAddress);
+        // const nonce = await signer.getNonce();
+        // console.log('nonce', nonce)
+        const easnonce = await eas.getNonce(attester);
+        console.log('easnonce', easnonce)
 
+        // const easnonce = 2n
         const options =
         {
             schema: schemaUID,
-            recipient: walletAddress,
+            recipient: recipient,
             expirationTime: toBigInt(0), // Unix timestamp of when attestation expires (0 for no expiration)
             revocable: true,
             refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
@@ -108,14 +119,14 @@ export async function POST(request: NextRequest) {
         const transaction = await eas.attestByDelegation({
             schema: schemaUID,
             data: {
-                recipient: walletAddress,
+                recipient: recipient,
                 expirationTime: toBigInt(0), // Unix timestamp of when attestation expires (0 for no expiration)
                 revocable: true,
                 refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
                 data: encodedData
             },
             signature: response.signature,
-            attester: await signer.getAddress(),
+            attester: attester,
             deadline: toBigInt(0) // Unix timestamp of when signature expires (0 for no expiration)
         });
 
