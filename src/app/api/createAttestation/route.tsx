@@ -125,6 +125,13 @@ export async function POST(request: NextRequest) {
 
         const newAttestationUID = await transaction.wait();
 
+        // Update user's vouchesAvailables
+        await prisma.user.update({
+            where: { id: id },
+            data: { vouchesAvailables: { decrement: 1 } },
+        });
+
+
         console.log('New attestation UID:', newAttestationUID);
         console.log('Transaction receipt:', transaction.receipt);
 
