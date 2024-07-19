@@ -88,7 +88,7 @@ const UserCard: React.FC<{ user: User, authStatus: boolean }> = ({ user, authSta
                             {authStatus && (
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
-                                        <Button className="inline-flex w-full hover:animate-shimmer items-center justify-center rounded-md border border-primarydark bg-[linear-gradient(110deg,#468c80,45%,#fcd270,55%,#468c80)] bg-[length:200%_100%] px-6 font-medium text-accentdark transition-colors focus:outline-none focus:ring-2 focus:ring-accentdark focus:ring-offset-2 focus:ring-offset-primarydark">
+                                        <Button className="inline-flex w-full hover:animate-shimmer items-center justify-center rounded-md border border-gray-300 bg-[linear-gradient(110deg,#ffffff,45%,#f0f0f0,55%,#ffffff)] bg-[length:200%_100%] px-6 font-medium text-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-gray-50">
                                             Vouch
                                         </Button>
                                     </AlertDialogTrigger>
