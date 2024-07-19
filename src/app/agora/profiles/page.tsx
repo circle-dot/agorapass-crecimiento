@@ -18,7 +18,10 @@ import {
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils";
 import { Skeleton } from '@/components/ui/skeleton';
-
+import { usePrivy } from '@privy-io/react-auth';
+import {
+    useEffect, useMemo, useState
+} from 'react';
 const filters = [
     {
         valueFilter: "desc" as const,
@@ -31,12 +34,19 @@ const filters = [
 ]
 
 function Page() {
-    const [openFilter, setOpenFilter] = React.useState(false);
-    const [valueFilter, setValueFilter] = React.useState<'asc' | 'desc'>("desc");
-    const [searchQuery, setSearchQuery] = React.useState<string>("");
+    const [openFilter, setOpenFilter] = useState(false);
+    const [valueFilter, setValueFilter] = useState<'asc' | 'desc'>("desc");
+    const [searchQuery, setSearchQuery] = useState<string>("");
+    const { ready, authenticated, user } = usePrivy();
+    const [authStatus, setAuthStatus] = useState(false);
 
-    // Debounce function for search query
-    const debouncedSearchQuery = React.useMemo(
+    useEffect(() => {
+        if (ready) {
+            setAuthStatus(authenticated);
+        }
+    }, [ready, authenticated]);
+
+    const debouncedSearchQuery = useMemo(
         () => debounce((query: string) => setSearchQuery(query), 300),
         []
     );
@@ -44,14 +54,13 @@ function Page() {
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useUsers(valueFilter, searchQuery);
     const { ref, inView } = useInView();
 
-    React.useEffect(() => {
+    useEffect(() => {
         const handleFetchNextPage = () => {
             if (inView && hasNextPage) {
                 fetchNextPage();
             }
         };
 
-        // Debounce function to avoid rapid calls
         const debounceFetch = debounce(handleFetchNextPage, 300);
         debounceFetch();
 
@@ -59,7 +68,6 @@ function Page() {
             debounceFetch.cancel();
         };
     }, [inView, fetchNextPage, hasNextPage]);
-
     return (
         <div className='flex flex-col w-full p-4'>
             <div className='flex flex-col md:flex-row md:justify-center md:items-center gap-4 p-4'>
@@ -129,7 +137,7 @@ function Page() {
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 p-4">
                             {data?.pages.map((page, i) =>
                                 page.users.map((user: any, index: number) => (
-                                    <UserCard key={`${i}-${index}`} user={user} />
+                                    <UserCard key={`${i}-${index}`} user={user} authStatus={authStatus} />
                                 ))
                             )}
                         </div>

@@ -32,10 +32,9 @@ import {
 import { getAvatar } from './getAvatarImg';
 import { ThumbsUp } from 'lucide-react';
 import Link from 'next/link';
-import VouchButton from '@/components/ui/VouchButton'
+import VouchButton from '@/components/ui/VouchButton';
 
 function truncateWallet(wallet: string) {
-    // Keep the first 6 characters and the last 4 characters
     return wallet.slice(0, 6) + '...' + wallet.slice(-4);
 }
 
@@ -48,16 +47,12 @@ function truncateName(name: string) {
     }
 }
 
-const UserCard: React.FC<{ user: User }> = ({ user }) => {
-    const { name, wallet, bio, twitter, rankScore, attestationReceived, avatarType } = user;
+const UserCard: React.FC<{ user: User, authStatus: boolean }> = ({ user, authStatus }) => {
+    const { name, wallet, bio, twitter, attestationReceived, avatarType } = user;
 
-    // Determine the display name: use name if available, otherwise use wallet address
     const displayName = truncateName(name) || truncateWallet(wallet);
     const fullName = name || wallet;
-    // Determine the bio: use provided bio, otherwise default to "No bio provided"
     const displayBio = bio || "No bio provided";
-
-    // Generate the avatar based on the avatarType
     const avatar = getAvatar(wallet, avatarType);
 
     return (
@@ -73,11 +68,12 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
                                     ) : (
                                         avatar
                                     )}
-                                    {/* <AvatarFallback>{name ? name.charAt(0) : 'U'}</AvatarFallback> */}
                                 </Avatar>
                                 <TooltipProvider>
                                     <Tooltip>
-                                        <TooltipTrigger asChild><Link href={'/agora/address/' + wallet}>{displayName}</Link></TooltipTrigger>
+                                        <TooltipTrigger asChild>
+                                            <Link href={'/agora/address/' + wallet}>{displayName}</Link>
+                                        </TooltipTrigger>
                                         <TooltipContent>
                                             {fullName}
                                         </TooltipContent>
@@ -89,27 +85,29 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
                             </CardDescription>
                         </div>
                         <div className="flex items-center rounded-md bg-secondary text-secondary-foreground">
-                            <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                    <Button className="inline-flex w-full hover:animate-shimmer items-center justify-center rounded-md border border-primarydark bg-[linear-gradient(110deg,#468c80,45%,#fcd270,55%,#468c80)] bg-[length:200%_100%] px-6 font-medium text-accentdark transition-colors focus:outline-none focus:ring-2 focus:ring-accentdark focus:ring-offset-2 focus:ring-offset-primarydark">
-                                        Vouch
-                                    </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            This action cannot be undone.
-                                        </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        <AlertDialogAction className='p-0'>
-                                            <VouchButton recipient={wallet} />
-                                        </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
+                            {authStatus && (
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <Button className="inline-flex w-full hover:animate-shimmer items-center justify-center rounded-md border border-primarydark bg-[linear-gradient(110deg,#468c80,45%,#fcd270,55%,#468c80)] bg-[length:200%_100%] px-6 font-medium text-accentdark transition-colors focus:outline-none focus:ring-2 focus:ring-accentdark focus:ring-offset-2 focus:ring-offset-primarydark">
+                                            Vouch
+                                        </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                This action cannot be undone.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            <AlertDialogAction className='p-0'>
+                                                <VouchButton recipient={wallet} />
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                            )}
                         </div>
                     </CardHeader>
                 </div>

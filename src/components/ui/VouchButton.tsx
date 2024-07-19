@@ -1,23 +1,54 @@
 import React from 'react';
-import { Button } from './button';
 import { usePrivy } from '@privy-io/react-auth';
 import generateAttestation from '@/utils/generateAttestation';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 function VouchButtonCustom({ recipient }: { recipient: string }) {
     const { getAccessToken } = usePrivy();
 
     const handleClick = async () => {
+        MySwal.fire({
+            title: 'Processing...',
+            text: 'Please wait while your request is being processed.',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+
         try {
             const token = await getAccessToken();
+            if (!token) {
+                MySwal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong. Try reloading the page.',
+                });
+                return;
+            }
+
             const power = "1";
             const endorsementType = "Social";
             const platform = "Agora City";
             const wallet = recipient;
 
             const result = await generateAttestation(token, power, endorsementType, platform, wallet);
-            console.log('Attestation created:', result);
+            MySwal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Vouch created successfully.',
+            });
+            console.log('Vouch created:', result);
         } catch (error) {
-            console.error('Error creating attestation:', error);
+            MySwal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'An error occurred while creating the vouch.',
+            });
+            console.error('Error creating vouch:', error);
         }
     };
 
