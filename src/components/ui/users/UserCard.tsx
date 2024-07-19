@@ -1,8 +1,5 @@
 import React from 'react';
-import { MetaMaskAvatar } from 'react-metamask-avatar';
-import blockies from 'ethereum-blockies';
 import {
-    StarIcon,
     TwitterLogoIcon
 } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
@@ -13,7 +10,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { User } from '@/types/user';
 import {
     Tooltip,
@@ -35,6 +32,7 @@ import {
 import { getAvatar } from './getAvatarImg';
 import { ThumbsUp } from 'lucide-react';
 import Link from 'next/link';
+import VouchButton from '@/components/ui/VouchButton'
 
 function truncateWallet(wallet: string) {
     // Keep the first 6 characters and the last 4 characters
@@ -93,8 +91,7 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
                         <div className="flex items-center rounded-md bg-secondary text-secondary-foreground">
                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
-                                    <Button variant="secondary" className="px-3 shadow-none w-full">
-                                        <StarIcon className="mr-2 h-4 w-4" />
+                                    <Button className="inline-flex w-full hover:animate-shimmer items-center justify-center rounded-md border border-primarydark bg-[linear-gradient(110deg,#468c80,45%,#fcd270,55%,#468c80)] bg-[length:200%_100%] px-6 font-medium text-accentdark transition-colors focus:outline-none focus:ring-2 focus:ring-accentdark focus:ring-offset-2 focus:ring-offset-primarydark">
                                         Vouch
                                     </Button>
                                 </AlertDialogTrigger>
@@ -107,7 +104,9 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        <AlertDialogAction>Vouch them <StarIcon className="ml-2 h-4 w-4" />!</AlertDialogAction>
+                                        <AlertDialogAction className='p-0'>
+                                            <VouchButton recipient={wallet} />
+                                        </AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
                             </AlertDialog>

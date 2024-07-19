@@ -126,7 +126,7 @@ function Page() {
                     </div> // Replace this with a skeleton component if needed
                 ) : (
                     <>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-4">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 p-4">
                             {data?.pages.map((page, i) =>
                                 page.users.map((user: any, index: number) => (
                                     <UserCard key={`${i}-${index}`} user={user} />

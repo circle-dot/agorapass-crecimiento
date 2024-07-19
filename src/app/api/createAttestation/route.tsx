@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
         const { platform, endorsementType, power, wallet } = await request.json();
 
         const id = verifiedClaims.userId;
-        const recipient = wallet.address;
+        const recipient = wallet;
         console.log('recipient', recipient)
         const user = await prisma.user.findUnique({
             where: { id: id },
