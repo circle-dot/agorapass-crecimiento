@@ -61,10 +61,12 @@ export async function POST(request: NextRequest) {
 
         // Encode the data using SchemaEncoder
         const schemaEncoder = new SchemaEncoder("uint8 power,string endorsementType,string platform");
+
+        //! TO DO maybe remove some hardcoded values?
         const encodedData = schemaEncoder.encodeData([
-            { name: "power", value: power, type: "uint8" },
-            { name: "endorsementType", value: endorsementType, type: "string" },
-            { name: "platform", value: platform, type: "string" }
+            { name: "power", value: "1", type: "uint8" },
+            { name: "endorsementType", value: "Social", type: "string" },
+            { name: "platform", value: "Agora City", type: "string" }
         ]);
 
         // Create signer
