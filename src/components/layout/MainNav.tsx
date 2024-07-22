@@ -29,7 +29,7 @@ function MainNav() {
                     </Link>
                 </div>
                 <div className='w-full flex justify-center'>
-                    <div className='flex flex-row bg-white rounded-full border border-gray-200  font-medium shadow-md lg:gap-4 lg:text-lg  px-2'>
+                    <div className='flex flex-row bg-white rounded-full border border-gray-200  font-medium shadow-md lg:gap-4 lg:text-lg '>
                         {/* <Link href='/'>Welcome</Link>
                         <Link href='/agora/attestations'>Vouches</Link>
                         <Link href='/agora/profiles'>Profiles</Link> */}
@@ -37,7 +37,7 @@ function MainNav() {
                             <Link
                                 key={index}
                                 href={section.href}
-                                className={`${section.className} ${pathname === section.href ? 'text-foreground bg-[#fafafa] font-medium' : 'text-muted-foreground'} text-nowrap py-1 px-2 rounded-full`}
+                                className={`${section.className} ${pathname === section.href ? 'text-accentdark bg-primarydark font-medium hover:text-accentdark' : 'text-muted-foreground'} text-nowrap py-1 px-2 rounded-full`}
                             >
                                 {section.label}
                             </Link>

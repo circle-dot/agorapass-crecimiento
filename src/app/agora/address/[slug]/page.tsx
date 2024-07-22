@@ -5,7 +5,6 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchAttestationsMade, fetchAttestationsReceived, fetchEnsNamesByAddress } from '@/lib/fetchers/attestations';
 import imageLogo from '@/../../public/agora.png';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
 import {
     Tooltip,
     TooltipContent,
@@ -14,9 +13,10 @@ import {
 } from "@/components/ui/tooltip";
 import { motion } from 'framer-motion';
 import Loader from '@/components/ui/Loader';
+import VouchButtonCustom from '@/components/ui/VouchButton';
 
 //!TODO replace this schemaId
-const schemaId = process.env.NEXT_PUBLIC_SCHEMA_ID || "0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"; // Replace with your schemaId
+const schemaId = process.env.NEXT_PUBLIC_SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3"; // Replace with your schemaId
 
 export default function Page({ params }: { params: { slug: string } }) {
     const address = params.slug; // Replace with the wallet address
@@ -70,6 +70,10 @@ export default function Page({ params }: { params: { slug: string } }) {
                     </div>
                 </div>
                 <div className="text-center">
+
+                    <div>
+                        <h1>Trust Score: N</h1>
+                    </div>
                     <div className="flex flex-col gap-4 items-center">
                         <div className="flex flex-col sm:flex-row sm:space-x-8">
                             <div>
@@ -96,10 +100,10 @@ export default function Page({ params }: { params: { slug: string } }) {
                             </TooltipProvider>
                         </h3>
                         <div className="mt-4 text-gray-600">
-                            <a href={'https://base.easscan.org/address/' + params.slug} target='_blank' className="underline">Check in EAS</a>
+                            <a href={process.env.NEXT_PUBLIC_EASSCAN + '/address/' + params.slug} target='_blank' className="underline">Check in EAS</a>
                         </div>
                         <hr className="my-4 border-gray-300" />
-                        <Button variant="outline" className='w-full'>Vouch</Button>
+                        <VouchButtonCustom recipient={address} className='!w-full py-1' />
                     </div>
                 </div>
             </motion.div>

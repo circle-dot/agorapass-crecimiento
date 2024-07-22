@@ -42,6 +42,7 @@
     "@types/ethereum-blockies": "^0.1.2",
     "@types/lodash.debounce": "^4.0.9",
     "@types/luxon": "^3.4.2",
+    "alchemy-sdk": "^3.3.1",
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -68,7 +69,7 @@
     "sweetalert2-react-content": "^5.0.7",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
-    "viem": "^2.17.0",
+    "viem": "^2.17.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {
