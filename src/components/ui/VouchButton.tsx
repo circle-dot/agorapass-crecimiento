@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from './button';
 import {
-    useEffect, useMemo, useState
+    useEffect, useState
 } from 'react';
 
 const MySwal = withReactContent(Swal);
@@ -28,7 +28,7 @@ interface VouchButtonCustomProps {
 
 const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, className }) => {
     const [authStatus, setAuthStatus] = useState(false);
-    const { getAccessToken, ready, authenticated, } = usePrivy();
+    const { getAccessToken, ready, authenticated } = usePrivy();
     useEffect(() => {
         if (ready) {
             setAuthStatus(authenticated);
