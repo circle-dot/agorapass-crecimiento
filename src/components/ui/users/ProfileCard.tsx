@@ -16,6 +16,7 @@ import { DateTime } from "luxon";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import blockies from 'ethereum-blockies';
+import { copyToClipboard } from '@/utils/copyToClipboard';
 
 export const FormSchema = z.object({
     username: z.string().min(2, { message: "Username must be at least 2 characters." }),
@@ -80,6 +81,9 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
 
     const avatar = getAvatar(wallet, avatarType);
 
+    const handleCopy = () => {
+        copyToClipboard(wallet);
+    };
     return (
         <Card className="shadow-lg">
             <CardHeader className="text-center">
@@ -107,9 +111,9 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <p className="text-sm text-muted-foreground truncate lg:truncate lg:w-9/12 px-4 break-words w-full border-zinc-400 rounded lg:rounded-full border">{wallet}</p>
+                                <p className="text-sm text-muted-foreground truncate lg:truncate lg:w-9/12 px-4 break-words w-full border-zinc-400 rounded lg:rounded-full border cursor-pointer" onClick={handleCopy}>{wallet}</p>
                             </TooltipTrigger>
-                            <TooltipContent>
+                            <TooltipContent className='bg-primarydark rounded p-0.5 m-2'>
                                 <p>{wallet}</p>
                             </TooltipContent>
                         </Tooltip>

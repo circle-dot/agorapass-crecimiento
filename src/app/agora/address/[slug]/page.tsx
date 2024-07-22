@@ -14,6 +14,7 @@ import {
 import { motion } from 'framer-motion';
 import Loader from '@/components/ui/Loader';
 import VouchButtonCustom from '@/components/ui/VouchButton';
+import { copyToClipboard } from '@/utils/copyToClipboard';
 
 //!TODO replace this schemaId
 const schemaId = process.env.NEXT_PUBLIC_SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3"; // Replace with your schemaId
@@ -40,7 +41,9 @@ export default function Page({ params }: { params: { slug: string } }) {
 
     if (madeLoading || receivedLoading || ensNameLoading) return <div className="w-screen flex items-center justify-center"><Loader /></div>;
     if (madeError || receivedError || ensNameerror) return <div>Error: {madeError?.message || receivedError?.message}</div>;
-
+    const handleCopy = () => {
+        copyToClipboard(address);
+    };
     return (
         <div className="flex items-center justify-center bg-gray-100 w-screen p-4">
             <motion.div
@@ -90,8 +93,8 @@ export default function Page({ params }: { params: { slug: string } }) {
                         <h3 className="text-2xl font-semibold truncate">
                             <TooltipProvider>
                                 <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <p className="whitespace-nowrap truncate">{ensName?.length > 0 ? ensName[0].name : params.slug || "No Data Available"}</p>
+                                    <TooltipTrigger asChild onClick={handleCopy}                                    >
+                                        <p className="whitespace-nowrap truncate cursor-pointer">{ensName?.length > 0 ? ensName[0].name : params.slug || "No Data Available"}</p>
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         <p>{ensName?.length > 0 ? ensName[0].name : params.slug || "No Data Available"}</p>
