@@ -36,7 +36,7 @@ function truncateName(name: string) {
     }
 }
 
-const UserCard: React.FC<{ user: User, authStatus: boolean }> = ({ user, authStatus }) => {
+const UserCard: React.FC<{ user: User }> = ({ user }) => {
     const { name, wallet, bio, twitter, avatarType, rankScore } = user;
 
     const displayName = truncateName(name) || truncateWallet(wallet);
@@ -74,9 +74,7 @@ const UserCard: React.FC<{ user: User, authStatus: boolean }> = ({ user, authSta
                             </CardDescription>
                         </div>
                         <div className="flex items-center rounded-md bg-secondary text-secondary-foreground">
-                            {authStatus && (
-                                <VouchButtonCustom recipient={wallet} />
-                            )}
+                            <VouchButtonCustom recipient={wallet} />
                         </div>
                     </CardHeader>
                 </div>

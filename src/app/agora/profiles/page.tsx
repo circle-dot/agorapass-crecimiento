@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils";
 import { Skeleton } from '@/components/ui/skeleton';
-import { usePrivy } from '@privy-io/react-auth';
 import {
     useEffect, useMemo, useState
 } from 'react';
@@ -37,14 +36,7 @@ function Page() {
     const [openFilter, setOpenFilter] = useState(false);
     const [valueFilter, setValueFilter] = useState<'asc' | 'desc'>("desc");
     const [searchQuery, setSearchQuery] = useState<string>("");
-    const { ready, authenticated, user } = usePrivy();
-    const [authStatus, setAuthStatus] = useState(false);
 
-    useEffect(() => {
-        if (ready) {
-            setAuthStatus(authenticated);
-        }
-    }, [ready, authenticated]);
 
     const debouncedSearchQuery = useMemo(
         () => debounce((query: string) => setSearchQuery(query), 300),
@@ -137,7 +129,7 @@ function Page() {
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 p-4">
                             {data?.pages.map((page, i) =>
                                 page.users.map((user: any, index: number) => (
-                                    <UserCard key={`${i}-${index}`} user={user} authStatus={authStatus} />
+                                    <UserCard key={`${i}-${index}`} user={user} />
                                 ))
                             )}
                         </div>
