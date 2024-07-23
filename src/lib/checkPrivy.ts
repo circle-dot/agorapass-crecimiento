@@ -11,7 +11,6 @@ export async function verifyPrivyToken(request: NextRequest) {
 
     try {
         const verifiedClaims = await privy.verifyAuthToken(authorization);
-        console.log('verifiedClaims', verifiedClaims);
         return verifiedClaims;
     } catch (error) {
         console.error('Token verification failed:', error);

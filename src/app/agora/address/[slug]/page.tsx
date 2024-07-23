@@ -50,7 +50,6 @@ export default function Page({ params }: { params: { slug: string } }) {
         },
     });
 
-    console.log('rankScore:', rankScore);
 
     if (madeLoading || receivedLoading || ensNameLoading || rankScoreLoading) return <div className="w-screen flex items-center justify-center"><Loader /></div>;
     if (madeError || receivedError || ensNameerror || rankScoreError) return <div>Error: {madeError?.message || receivedError?.message}</div>;
