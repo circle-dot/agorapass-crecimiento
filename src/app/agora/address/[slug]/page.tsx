@@ -39,8 +39,21 @@ export default function Page({ params }: { params: { slug: string } }) {
         queryFn: () => fetchEnsNamesByAddress(id),
     });
 
-    if (madeLoading || receivedLoading || ensNameLoading) return <div className="w-screen flex items-center justify-center"><Loader /></div>;
-    if (madeError || receivedError || ensNameerror) return <div>Error: {madeError?.message || receivedError?.message}</div>;
+    const { data: rankScore, error: rankScoreError, isLoading: rankScoreLoading } = useQuery({
+        queryKey: ['userRankScore', address],
+        queryFn: async () => {
+            const res = await fetch(`/api/user/${address}`);
+            if (!res.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return res.json();
+        },
+    });
+
+    console.log('rankScore:', rankScore);
+
+    if (madeLoading || receivedLoading || ensNameLoading || rankScoreLoading) return <div className="w-screen flex items-center justify-center"><Loader /></div>;
+    if (madeError || receivedError || ensNameerror || rankScoreError) return <div>Error: {madeError?.message || receivedError?.message}</div>;
     const handleCopy = () => {
         copyToClipboard(address);
     };
@@ -75,7 +88,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 <div className="text-center">
 
                     <div>
-                        <h1>Trust Score: N</h1>
+                        <h1>Trust Score: {rankScore.rankScore ?? 'N/A'}</h1>
                     </div>
                     <div className="flex flex-col gap-4 items-center">
                         <div className="flex flex-col sm:flex-row sm:space-x-8">

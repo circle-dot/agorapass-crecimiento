@@ -18,7 +18,7 @@ model User {
   email               String?
   name                String?
   bio                 String?
-  wallet              String //@unique
+  wallet              String    @unique
   // privyId             String    @unique
   chainType           String?   @default("ethereum")
   vouchesAvailables   Int       @default(3)
