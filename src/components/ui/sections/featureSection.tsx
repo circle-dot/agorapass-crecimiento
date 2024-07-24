@@ -11,7 +11,7 @@ import Link from "next/link";
 export default function FeaturesSection() {
     const features = [
         {
-            title: "Agora City",
+            title: "Agora Pass",
             description:
                 "Agora Pass enables community members to vouch for each other and increase their trust score within the Zuzalu community. By vouching for new members, you are inviting them to become part of the ecosystem. Once you get over a certain trust score you will be able to get an Agora Pass Zupass enabled.This pass will grant you access to the Agora.City forum and other perks.",
             skeleton: < SkeletonOne />,

@@ -60,7 +60,7 @@ const Attestations: React.FC = () => {
             <SearchBar />
             <div className="overflow-x-auto md:w-3/4 mx-auto">
                 <Table>
-                    <TableCaption>A list of vouches.</TableCaption>
+                    <TableCaption>Agora Pass</TableCaption>
                     <TableHeader >
                         <TableRow className="bg-primarydark hover:bg-primarydark">
                             <TableHead className="w-[150px] md:w-auto text-black">UID</TableHead>
@@ -75,17 +75,18 @@ const Attestations: React.FC = () => {
                                 {page.map((attestation: Attestation, attestationIndex: number) => (
                                     <TableRow key={`${pageIndex}-${attestationIndex}`}>
                                         <TableCell className="truncate">
-                                            <Link href={`/agora/attestation/${attestation.id}`} className="text-link">
+                                            <Link href={`/attestation/${attestation.id}`} className="text-link">
                                                 {truncateAddress(attestation.id, 20)} {/* Truncate to 20 characters */}
+
                                             </Link>
                                         </TableCell>
                                         <TableCell className="truncate">
-                                            <Link href={`/agora/address/${attestation.attester}`} className="text-link">
+                                            <Link href={`/address/${attestation.attester}`} className="text-link">
                                                 {truncateAddress(attestation.attester, 20)} {/* Truncate to 20 characters */}
                                             </Link>
                                         </TableCell>
                                         <TableCell className="truncate">
-                                            <Link href={`/agora/address/${attestation.recipient}`} className="text-link">
+                                            <Link href={`/address/${attestation.recipient}`} className="text-link">
                                                 {truncateAddress(attestation.recipient, 20)} {/* Truncate to 20 characters */}
                                             </Link>
                                         </TableCell>

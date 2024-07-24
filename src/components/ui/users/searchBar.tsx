@@ -69,11 +69,11 @@ const SearchBar = () => {
 
     const getLinkForResult = (result: any) => {
         if (result.type === "Wallet Address") {
-            return `/agora/address/${result.value}`;
+            return `/address/${result.value}`;
         } else if (result.type === "ENS Name") {
-            return `/agora/address/${result.id}`;
+            return `/address/${result.id}`;
         } else if (result.type === "Attestation ID") {
-            return `/agora/attestation/${result.value}`;
+            return `/attestation/${result.value}`;
         }
         return "#";
     };

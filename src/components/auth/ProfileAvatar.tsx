@@ -105,7 +105,7 @@ function ProfileAvatar() {
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild><Link href='/agora/me' className='cursor-pointer'>My Profile</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href='/me' className='cursor-pointer'>My Profile</Link></DropdownMenuItem>
                         <DropdownMenuItem asChild><a href="#" className='cursor-pointer'>Support</a></DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={logout} className='cursor-pointer'>
@@ -116,7 +116,7 @@ function ProfileAvatar() {
             ) : (
                 <button disabled={disableLogin} onClick={login}>
                     <Wallet className='h-5 w-5 lg:hidden' />
-                    <p className='hidden lg:flex border border-gray-200 bg-gray-50 font-medium px-4 py-2 rounded-full cursor-pointer items-center'>Connect with wallet</p>
+                    <p className='hidden lg:flex border border-gray-200 bg-gray-50 font-medium px-4 py-2 rounded-full cursor-pointer items-center'>Sign in</p>
                 </button>
             )}
         </>

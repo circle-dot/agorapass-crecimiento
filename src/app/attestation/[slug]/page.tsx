@@ -77,7 +77,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                                     <div className="truncate max-w-[50%]">
                                         <Tooltip>
                                             <TooltipTrigger asChild>
-                                                <Link href={'/agora/address/' + data.attester} className="text-link block truncate">{data.attester}</Link>
+                                                <Link href={'/address/' + data.attester} className="text-link block truncate">{data.attester}</Link>
                                             </TooltipTrigger>
                                             <TooltipContent>
                                                 <p>{data.attester}</p>
@@ -101,7 +101,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                                     <div className="truncate max-w-[50%]">
                                         <Tooltip>
                                             <TooltipTrigger asChild>
-                                                <Link href={'/agora/address/' + data.recipient} className="text-link block truncate">{data.recipient}</Link>
+                                                <Link href={'/address/' + data.recipient} className="text-link block truncate">{data.recipient}</Link>
                                             </TooltipTrigger>
                                             <TooltipContent>
                                                 <p>{data.recipient}</p>

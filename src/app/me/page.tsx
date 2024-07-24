@@ -128,7 +128,7 @@ export default function Page() {
           )}
 
           <div className="mt-4">
-            <Link href={'/agora/address/' + data?.wallet} className="w-full flex">
+            <Link href={'/address/' + data?.wallet} className="w-full flex">
               <button className="px-4 py-2 w-full font-bold rounded-md border border-black bg-white text-black text-sm hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200">
                 Check all your vouches
               </button>

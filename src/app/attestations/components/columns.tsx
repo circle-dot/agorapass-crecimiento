@@ -13,7 +13,7 @@ export const columns: ColumnDef<Attestation>[] = [
       <DataTableColumnHeader column={column} title="UID" />
     ),
     cell: ({ row }) => (
-      <div className="w-[200px] truncate"><Link href={'/agora/attestation/' + row.getValue("id")} className="text-link">{row.getValue("id")}</Link></div>
+      <div className="w-[200px] truncate"><Link href={'/attestation/' + row.getValue("id")} className="text-link">{row.getValue("id")}</Link></div>
     ),
     enableSorting: true,
     enableHiding: false,
@@ -24,7 +24,7 @@ export const columns: ColumnDef<Attestation>[] = [
       <DataTableColumnHeader column={column} title="From" />
     ),
     cell: ({ row }) => (
-      <div className="w-[200px] truncate"><Link href={'/agora/address/' + row.getValue("attester")} className="text-link">{row.getValue("attester")}</Link></div>
+      <div className="w-[200px] truncate"><Link href={'/address/' + row.getValue("attester")} className="text-link">{row.getValue("attester")}</Link></div>
     ),
     enableSorting: true,
     enableHiding: false,
@@ -35,7 +35,7 @@ export const columns: ColumnDef<Attestation>[] = [
       <DataTableColumnHeader column={column} title="To" />
     ),
     cell: ({ row }) => (
-      <div className="w-[200px] truncate"><Link href={'/agora/address/' + row.getValue("recipient")} className="text-link">{row.getValue("recipient")}</Link></div>
+      <div className="w-[200px] truncate"><Link href={'/address/' + row.getValue("recipient")} className="text-link">{row.getValue("recipient")}</Link></div>
     ),
     enableSorting: true,
     enableHiding: false,

@@ -1,23 +1,23 @@
 // navConfig.js
 export const navSections = [
     {
-        label: "Welcome",
+        label: "Home",
         href: "/",
         className: "transition-colors hover:text-foreground"
     },
     {
         label: "Vouch",
-        href: "/agora/profiles",
+        href: "/profiles",
         className: "transition-colors hover:text-foreground"
     },
     {
         label: "History",
-        href: "/agora/attestations",
+        href: "/attestations",
         className: "transition-colors hover:text-foreground"
     },
     {
         label: "About",
-        href: "/agora/about",
+        href: "/about",
         className: "transition-colors hover:text-foreground"
     },
 ];
