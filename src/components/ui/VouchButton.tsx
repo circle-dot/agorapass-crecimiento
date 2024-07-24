@@ -25,7 +25,7 @@ interface VouchButtonCustomProps {
 }
 
 const fetchNonce = async (wallet: string) => {
-    console.log('wallet!', wallet);
+    // console.log('wallet!', wallet);
     const response = await fetch(`/api/getNonce?attester=${wallet}`, {
         method: 'GET',
         headers: {
@@ -38,7 +38,7 @@ const fetchNonce = async (wallet: string) => {
     }
 
     const data = await response.json();
-    console.log('Fetched nonce data:', data);
+    // console.log('Fetched nonce data:', data);
     return data.easNonce;
 };
 
@@ -70,10 +70,10 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
         const power = "1";
         const endorsementType = "Social";
         const platform = "Agora City";
-        console.log('Recipient:', recipient);
-        console.log('test', user.wallet.address)
+        // console.log('Recipient:', recipient);
+        // console.log('test', user.wallet.address)
         const nonce = await fetchNonce(user.wallet.address);
-        console.log('nonce', nonce)
+        // console.log('nonce', nonce)
         if (nonce === undefined) {
             MySwal.fire({
                 icon: 'error',
