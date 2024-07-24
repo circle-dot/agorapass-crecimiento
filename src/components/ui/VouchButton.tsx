@@ -24,6 +24,25 @@ interface VouchButtonCustomProps {
     className?: string;
 }
 
+const fetchNonce = async (wallet: string) => {
+    console.log('wallet!', wallet);
+    const response = await fetch(`/api/getNonce?attester=${wallet}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Error fetching EAS nonce');
+    }
+
+    const data = await response.json();
+    console.log('Fetched nonce data:', data);
+    return data.easNonce;
+};
+
+
 const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, className }) => {
     const [authStatus, setAuthStatus] = useState(false);
     const { getAccessToken, ready, authenticated, signTypedData, user } = usePrivy();
@@ -36,77 +55,35 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
 
 
 
-    const schemaUID = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3";
-    const attester = user?.wallet
-    // Helper function to convert a string to bytes32 (hexadecimal)
-    function stringToBytes32(str: string): string {
-        const hex = Buffer.from(str, 'utf8').toString('hex');
-        return `0x${hex.padEnd(64, '0')}`; // Ensure it is 64 characters long (32 bytes)
-    }
-
-    // Domain for EAS contract
-    const domain = {
-        name: 'EAS',
-        version: '1.2.0',
-        chainId: 84532,
-        verifyingContract: '0x4200000000000000000000000000000000000021'
-    }
-
-    // Type definitions for EAS attestation
-    const types = {
-        Attest: [
-            { name: 'schema', type: 'bytes32' },
-            { name: 'recipient', type: 'address' },
-            { name: 'expirationTime', type: 'uint64' },
-            { name: 'revocable', type: 'bool' },
-            { name: 'refUID', type: 'bytes32' },
-            { name: 'data', type: 'bytes' },
-            { name: 'value', type: 'uint256' },
-            { name: 'nonce', type: 'uint256' },
-            { name: 'deadline', type: 'uint64' }
-        ]
-    }
-
-
-    const schemaEncoder = new SchemaEncoder("uint8 power,string endorsementType,string platform");
-
-    const encodedData = schemaEncoder.encodeData([
-        { name: "power", value: "1", type: "uint8" },
-        { name: "endorsementType", value: "Social", type: "string" },
-        { name: "platform", value: "Agora City", type: "string" }
-    ]);
-
-    // The data to sign
-    const value = {
-        schema: schemaUID,
-        recipient: recipient,
-        expirationTime: 0, // Unix timestamp of when attestation expires (0 for no expiration)
-        revocable: true,
-        refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        data: encodedData,
-        deadline: 0, // Unix timestamp of when signature expires (0 for no expiration)
-        value: 0,
-        nonce: 0
-    }
-
-
-
-    const typedData = {
-        domain: domain,
-        primaryType: 'Attest',
-        message: value,
-        types: types,
-    };
-
-    const uiConfig = {
-        title: 'Sign EAS Attestation',
-        description: 'Please sign this message to attest.',
-        buttonText: 'Sign',
-    };
-
 
 
     const handleClick = async () => {
+        if (!user?.wallet?.address) {
+            MySwal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'User wallet address is not defined.',
+            });
+            return;
+        }
+
+        const power = "1";
+        const endorsementType = "Social";
+        const platform = "Agora City";
+        console.log('Recipient:', recipient);
+        console.log('test', user.wallet.address)
+        const nonce = await fetchNonce(user.wallet.address);
+        console.log('nonce', nonce)
+        if (nonce === undefined) {
+            MySwal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'Failed to fetch nonce.',
+            });
+            return;
+        }
+
+
         MySwal.fire({
             title: 'Processing...',
             text: 'Please wait while your request is being processed.',
@@ -127,12 +104,79 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                 return;
             }
 
-            const power = "1";
-            const endorsementType = "Social";
-            const platform = "Agora City";
-            const wallet = recipient;
 
-            const result = await generateAttestation(token, power, endorsementType, platform, wallet);
+            const schemaUID = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3";
+            const attester = user?.wallet.address
+            // Helper function to convert a string to bytes32 (hexadecimal)
+            function stringToBytes32(str: string): string {
+                const hex = Buffer.from(str, 'utf8').toString('hex');
+                return `0x${hex.padEnd(64, '0')}`; // Ensure it is 64 characters long (32 bytes)
+            }
+
+            // Domain for EAS contract
+            const domain = {
+                name: 'EAS',
+                version: '1.2.0',
+                chainId: 84532,
+                verifyingContract: '0x4200000000000000000000000000000000000021'
+            }
+
+            // Type definitions for EAS attestation
+            const types = {
+                Attest: [
+                    { name: 'schema', type: 'bytes32' },
+                    { name: 'recipient', type: 'address' },
+                    { name: 'expirationTime', type: 'uint64' },
+                    { name: 'revocable', type: 'bool' },
+                    { name: 'refUID', type: 'bytes32' },
+                    { name: 'data', type: 'bytes' },
+                    { name: 'value', type: 'uint256' },
+                    { name: 'nonce', type: 'uint256' },
+                    { name: 'deadline', type: 'uint64' }
+                ]
+            }
+
+
+            const schemaEncoder = new SchemaEncoder("uint8 power,string endorsementType,string platform");
+
+            const encodedData = schemaEncoder.encodeData([
+                { name: "power", value: "1", type: "uint8" },
+                { name: "endorsementType", value: "Social", type: "string" },
+                { name: "platform", value: "Agora City", type: "string" }
+            ]);
+            console.log('nonce', nonce)
+            // The data to sign
+            const value = {
+                schema: schemaUID,
+                recipient: recipient,
+                expirationTime: 0, // Unix timestamp of when attestation expires (0 for no expiration)
+                revocable: true,
+                refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+                data: encodedData,
+                deadline: 0, // Unix timestamp of when signature expires (0 for no expiration)
+                value: 0,
+                nonce: nonce
+            }
+
+
+
+            const typedData = {
+                domain: domain,
+                primaryType: 'Attest',
+                message: value,
+                types: types,
+            };
+
+            const uiConfig = {
+                title: 'Sign EAS Attestation',
+                description: 'Please sign this message to attest.',
+                buttonText: 'Sign',
+            };
+
+            const signature = await signTypedData(typedData, uiConfig);
+            //         console.log('Generated Signature:', signature);
+
+            const result = await generateAttestation(token, power, endorsementType, platform, recipient, attester, signature);
             MySwal.fire({
                 icon: 'success',
                 title: 'Success!',

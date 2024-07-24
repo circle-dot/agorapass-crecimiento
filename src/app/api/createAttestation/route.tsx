@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Extract user data from request body
-        const { platform, endorsementType, power, wallet } = await request.json();
+        const { platform, endorsementType, power, wallet, attester, signature } = await request.json();
 
         const id = verifiedClaims.userId;
         const recipient = wallet;
@@ -73,7 +73,6 @@ export async function POST(request: NextRequest) {
         // Create signer
         // const signer = new ethers.Wallet(PRIVATE_KEY, provider);
 
-        const attester = '0x02a72042AF3Af336f4D0b465881CD0174A1dBa33'
         console.log(attester);
 
         // Get delegated attestation
@@ -83,7 +82,9 @@ export async function POST(request: NextRequest) {
         console.log('schemaUID:', schemaUID);
         console.log('walletAddress:', walletAddress);
         console.log('encodedData:', encodedData);
-
+        console.log('signature', signature)
+        console.log('attester', attester)
+        console.log('recipient', recipient)
         // const easnonce = await eas.getNonce(attester);
         // console.log('easnonce', easnonce);
         // console.log(attester)
@@ -106,7 +107,7 @@ export async function POST(request: NextRequest) {
         //     signer
         // );
 
-        let flatSig = "0x28d425445bc744164111133a64194dc223ded8aac448e587a0b30923ad436fec0be657128b817cc607542ed483700b8724e232e172b21c23a911ae3929e27c181c"
+        let flatSig = signature
 
         let expandedSig = Utils.splitSignature(flatSig);
 
