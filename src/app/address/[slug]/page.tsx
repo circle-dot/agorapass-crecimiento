@@ -1,6 +1,8 @@
 "use client";
 
 import React from 'react';
+import { useEffect, useState } from "react";
+import { usePrivy } from '@privy-io/react-auth';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAttestationsMade, fetchAttestationsReceived, fetchEnsNamesByAddress } from '@/lib/fetchers/attestations';
 import imageLogo from '@/../../public/agora.png';
@@ -20,6 +22,16 @@ import { copyToClipboard } from '@/utils/copyToClipboard';
 const schemaId = process.env.NEXT_PUBLIC_SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3"; // Replace with your schemaId
 
 export default function Page({ params }: { params: { slug: string } }) {
+
+    const [authStatus, setAuthStatus] = useState(false);
+    const { ready, authenticated } = usePrivy();
+
+    useEffect(() => {
+        if (ready) {
+            setAuthStatus(authenticated);
+        }
+    }, [ready, authenticated]);
+
     const address = params.slug; // Replace with the wallet address
 
     const { data: madeData, error: madeError, isLoading: madeLoading } = useQuery({
@@ -118,7 +130,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                             <a href={process.env.NEXT_PUBLIC_EASSCAN + '/address/' + params.slug} target='_blank' className="underline">Check in EAS</a>
                         </div>
                         <hr className="my-4 border-gray-300" />
-                        <VouchButtonCustom recipient={address} className='!w-full py-1' />
+                        <VouchButtonCustom recipient={address} className='!w-full py-1' authStatus={authStatus} />
                     </div>
                 </div>
             </motion.div>

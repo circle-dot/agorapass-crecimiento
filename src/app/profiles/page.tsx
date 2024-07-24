@@ -11,6 +11,7 @@ import {
     CommandItem,
     CommandList,
 } from "@/components/ui/command"
+import { Card, CardHeader } from "@/components/ui/card";
 import {
     Popover,
     PopoverContent,
@@ -115,36 +116,45 @@ function Page() {
                 </Popover>
             </div>
 
-            <div className='flex flex-col justify-center items-center'>
-                {isLoading ? (
-                    <div className="flex items-center space-x-4">
-                        <Skeleton className="h-12 w-12 rounded-full" />
-                        <div className="space-y-2">
-                            <Skeleton className="h-4 w-[250px]" />
-                            <Skeleton className="h-4 w-[200px]" />
-                        </div>
-                    </div> // Replace this with a skeleton component if needed
-                ) : (
-                    <>
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 p-4">
+            <div className='flex flex-col justify-center'>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 p-4">
+                    {isLoading ? (
+                        Array(12).fill({}).map((i, key) => {
+                            return (
+                                <Card className="w-full" key={key}>
+                                    <CardHeader className="grid grid-cols-[1fr_110px] items-start gap-4 space-y-0">
+
+                                        <div className="flex justify-center items-center space-x-4">
+                                            <Skeleton className="h-12 w-12 rounded-full" />
+                                            <div className="space-y-2">
+                                                <Skeleton className="h-4 w-[250px]" />
+                                                <Skeleton className="h-4 w-[200px]" />
+                                            </div>
+                                        </div>
+                                    </CardHeader>
+                                </Card>
+                            )
+                        })
+                    ) : (
+                        <>
                             {data?.pages.map((page, i) =>
                                 page.users.map((user: any, index: number) => (
                                     <UserCard key={`${i}-${index}`} user={user} />
                                 ))
                             )}
-                        </div>
-                        <div ref={ref}>
-                            {isFetchingNextPage &&
-                                <div className="flex items-start justify-start space-x-4">
-                                    <Skeleton className="h-12 w-12 rounded-full" />
-                                    <div className="space-y-2">
-                                        <Skeleton className="h-4 w-[250px]" />
-                                        <Skeleton className="h-4 w-[200px]" />
-                                    </div>
-                                </div>}
-                        </div>
-                    </>
-                )}
+                        </>
+                    )}
+                </div>
+                <div ref={ref}>
+                    {isFetchingNextPage &&
+                        <div className="flex items-start justify-start space-x-4">
+                            <Skeleton className="h-12 w-12 rounded-full" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-[250px]" />
+                                <Skeleton className="h-4 w-[200px]" />
+                            </div>
+                        </div>}
+                </div>
             </div>
         </div>
     );

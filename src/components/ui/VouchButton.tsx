@@ -22,6 +22,7 @@ const MySwal = withReactContent(Swal);
 interface VouchButtonCustomProps {
     recipient: string;
     className?: string;
+    authStatus: boolean;
 }
 
 const fetchNonce = async (wallet: string) => {
@@ -43,19 +44,9 @@ const fetchNonce = async (wallet: string) => {
 };
 
 
-const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, className }) => {
-    const [authStatus, setAuthStatus] = useState(false);
-    const { getAccessToken, ready, authenticated, signTypedData, user } = usePrivy();
+const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, className, authStatus }) => {
 
-    useEffect(() => {
-        if (ready) {
-            setAuthStatus(authenticated);
-        }
-    }, [ready, authenticated]);
-
-
-
-
+    const { getAccessToken, signTypedData, user } = usePrivy();
 
     const handleClick = async () => {
         if (!user?.wallet?.address) {
@@ -69,7 +60,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
 
         const power = "1";
         const endorsementType = "Social";
-        const platform = "Agora City";
+        const platform = "Agora Pass";
         // console.log('Recipient:', recipient);
         // console.log('test', user.wallet.address)
         const nonce = await fetchNonce(user.wallet.address);
@@ -142,7 +133,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
             const encodedData = schemaEncoder.encodeData([
                 { name: "power", value: "1", type: "uint8" },
                 { name: "endorsementType", value: "Social", type: "string" },
-                { name: "platform", value: "Agora City", type: "string" }
+                { name: "platform", value: "Agora Pass", type: "string" }
             ]);
             console.log('nonce', nonce)
             // The data to sign
@@ -204,7 +195,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                         <AlertDialogHeader>
-                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                             <AlertDialogDescription>
                                 This action cannot be undone.
                             </AlertDialogDescription>
@@ -228,7 +219,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                                     <span className="absolute top-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-accentdark group-hover:h-full ease"></span>
                                     <span className="absolute bottom-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-accentdark group-hover:h-full ease"></span>
                                     <span className="absolute inset-0 w-full h-full duration-300 delay-300 bg-accentdarker opacity-0 group-hover:opacity-100"></span>
-                                    <span className="relative transition-colors duration-300 delay-200 group-hover:text-white ease">Vouch them!</span>
+                                    <span className="relative transition-colors duration-300 delay-200 group-hover:text-white ease">Vouch</span>
                                 </button>
                             </AlertDialogAction>
                         </AlertDialogFooter>

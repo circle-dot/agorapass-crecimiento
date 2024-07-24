@@ -47,7 +47,7 @@ async function login() {
         watermark,
         config,
         proofTitle: "Sign-In with Zupass",
-        proofDescription: "**Use Zupass to login to Agora City**",
+        proofDescription: "**Use Zupass to login to Agora Pass**",
         multi: true
     };
 

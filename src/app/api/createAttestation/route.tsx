@@ -16,6 +16,7 @@ const ALCHEMY_URL = process.env.ALCHEMY_URL!;
 
 const provider = new ethers.JsonRpcProvider(ALCHEMY_URL);
 const signer = new ethers.Wallet(PRIVATE_KEY, provider);
+const clientSigner = new ethers.Wallet("0x05a7b43d9db4131737329d18972b37eafe6291006a727693e77af60c9d06b2a0", provider);
 await eas.connect(signer);
 
 export async function POST(request: NextRequest) {
@@ -67,7 +68,7 @@ export async function POST(request: NextRequest) {
         const encodedData = schemaEncoder.encodeData([
             { name: "power", value: "1", type: "uint8" },
             { name: "endorsementType", value: "Social", type: "string" },
-            { name: "platform", value: "Agora City", type: "string" }
+            { name: "platform", value: "Agora Pass", type: "string" }
         ]);
 
         // Create signer

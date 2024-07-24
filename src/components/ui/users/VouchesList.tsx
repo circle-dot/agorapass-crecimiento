@@ -38,7 +38,7 @@ export function VouchesList({ vouches }: VouchesListProps) {
                         <div className="flex flex-col md:flex-row items-start md:items-center justify-between space-y-2 md:space-y-0 md:space-x-2">
                             <div>
                                 <p className="font-semibold">
-                                    You vouched for <Link href={`/agora/address/${vouch.recipient}`} className="text-blue-500 hover:underline truncate">{truncateWallet(vouch.recipient)}</Link> on {new Date(vouch.timeCreated * 1000).toLocaleDateString()}
+                                    You vouched for <Link href={`/address/${vouch.recipient}`} className="text-blue-500 hover:underline truncate">{truncateWallet(vouch.recipient)}</Link> on {new Date(vouch.timeCreated * 1000).toLocaleDateString()}
                                 </p>
                             </div>
                             <div className="flex flex-row space-x-2">
@@ -54,7 +54,7 @@ export function VouchesList({ vouches }: VouchesListProps) {
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem asChild>
                                             <Button variant="outline" className="p-2 cursor-pointer" asChild>
-                                                <Link href={`/agora/attestation/${vouch.id}`}>
+                                                <Link href={`/attestation/${vouch.id}`}>
                                                     Check vouch
                                                     <CheckCircle className="text-green-500 w-4 h-4 ml-2" />
                                                 </Link>
