@@ -4,6 +4,7 @@ import { EAS, SchemaEncoder } from '@ethereum-attestation-service/eas-sdk';
 import { ethers } from 'ethers';
 import prisma from '@/lib/db';
 import { toBigInt } from 'ethers';
+import { Utils } from 'alchemy-sdk';
 
 const easContractAddress = "0x4200000000000000000000000000000000000021";
 const schemaUID = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3";
@@ -70,43 +71,47 @@ export async function POST(request: NextRequest) {
         ]);
 
         // Create signer
-        const signer = new ethers.Wallet(PRIVATE_KEY, provider);
+        // const signer = new ethers.Wallet(PRIVATE_KEY, provider);
 
-        const attester = await signer.getAddress();
+        const attester = '0x02a72042AF3Af336f4D0b465881CD0174A1dBa33'
         console.log(attester);
 
         // Get delegated attestation
-        const delegated = await eas.getDelegated();
+        // const delegated = await eas.getDelegated();
 
         // Print values for debugging
         console.log('schemaUID:', schemaUID);
         console.log('walletAddress:', walletAddress);
         console.log('encodedData:', encodedData);
 
-        const easnonce = await eas.getNonce(attester);
-        console.log('easnonce', easnonce);
-        console.log(attester)
-        const options = {
-            schema: schemaUID,
-            recipient: recipient,
-            expirationTime: toBigInt(0), // Unix timestamp of when attestation expires (0 for no expiration)
-            revocable: true,
-            refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
-            data: encodedData,
-            deadline: toBigInt(0), // Unix timestamp of when signature expires (0 for no expiration)
-            value: toBigInt(0),
-            nonce: easnonce,
-        };
-        console.log(options);
+        // const easnonce = await eas.getNonce(attester);
+        // console.log('easnonce', easnonce);
+        // console.log(attester)
+        // const options = {
+        //     schema: schemaUID,
+        //     recipient: recipient,
+        //     expirationTime: toBigInt(0), // Unix timestamp of when attestation expires (0 for no expiration)
+        //     revocable: true,
+        //     refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        //     data: encodedData,
+        //     deadline: toBigInt(0), // Unix timestamp of when signature expires (0 for no expiration)
+        //     value: toBigInt(0),
+        //     nonce: easnonce,
+        // };
+        // console.log(options);
 
         // Sign the delegated attestation
-        const response = await delegated.signDelegatedAttestation(
-            options,
-            signer
-        );
+        // const response = await delegated.signDelegatedAttestation(
+        //     options,
+        //     signer
+        // );
+
+        let flatSig = "0x28d425445bc744164111133a64194dc223ded8aac448e587a0b30923ad436fec0be657128b817cc607542ed483700b8724e232e172b21c23a911ae3929e27c181c"
+
+        let expandedSig = Utils.splitSignature(flatSig);
 
         // Print response for debugging
-        console.log('Delegated Attestation Response:', response);
+        // console.log('Delegated Attestation Response:', response);
 
         // Create the delegated attestation
         const transaction = await eas.attestByDelegation({
@@ -118,7 +123,7 @@ export async function POST(request: NextRequest) {
                 refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
                 data: encodedData
             },
-            signature: response.signature,
+            signature: expandedSig,
             attester: attester,
             deadline: toBigInt(0) // Unix timestamp of when signature expires (0 for no expiration)
         });

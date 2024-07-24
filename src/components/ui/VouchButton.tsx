@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
 import generateAttestation from '@/utils/generateAttestation';
 import Swal from 'sweetalert2';
@@ -15,9 +15,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from './button';
-import {
-    useEffect, useState
-} from 'react';
+import { SchemaEncoder } from '@ethereum-attestation-service/eas-sdk';
 
 const MySwal = withReactContent(Swal);
 
@@ -28,12 +26,85 @@ interface VouchButtonCustomProps {
 
 const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, className }) => {
     const [authStatus, setAuthStatus] = useState(false);
-    const { getAccessToken, ready, authenticated } = usePrivy();
+    const { getAccessToken, ready, authenticated, signTypedData, user } = usePrivy();
+
     useEffect(() => {
         if (ready) {
             setAuthStatus(authenticated);
         }
     }, [ready, authenticated]);
+
+
+
+    const schemaUID = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3";
+    const attester = user?.wallet
+    // Helper function to convert a string to bytes32 (hexadecimal)
+    function stringToBytes32(str: string): string {
+        const hex = Buffer.from(str, 'utf8').toString('hex');
+        return `0x${hex.padEnd(64, '0')}`; // Ensure it is 64 characters long (32 bytes)
+    }
+
+    // Domain for EAS contract
+    const domain = {
+        name: 'EAS',
+        version: '1.2.0',
+        chainId: 84532,
+        verifyingContract: '0x4200000000000000000000000000000000000021'
+    }
+
+    // Type definitions for EAS attestation
+    const types = {
+        Attest: [
+            { name: 'schema', type: 'bytes32' },
+            { name: 'recipient', type: 'address' },
+            { name: 'expirationTime', type: 'uint64' },
+            { name: 'revocable', type: 'bool' },
+            { name: 'refUID', type: 'bytes32' },
+            { name: 'data', type: 'bytes' },
+            { name: 'value', type: 'uint256' },
+            { name: 'nonce', type: 'uint256' },
+            { name: 'deadline', type: 'uint64' }
+        ]
+    }
+
+
+    const schemaEncoder = new SchemaEncoder("uint8 power,string endorsementType,string platform");
+
+    const encodedData = schemaEncoder.encodeData([
+        { name: "power", value: "1", type: "uint8" },
+        { name: "endorsementType", value: "Social", type: "string" },
+        { name: "platform", value: "Agora City", type: "string" }
+    ]);
+
+    // The data to sign
+    const value = {
+        schema: schemaUID,
+        recipient: recipient,
+        expirationTime: 0, // Unix timestamp of when attestation expires (0 for no expiration)
+        revocable: true,
+        refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        data: encodedData,
+        deadline: 0, // Unix timestamp of when signature expires (0 for no expiration)
+        value: 0,
+        nonce: 0
+    }
+
+
+
+    const typedData = {
+        domain: domain,
+        primaryType: 'Attest',
+        message: value,
+        types: types,
+    };
+
+    const uiConfig = {
+        title: 'Sign EAS Attestation',
+        description: 'Please sign this message to attest.',
+        buttonText: 'Sign',
+    };
+
+
 
     const handleClick = async () => {
         MySwal.fire({
@@ -67,7 +138,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                 title: 'Success!',
                 text: 'Vouch created successfully.',
             });
-            console.log('Vouch created:', result);
+            // console.log('Vouch created:', result);
         } catch (error) {
             MySwal.fire({
                 icon: 'error',
@@ -97,7 +168,17 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                         <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                             <AlertDialogAction className='p-0' asChild>
-                                <button onClick={handleClick} className="relative px-5 py-3 overflow-hidden font-medium text-gray-600 !bg-primarydark border-gray-100 rounded-lg shadow-inner group">
+                                <button
+                                    // onClick={async () => {
+                                    //     try {
+                                    //         const signature = await signTypedData(typedData, uiConfig);
+                                    //         console.log('Generated Signature:', signature);
+                                    //     } catch (error) {
+                                    //         console.error('Error signing typed data:', error);
+                                    //     }
+                                    // }}
+                                    onClick={handleClick}
+                                    className="relative px-5 py-3 overflow-hidden font-medium text-gray-600 !bg-primarydark border-gray-100 rounded-lg shadow-inner group">
                                     <span className="absolute top-0 left-0 w-0 h-0 transition-all duration-200 border-t-2 border-accentdark group-hover:w-full ease"></span>
                                     <span className="absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 border-accentdark group-hover:w-full ease"></span>
                                     <span className="absolute top-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-accentdark group-hover:h-full ease"></span>
@@ -111,8 +192,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                 </AlertDialog>
             )}
         </>
-
     );
-}
+};
 
 export default VouchButtonCustom;

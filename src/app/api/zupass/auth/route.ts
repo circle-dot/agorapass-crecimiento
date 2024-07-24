@@ -59,7 +59,7 @@ export const POST = async (req: NextRequest) => {
                     add_groups: groups.join(",")
                 };
 
-                console.log('Payload:', payload); // Log payload for verification
+                // console.log('Payload:', payload); // Log payload for verification
 
                 if (pcd.claim.nullifierHash) {
                     nullifiers.add(pcd.claim.nullifierHash);
@@ -118,7 +118,7 @@ export const POST = async (req: NextRequest) => {
                 status: 200
             };
 
-            console.log('Final Response:', finalResponse); // Log final response for verification
+            // console.log('Final Response:', finalResponse); // Log final response for verification
 
             return NextResponse.json(finalResponse, { status: 200 });
         } else {

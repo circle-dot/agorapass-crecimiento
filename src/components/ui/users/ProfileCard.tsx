@@ -69,7 +69,6 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
     }, [vouchResetDate]);
 
     const handleFormSubmit = (data: z.infer<typeof FormSchema>) => {
-        console.log('Form submitted with data:', data);
         onSubmit(data);
         setIsDialogOpen(false);
     };

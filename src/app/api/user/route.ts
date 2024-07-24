@@ -59,7 +59,6 @@ export async function PATCH(request: NextRequest) {
         if (!name || typeof name !== 'string' || name.trim().length < 2) {
             return NextResponse.json({ error: 'Invalid name' }, { status: 400 });
         }
-        console.log(avatarType)
         const updatedUser = await prisma.user.update({
             where: {
                 id: verifiedClaims.userId,
