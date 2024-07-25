@@ -1,5 +1,6 @@
+"use client"
 import React, { useEffect, useState } from 'react';
-import { usePrivy } from '@privy-io/react-auth';
+import { usePrivy, useWallets } from '@privy-io/react-auth';
 import generateAttestation from '@/utils/generateAttestation';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -16,6 +17,9 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from './button';
 import { SchemaEncoder } from '@ethereum-attestation-service/eas-sdk';
+import { base, baseSepolia } from 'viem/chains'
+import { type Address, type Hash, createWalletClient, custom } from 'viem'
+import 'viem/window'
 
 const MySwal = withReactContent(Swal);
 
@@ -47,7 +51,7 @@ const fetchNonce = async (wallet: string) => {
 const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, className, authStatus }) => {
 
     const { getAccessToken, signTypedData, user } = usePrivy();
-
+    const { wallets } = useWallets();
     const handleClick = async () => {
         if (!user?.wallet?.address) {
             MySwal.fire({
@@ -152,10 +156,10 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
 
 
             const typedData = {
+                types: types,
                 domain: domain,
                 primaryType: 'Attest',
                 message: value,
-                types: types,
             };
 
             const uiConfig = {
@@ -164,10 +168,91 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                 buttonText: 'Sign',
             };
 
-            const signature = await signTypedData(typedData, uiConfig);
+
+
+            const walletClient = createWalletClient({
+                chain: baseSepolia,
+                transport: custom(window.ethereum!),
+            })
+            const [address] = await walletClient.requestAddresses()
+            console.log(address)
+            const account = address
+
+            const signature = await walletClient.signTypedData({
+                account,
+                domain: {
+                    name: 'EAS',
+                    version: '1.2.0',
+                    chainId: 84532,
+                    verifyingContract: '0x4200000000000000000000000000000000000021'
+                },
+                types: {
+                    Attest: [
+                        { name: 'schema', type: 'bytes32' },
+                        { name: 'recipient', type: 'address' },
+                        { name: 'expirationTime', type: 'uint64' },
+                        { name: 'revocable', type: 'bool' },
+                        { name: 'refUID', type: 'bytes32' },
+                        { name: 'data', type: 'bytes' },
+                        { name: 'value', type: 'uint256' },
+                        { name: 'nonce', type: 'uint256' },
+                        { name: 'deadline', type: 'uint64' }
+                    ]
+                },
+                primaryType: 'Attest',
+                message: {
+                    schema: schemaUID,
+                    recipient: recipient,
+                    expirationTime: 0, // Unix timestamp of when attestation expires (0 for no expiration)
+                    revocable: true,
+                    refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+                    data: encodedData,
+                    deadline: 0, // Unix timestamp of when signature expires (0 for no expiration)
+                    value: 0,
+                    nonce: nonce
+                }
+                ,
+            })
+            console.log('signature', signature)
+            // const wallet = wallets[0]; // Replace this with your desired wallet
+            // const provider = await wallet.getEthereumProvider();
+            // const address = wallet.address;
+            // // const message = 'This is the message I am signing';
+            // const signature = await provider.request({
+            //     method: 'eth_signTypedData_v4',
+            //     params: [address, typedData],
+            // });
+            // console.log(signature2)
+            // let signature;
+            // console.log('signature1', signature);
+            // if (user.wallet.walletClientType === 'privy') {
+            //     signature = await signTypedData(typedData, uiConfig);
+            // } else {
+            //     const walletClient = createWalletClient({
+            //         chain: baseSepolia,
+            //         transport: custom(window.ethereum!),
+            //     });
+            //     const [account] = await walletClient.getAddresses()
+            //     signature = await walletClient.signTypedData({
+            //         // account: user.wallet.address,
+            //         account,
+            //         domain: {
+            //             name: 'EAS',
+            //             version: '1.2.0',
+            //             chainId: 84532,
+            //             verifyingContract: '0x4200000000000000000000000000000000000021'
+            //         },
+            //         primaryType: 'Attest',
+            //         message: value,
+            //         types: types,
+            //     });
+            // }
+            // console.log('signature', signature);
+
             //         console.log('Generated Signature:', signature);
 
             const result = await generateAttestation(token, power, endorsementType, platform, recipient, attester, signature);
+
             MySwal.fire({
                 icon: 'success',
                 title: 'Success!',
