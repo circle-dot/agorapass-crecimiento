@@ -3,7 +3,7 @@ import privy from '@/lib/privy';
 import { EAS, SchemaEncoder } from '@ethereum-attestation-service/eas-sdk';
 import { ethers } from 'ethers';
 import prisma from '@/lib/db';
-import { toBigInt } from 'ethers';
+import { toBigInt, toUtf8String } from 'ethers';
 import { Utils } from 'alchemy-sdk';
 
 const easContractAddress = "0x4200000000000000000000000000000000000021";
@@ -112,6 +112,7 @@ export async function POST(request: NextRequest) {
         console.log('Signature', flatSig)
         let expandedSig = Utils.splitSignature(flatSig);
         console.log('expandedSig', expandedSig)
+
         // Print response for debugging
         // console.log('Delegated Attestation Response:', response);
 
