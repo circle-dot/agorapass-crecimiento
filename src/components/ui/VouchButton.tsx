@@ -169,67 +169,68 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
             };
             let signature;
 
-            if (user.wallet.walletClientType === 'privy') {
-                const wallet = wallets[0];
-                const provider = await wallet.getEthereumProvider();
-                const address = wallet.address;
+            // if (user.wallet.walletClientType === 'privy') {
+            const wallet = wallets[0];
+            await wallet.switchChain(84532)
+            const provider = await wallet.getEthereumProvider();
+            const address = wallet.address;
+            console.log('Wallet address', address)
+            signature = await provider.request({
+                method: 'eth_signTypedData_v4',
+                params: [address, JSON.stringify(typedData)],
+            });
+            // } else {
 
-                signature = await provider.request({
-                    method: 'eth_signTypedData_v4',
-                    params: [address, typedData],
-                });
-            } else {
+            //     const walletClient = createWalletClient({
+            //         chain: baseSepolia,
+            //         transport: custom(window.ethereum!),
+            //     })
+            //     const [address] = await walletClient.requestAddresses()
+            //     console.log(address)
+            //     const account = address
 
-                const walletClient = createWalletClient({
-                    chain: baseSepolia,
-                    transport: custom(window.ethereum!),
-                })
-                const [address] = await walletClient.requestAddresses()
-                console.log(address)
-                const account = address
-
-                signature = await walletClient.signTypedData({
-                    account,
-                    domain: {
-                        name: 'EAS',
-                        version: '1.2.0',
-                        chainId: 84532,
-                        verifyingContract: '0x4200000000000000000000000000000000000021'
-                    },
-                    types: {
-                        Attest: [
-                            { name: 'schema', type: 'bytes32' },
-                            { name: 'recipient', type: 'address' },
-                            { name: 'expirationTime', type: 'uint64' },
-                            { name: 'revocable', type: 'bool' },
-                            { name: 'refUID', type: 'bytes32' },
-                            { name: 'data', type: 'bytes' },
-                            { name: 'value', type: 'uint256' },
-                            { name: 'nonce', type: 'uint256' },
-                            { name: 'deadline', type: 'uint64' }
-                        ]
-                    },
-                    primaryType: 'Attest',
-                    message: {
-                        schema: schemaUID,
-                        recipient: recipient,
-                        expirationTime: 0n, // Unix timestamp of when attestation expires (0 for no expiration)
-                        revocable: true,
-                        refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
-                        data: encodedData,
-                        deadline: 0n, // Unix timestamp of when signature expires (0 for no expiration)
-                        value: 0n,
-                        nonce: nonce
-                    }
-                    ,
-                })
-            }
+            //     signature = await walletClient.signTypedData({
+            //         account,
+            //         domain: {
+            //             name: 'EAS',
+            //             version: '1.2.0',
+            //             chainId: 84532,
+            //             verifyingContract: '0x4200000000000000000000000000000000000021'
+            //         },
+            //         types: {
+            //             Attest: [
+            //                 { name: 'schema', type: 'bytes32' },
+            //                 { name: 'recipient', type: 'address' },
+            //                 { name: 'expirationTime', type: 'uint64' },
+            //                 { name: 'revocable', type: 'bool' },
+            //                 { name: 'refUID', type: 'bytes32' },
+            //                 { name: 'data', type: 'bytes' },
+            //                 { name: 'value', type: 'uint256' },
+            //                 { name: 'nonce', type: 'uint256' },
+            //                 { name: 'deadline', type: 'uint64' }
+            //             ]
+            //         },
+            //         primaryType: 'Attest',
+            //         message: {
+            //             schema: schemaUID,
+            //             recipient: recipient,
+            //             expirationTime: 0n, // Unix timestamp of when attestation expires (0 for no expiration)
+            //             revocable: true,
+            //             refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+            //             data: encodedData,
+            //             deadline: 0n, // Unix timestamp of when signature expires (0 for no expiration)
+            //             value: 0n,
+            //             nonce: nonce
+            //         }
+            //         ,
+            //     })
+            // }
 
             console.log('signature', signature)
 
 
             const result = await generateAttestation(token, power, endorsementType, platform, recipient, attester, signature);
-
+            console.log('Result', result)
             MySwal.fire({
                 icon: 'success',
                 title: 'Success!',

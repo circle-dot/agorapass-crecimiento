@@ -109,9 +109,9 @@ export async function POST(request: NextRequest) {
         // );
 
         let flatSig = signature
-
+        console.log('Signature', flatSig)
         let expandedSig = Utils.splitSignature(flatSig);
-
+        console.log('expandedSig', expandedSig)
         // Print response for debugging
         // console.log('Delegated Attestation Response:', response);
 
