@@ -17,6 +17,8 @@ import { motion } from 'framer-motion';
 import Loader from '@/components/ui/Loader';
 import VouchButtonCustom from '@/components/ui/VouchButton';
 import { copyToClipboard } from '@/utils/copyToClipboard';
+import { getAvatar } from '@/components/ui/users/getAvatarImg';
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 //!TODO replace this schemaId
 const schemaId = process.env.NEXT_PUBLIC_SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3"; // Replace with your schemaId
@@ -62,6 +64,8 @@ export default function Page({ params }: { params: { slug: string } }) {
         },
     });
 
+    const avatarType = rankScore ? rankScore.avatarType || 'metamask' : 'metamask';
+    const avatar = getAvatar(address, avatarType);
 
     if (madeLoading || receivedLoading || ensNameLoading || rankScoreLoading) return <div className="w-screen flex items-center justify-center"><Loader /></div>;
     if (madeError || receivedError || ensNameerror || rankScoreError) return <div>Error: {madeError?.message || receivedError?.message}</div>;
@@ -86,15 +90,14 @@ export default function Page({ params }: { params: { slug: string } }) {
                 className="bg-white bg-opacity-90 shadow-lg p-6 rounded-lg max-w-md w-full"
             >
                 <div className="flex justify-center mb-6">
-                    <div className="h-32 w-32 rounded-full overflow-hidden">
-                        <Image
-                            src={imageLogo}
-                            width={100}
-                            height={100}
-                            alt='Profile pic'
-                            className="object-cover w-full h-full"
-                        />
-                    </div>
+                    <Avatar className="w-24 h-24 mx-auto mb-4">
+                        {typeof avatar === 'string' ? (
+                            <AvatarImage src={avatar} alt="Avatar Image" />
+                        ) : (
+                            avatar
+                        )}
+                        {/* <AvatarFallback className="flex items-center justify-center">{email?.charAt(0)}</AvatarFallback> */}
+                    </Avatar>
                 </div>
                 <div className="text-center">
 
