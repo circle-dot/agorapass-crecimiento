@@ -139,7 +139,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                 { name: "endorsementType", value: "Social", type: "string" },
                 { name: "platform", value: "Agora Pass", type: "string" }
             ]);
-            console.log('nonce', nonce)
+            // console.log('nonce', nonce)
             // The data to sign
             const value = {
                 schema: schemaUID,
@@ -174,16 +174,15 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                 await wallet.switchChain(84532)
                 const provider = await wallet.getEthereumProvider();
                 const address = wallet.address;
-                console.log('Wallet address', address)
+                // console.log('Wallet address', address)
                 signature = await provider.request({
                     method: 'eth_signTypedData_v4',
                     params: [address, JSON.stringify(typedData)],
                 });
             } else {
 
-
-                console.log(wallets)
-                const wallet = wallets.find(wallet => wallet.walletClientType === user.wallet.walletClientType); // Replace 'MetaMask' with the desired wallet type
+                // console.log(wallets)
+                const wallet = wallets.find(wallet => wallet.walletClientType === user.wallet!.walletClientType); // Replace 'MetaMask' with the desired wallet type
 
                 // Ensure the wallet is found
                 if (!wallet) {
@@ -198,15 +197,17 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
 
                 // Get the wallet address
                 const address = wallet.address;
-                console.log('Wallet address', address);
+                // console.log('Wallet address', address);
                 const walletClient = createWalletClient({
-                    account: address,
+                    account: address as `0x${string}`,
                     chain: baseSepolia,
                     transport: custom(provider),
                 })
-                console.log('walletc', walletClient)
+                // console.log('walletc', walletClient)
+                const data = encodedData as `0x${string}`;
 
                 signature = await walletClient.signTypedData({
+                    //@ts-ignore !TO DO check how to fix this
                     address,
                     domain: {
                         name: 'EAS',
@@ -229,12 +230,12 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                     },
                     primaryType: 'Attest',
                     message: {
-                        schema: schemaUID,
-                        recipient: recipient,
+                        schema: schemaUID as `0x${string}`,
+                        recipient: recipient as `0x${string}`,
                         expirationTime: 0n, // Unix timestamp of when attestation expires (0 for no expiration)
                         revocable: true,
                         refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
-                        data: encodedData,
+                        data: data,
                         deadline: 0n, // Unix timestamp of when signature expires (0 for no expiration)
                         value: 0n,
                         nonce: nonce
@@ -245,7 +246,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
 
 
 
-            console.log('signature', signature)
+            // console.log('signature', signature)
 
 
             const result = await generateAttestation(token, power, endorsementType, platform, recipient, attester, signature);
