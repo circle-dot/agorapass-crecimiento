@@ -1,5 +1,6 @@
+"use client"
 import React, { useEffect, useState } from 'react';
-import { usePrivy } from '@privy-io/react-auth';
+import { usePrivy, useWallets } from '@privy-io/react-auth';
 import generateAttestation from '@/utils/generateAttestation';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -16,6 +17,9 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from './button';
 import { SchemaEncoder } from '@ethereum-attestation-service/eas-sdk';
+import { base, baseSepolia } from 'viem/chains'
+import { type Address, type Hash, createWalletClient, custom } from 'viem'
+import 'viem/window'
 
 const MySwal = withReactContent(Swal);
 
@@ -47,7 +51,7 @@ const fetchNonce = async (wallet: string) => {
 const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, className, authStatus }) => {
 
     const { getAccessToken, signTypedData, user } = usePrivy();
-
+    const { wallets } = useWallets();
     const handleClick = async () => {
         if (!user?.wallet?.address) {
             MySwal.fire({
@@ -135,7 +139,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                 { name: "endorsementType", value: "Social", type: "string" },
                 { name: "platform", value: "Agora Pass", type: "string" }
             ]);
-            console.log('nonce', nonce)
+            // console.log('nonce', nonce)
             // The data to sign
             const value = {
                 schema: schemaUID,
@@ -152,10 +156,10 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
 
 
             const typedData = {
+                types: types,
                 domain: domain,
                 primaryType: 'Attest',
                 message: value,
-                types: types,
             };
 
             const uiConfig = {
@@ -163,11 +167,90 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                 description: 'Please sign this message to attest.',
                 buttonText: 'Sign',
             };
+            let signature;
 
-            const signature = await signTypedData(typedData, uiConfig);
-            //         console.log('Generated Signature:', signature);
+            if (user.wallet.walletClientType === 'privy') {
+                const wallet = wallets[0];
+                await wallet.switchChain(84532)
+                const provider = await wallet.getEthereumProvider();
+                const address = wallet.address;
+                // console.log('Wallet address', address)
+                signature = await provider.request({
+                    method: 'eth_signTypedData_v4',
+                    params: [address, JSON.stringify(typedData)],
+                });
+            } else {
+
+                // console.log(wallets)
+                const wallet = wallets.find(wallet => wallet.walletClientType === user.wallet!.walletClientType); // Replace 'MetaMask' with the desired wallet type
+
+                // Ensure the wallet is found
+                if (!wallet) {
+                    throw new Error('Desired wallet not found');
+                }
+
+                // Switch chain if needed
+                await wallet.switchChain(84532);
+
+                // Get the EIP-1193 provider
+                const provider = await wallet.getEthereumProvider();
+
+                // Get the wallet address
+                const address = wallet.address;
+                // console.log('Wallet address', address);
+                const walletClient = createWalletClient({
+                    account: address as `0x${string}`,
+                    chain: baseSepolia,
+                    transport: custom(provider),
+                })
+                // console.log('walletc', walletClient)
+                const data = encodedData as `0x${string}`;
+
+                signature = await walletClient.signTypedData({
+                    //@ts-ignore !TO DO check how to fix this
+                    address,
+                    domain: {
+                        name: 'EAS',
+                        version: '1.2.0',
+                        chainId: 84532,
+                        verifyingContract: '0x4200000000000000000000000000000000000021'
+                    },
+                    types: {
+                        Attest: [
+                            { name: 'schema', type: 'bytes32' },
+                            { name: 'recipient', type: 'address' },
+                            { name: 'expirationTime', type: 'uint64' },
+                            { name: 'revocable', type: 'bool' },
+                            { name: 'refUID', type: 'bytes32' },
+                            { name: 'data', type: 'bytes' },
+                            { name: 'value', type: 'uint256' },
+                            { name: 'nonce', type: 'uint256' },
+                            { name: 'deadline', type: 'uint64' }
+                        ]
+                    },
+                    primaryType: 'Attest',
+                    message: {
+                        schema: schemaUID as `0x${string}`,
+                        recipient: recipient as `0x${string}`,
+                        expirationTime: 0n, // Unix timestamp of when attestation expires (0 for no expiration)
+                        revocable: true,
+                        refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+                        data: data,
+                        deadline: 0n, // Unix timestamp of when signature expires (0 for no expiration)
+                        value: 0n,
+                        nonce: nonce
+                    }
+                    ,
+                })
+            }
+
+
+
+            // console.log('signature', signature)
+
 
             const result = await generateAttestation(token, power, endorsementType, platform, recipient, attester, signature);
+            console.log('Result', result)
             MySwal.fire({
                 icon: 'success',
                 title: 'Success!',

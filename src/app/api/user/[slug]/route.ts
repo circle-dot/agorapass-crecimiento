@@ -8,7 +8,10 @@ export async function GET(
 
     const user = await prisma.user.findUnique({
         where: { wallet: slug },
-        select: { rankScore: true },
+        select: {
+            rankScore: true,
+            avatarType: true
+        },
     });
     const rankScore = user?.rankScore ?? null
     return Response.json({ rankScore })

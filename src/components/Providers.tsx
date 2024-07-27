@@ -2,7 +2,7 @@
 
 import { PrivyProvider } from '@privy-io/react-auth';
 import React from 'react';
-import { base } from 'viem/chains';
+import { base, baseSepolia } from 'viem/chains';
 import { ApolloWrapper } from './layout/ApolloWrapper';
 import QueryProvider from './layout/QueryProvider';
 export default function Providers({ children }: { children: React.ReactNode }) {
@@ -10,8 +10,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         <PrivyProvider
             appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ''}
             config={{
-                defaultChain: base,
-                supportedChains: [base],
+                defaultChain: baseSepolia,
+                supportedChains: [baseSepolia],
                 // Customize Privy's appearance in your app
                 appearance: {
                     theme: 'light',
