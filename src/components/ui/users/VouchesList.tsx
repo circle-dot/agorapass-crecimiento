@@ -54,7 +54,7 @@ export function VouchesList({ vouches }: VouchesListProps) {
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem asChild>
                                             <Button variant="outline" className="p-2 cursor-pointer" asChild>
-                                                <Link href={`/attestation/${vouch.id}`}>
+                                                <Link href={`/vouch/${vouch.id}`}>
                                                     Check vouch
                                                     <CheckCircle className="text-green-500 w-4 h-4 ml-2" />
                                                 </Link>

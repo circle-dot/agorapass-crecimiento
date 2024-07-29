@@ -62,6 +62,17 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
             return;
         }
 
+        //Cant vouch yourself!
+        if (recipient === user.wallet.address) {
+            MySwal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: "You can't vouch yourself.",
+            });
+            return;
+        }
+
+
         const power = "1";
         const endorsementType = "Social";
         const platform = "Agora Pass";
@@ -99,7 +110,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                 return;
             }
 
-
+            const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '84532', 10);
             const schemaUID = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3";
             const attester = user?.wallet.address
             // Helper function to convert a string to bytes32 (hexadecimal)
@@ -112,7 +123,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
             const domain = {
                 name: 'EAS',
                 version: '1.2.0',
-                chainId: 84532,
+                chainId: chainId,
                 verifyingContract: '0x4200000000000000000000000000000000000021'
             }
 
@@ -171,7 +182,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
 
             if (user.wallet.walletClientType === 'privy') {
                 const wallet = wallets[0];
-                await wallet.switchChain(84532)
+                await wallet.switchChain(chainId)
                 const provider = await wallet.getEthereumProvider();
                 const address = wallet.address;
                 // console.log('Wallet address', address)
@@ -190,7 +201,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                 }
 
                 // Switch chain if needed
-                await wallet.switchChain(84532);
+                await wallet.switchChain(chainId);
 
                 // Get the EIP-1193 provider
                 const provider = await wallet.getEthereumProvider();
@@ -198,9 +209,13 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                 // Get the wallet address
                 const address = wallet.address;
                 // console.log('Wallet address', address);
+
+                // Determine the defaultChain and supportedChains based on the chainId
+                const defaultChain = chainId === 8453 ? base : baseSepolia;
+
                 const walletClient = createWalletClient({
                     account: address as `0x${string}`,
-                    chain: baseSepolia,
+                    chain: defaultChain,
                     transport: custom(provider),
                 })
                 // console.log('walletc', walletClient)
@@ -212,7 +227,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                     domain: {
                         name: 'EAS',
                         version: '1.2.0',
-                        chainId: 84532,
+                        chainId: chainId,
                         verifyingContract: '0x4200000000000000000000000000000000000021'
                     },
                     types: {
@@ -248,22 +263,56 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
 
             // console.log('signature', signature)
 
-
-            const result = await generateAttestation(token, power, endorsementType, platform, recipient, attester, signature);
-            console.log('Result', result)
+            const resultAttestation = await generateAttestation(token, power, endorsementType, platform, recipient, attester, signature);
+            console.log('Result', resultAttestation)
             MySwal.fire({
                 icon: 'success',
                 title: 'Success!',
                 text: 'Vouch created successfully.',
+                showCancelButton: true,
+                confirmButtonText: 'Go to vouch',
+                cancelButtonText: 'Close',
+                cancelButtonColor: '#d33',
+                confirmButtonColor: '#3085d6',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to the attestation page or URL
+                    window.location.href = '/vouch/' + resultAttestation.newAttestationUID; // Replace with the actual URL or logic
+                }
+                // If 'Close' is clicked, no additional action i    s needed (popup will close automatically)
             });
             // console.log('Vouch created:', result);
         } catch (error) {
-            MySwal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: 'An error occurred while creating the vouch.',
-            });
-            console.error('Error creating vouch:', error);
+            // Type guard for 'Error'
+            if (error instanceof Error) {
+                const errorMessage = error.message;
+
+                if (errorMessage === '550') {
+                    MySwal.fire({
+                        icon: 'error',
+                        title: 'No Vouches Available',
+                        text: "You don't have any vouches available.",
+                    });
+                } else if (errorMessage === "You can't vouch yourself.") {
+                    MySwal.fire({
+                        icon: 'error',
+                        title: 'Invalid Vouch',
+                        text: "You can't vouch yourself.",
+                    });
+                } else {
+                    MySwal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'An error occurred while creating the vouch.',
+                    });
+                }
+            } else {
+                MySwal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'An unknown error occurred.',
+                });
+            }
         }
     };
 

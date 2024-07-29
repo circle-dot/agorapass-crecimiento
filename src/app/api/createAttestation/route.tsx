@@ -3,7 +3,7 @@ import privy from '@/lib/privy';
 import { EAS, SchemaEncoder } from '@ethereum-attestation-service/eas-sdk';
 import { ethers } from 'ethers';
 import prisma from '@/lib/db';
-import { toBigInt, toUtf8String } from 'ethers';
+import { toBigInt } from 'ethers';
 import { Utils } from 'alchemy-sdk';
 
 const easContractAddress = "0x4200000000000000000000000000000000000021";
@@ -16,7 +16,6 @@ const ALCHEMY_URL = process.env.ALCHEMY_URL!;
 
 const provider = new ethers.JsonRpcProvider(ALCHEMY_URL);
 const signer = new ethers.Wallet(PRIVATE_KEY, provider);
-const clientSigner = new ethers.Wallet("0x05a7b43d9db4131737329d18972b37eafe6291006a727693e77af60c9d06b2a0", provider);
 await eas.connect(signer);
 
 export async function POST(request: NextRequest) {
@@ -61,6 +60,10 @@ export async function POST(request: NextRequest) {
         const walletAddress = user.wallet;
         console.log(walletAddress);
 
+        // Check if the recipient is the same as the attester
+        if (recipient === attester) {
+            return NextResponse.json({ error: "You can't vouch yourself." }, { status: 400 });
+        }
         // Encode the data using SchemaEncoder
         const schemaEncoder = new SchemaEncoder("uint8 power,string endorsementType,string platform");
 
@@ -71,50 +74,12 @@ export async function POST(request: NextRequest) {
             { name: "platform", value: "Agora Pass", type: "string" }
         ]);
 
-        // Create signer
-        // const signer = new ethers.Wallet(PRIVATE_KEY, provider);
-
-        console.log(attester);
-
-        // Get delegated attestation
-        // const delegated = await eas.getDelegated();
-
-        // Print values for debugging
-        console.log('schemaUID:', schemaUID);
-        console.log('walletAddress:', walletAddress);
-        console.log('encodedData:', encodedData);
-        console.log('signature', signature)
-        console.log('attester', attester)
-        console.log('recipient', recipient)
-        // const easnonce = await eas.getNonce(attester);
-        // console.log('easnonce', easnonce);
-        // console.log(attester)
-        // const options = {
-        //     schema: schemaUID,
-        //     recipient: recipient,
-        //     expirationTime: toBigInt(0), // Unix timestamp of when attestation expires (0 for no expiration)
-        //     revocable: true,
-        //     refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        //     data: encodedData,
-        //     deadline: toBigInt(0), // Unix timestamp of when signature expires (0 for no expiration)
-        //     value: toBigInt(0),
-        //     nonce: easnonce,
-        // };
-        // console.log(options);
-
-        // Sign the delegated attestation
-        // const response = await delegated.signDelegatedAttestation(
-        //     options,
-        //     signer
-        // );
 
         let flatSig = signature
         console.log('Signature', flatSig)
         let expandedSig = Utils.splitSignature(flatSig);
         console.log('expandedSig', expandedSig)
 
-        // Print response for debugging
-        // console.log('Delegated Attestation Response:', response);
 
         // Create the delegated attestation
         const transaction = await eas.attestByDelegation({
@@ -138,7 +103,6 @@ export async function POST(request: NextRequest) {
             where: { id: id },
             data: { vouchesAvailables: { decrement: 1 } },
         });
-
 
         console.log('New attestation UID:', newAttestationUID);
         console.log('Transaction receipt:', transaction.receipt);

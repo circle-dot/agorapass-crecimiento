@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
             skip,
             take: pageSize,
             orderBy: {
-                attestationReceived: sortOrder,
+                rankScore: sortOrder,
             },
             where: {
                 name: {
