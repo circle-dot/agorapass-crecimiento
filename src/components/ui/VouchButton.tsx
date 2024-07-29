@@ -99,7 +99,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                 return;
             }
 
-
+            const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '84532', 10);
             const schemaUID = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3";
             const attester = user?.wallet.address
             // Helper function to convert a string to bytes32 (hexadecimal)
@@ -112,7 +112,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
             const domain = {
                 name: 'EAS',
                 version: '1.2.0',
-                chainId: 84532,
+                chainId: chainId,
                 verifyingContract: '0x4200000000000000000000000000000000000021'
             }
 
@@ -171,7 +171,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
 
             if (user.wallet.walletClientType === 'privy') {
                 const wallet = wallets[0];
-                await wallet.switchChain(84532)
+                await wallet.switchChain(chainId)
                 const provider = await wallet.getEthereumProvider();
                 const address = wallet.address;
                 // console.log('Wallet address', address)
@@ -190,7 +190,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                 }
 
                 // Switch chain if needed
-                await wallet.switchChain(84532);
+                await wallet.switchChain(chainId);
 
                 // Get the EIP-1193 provider
                 const provider = await wallet.getEthereumProvider();
@@ -198,9 +198,13 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                 // Get the wallet address
                 const address = wallet.address;
                 // console.log('Wallet address', address);
+
+                // Determine the defaultChain and supportedChains based on the chainId
+                const defaultChain = chainId === 8453 ? base : baseSepolia;
+
                 const walletClient = createWalletClient({
                     account: address as `0x${string}`,
-                    chain: baseSepolia,
+                    chain: defaultChain,
                     transport: custom(provider),
                 })
                 // console.log('walletc', walletClient)
@@ -212,7 +216,7 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                     domain: {
                         name: 'EAS',
                         version: '1.2.0',
-                        chainId: 84532,
+                        chainId: chainId,
                         verifyingContract: '0x4200000000000000000000000000000000000021'
                     },
                     types: {
