@@ -93,6 +93,7 @@ export const fetchAttestationsReduced = async (page: number, pageSize: number): 
             where: { id: process.env.NEXT_PUBLIC_SCHEMA_ID },
             skip: page * pageSize,
             take: pageSize,
+            orderBy: [{ timeCreated: 'desc' }] // Pass orderBy as an array
         },
     });
 
