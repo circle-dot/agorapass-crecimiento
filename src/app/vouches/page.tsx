@@ -10,7 +10,7 @@ import blockies from 'ethereum-blockies';
 import Loader from "@/components/ui/Loader";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 const truncateAddress = (address: string, length: number) => {
     if (address.length <= length) return address;
     return `${address.slice(0, length)}...${address.slice(-length)}`;
@@ -104,8 +104,19 @@ const Attestations: React.FC = () => {
     const cards = data?.pages.flatMap(page =>
         page.map((attestation: Attestation) => ({
             title: truncateAddress(attestation.id, 20),
-            description: `Vouched for ${truncateAddress(attestation.recipient, 20)} on ${new Date(attestation.timeCreated * 1000).toLocaleString()}`,
-            src: getAvatar(attestation.attester, 'blockies') as string,
+            description: (
+                <>
+                    <Link href={`/address/${attestation.attester}`} className="text-blue-600 hover:underline">
+                        {attestation.attester}
+                    </Link>
+                    {" vouched for "}
+                    <Link href={`/address/${attestation.recipient}`} className="text-blue-600 hover:underline">
+                        {attestation.recipient}
+                    </Link>
+                    {" on "}{new Date(attestation.timeCreated * 1000).toLocaleString()}
+                </>
+            ),
+            src: getAvatar(attestation.id, 'blockies') as string,
             ctaText: "View",
             ctaLink: `/vouch/${attestation.id}`
         }))
@@ -124,13 +135,14 @@ const Attestations: React.FC = () => {
                         >
                             <div className="flex gap-4 flex-col md:flex-row">
                                 <motion.div layoutId={`image-${card.title}-${id}`}>
-                                    <Image
-                                        width={100}
-                                        height={100}
-                                        src={card.src}
-                                        alt={card.title}
-                                        className="h-40 w-40 md:h-14 md:w-14 rounded-lg object-cover object-top"
-                                    />
+                                    <Avatar className="w-12 h-12 mx-auto mb-4">
+                                        {typeof card.src === 'string' ? (
+                                            <AvatarImage src={card.src} alt="Avatar Image" />
+                                        ) : (
+                                            <div></div>
+                                        )}
+                                        {/* <AvatarFallback className="flex items-center justify-center">{email?.charAt(0)}</AvatarFallback> */}
+                                    </Avatar>
                                 </motion.div>
                                 <div className="">
                                     <motion.h3
@@ -139,12 +151,12 @@ const Attestations: React.FC = () => {
                                     >
                                         {card.title}
                                     </motion.h3>
-                                    <motion.p
+                                    {/* <motion.p
                                         layoutId={`description-${card.description}-${id}`}
                                         className="text-neutral-600 dark:text-neutral-400 text-center md:text-left"
                                     >
                                         {card.description}
-                                    </motion.p>
+                                    </motion.p> */}
                                 </div>
                             </div>
                             <motion.button
