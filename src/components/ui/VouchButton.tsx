@@ -283,6 +283,12 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
                         title: 'No Vouches Available',
                         text: "You don't have any vouches available.",
                     });
+                } else if (errorMessage === "You can't vouch yourself.") {
+                    MySwal.fire({
+                        icon: 'error',
+                        title: 'Invalid Vouch',
+                        text: "You can't vouch yourself.",
+                    });
                 } else {
                     MySwal.fire({
                         icon: 'error',
