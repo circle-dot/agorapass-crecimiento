@@ -55,17 +55,17 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
             if (remainingDuration.as('milliseconds') <= 0) {
                 setRemainingTime('00:00:00');
             } else {
-                const { days, hours, minutes, seconds } = remainingDuration.shiftTo('days', 'hours', 'minutes', 'seconds').toObject();
+                // Extract values with default to 0 if undefined
+                const { days = 0, hours = 0, minutes = 0, seconds = 0 } = remainingDuration.shiftTo('days', 'hours', 'minutes', 'seconds').toObject();
 
                 // Format remaining time
                 const formattedTime = days > 0
-                    ? `${String(Math.floor(days)).padStart(2, '0')}d ${String(Math.floor(hours || 0)).padStart(2, '0')}h ${String(Math.floor(minutes || 0)).padStart(2, '0')}m ${String(Math.floor(seconds || 0)).padStart(2, '0')}s`
-                    : `${String(Math.floor(hours || 0)).padStart(2, '0')}:${String(Math.floor(minutes || 0)).padStart(2, '0')}:${String(Math.floor(seconds || 0)).padStart(2, '0')}`;
+                    ? `${String(Math.floor(days)).padStart(2, '0')}d ${String(Math.floor(hours)).padStart(2, '0')}h ${String(Math.floor(minutes)).padStart(2, '0')}m ${String(Math.floor(seconds)).padStart(2, '0')}s`
+                    : `${String(Math.floor(hours)).padStart(2, '0')}:${String(Math.floor(minutes)).padStart(2, '0')}:${String(Math.floor(seconds)).padStart(2, '0')}`;
 
                 setRemainingTime(formattedTime);
             }
         };
-
         updateRemainingTime();
         const intervalId = setInterval(updateRemainingTime, 1000);
 
