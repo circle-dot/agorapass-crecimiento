@@ -50,15 +50,19 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
     useEffect(() => {
         const updateRemainingTime = () => {
             const now = DateTime.now();
-            const remainingDuration = vouchResetDate.diff(now, ['hours', 'minutes', 'seconds']);
+            const remainingDuration = vouchResetDate.diff(now, ['days', 'hours', 'minutes', 'seconds']);
 
             if (remainingDuration.as('milliseconds') <= 0) {
                 setRemainingTime('00:00:00');
             } else {
-                const { hours, minutes, seconds } = remainingDuration.shiftTo('hours', 'minutes', 'seconds').toObject();
-                setRemainingTime(
-                    `${String(Math.floor(hours || 0)).padStart(2, '0')}:${String(Math.floor(minutes || 0)).padStart(2, '0')}:${String(Math.floor(seconds || 0)).padStart(2, '0')}`
-                );
+                const { days, hours, minutes, seconds } = remainingDuration.shiftTo('days', 'hours', 'minutes', 'seconds').toObject();
+
+                // Format remaining time
+                const formattedTime = days > 0
+                    ? `${String(Math.floor(days)).padStart(2, '0')}d ${String(Math.floor(hours || 0)).padStart(2, '0')}h ${String(Math.floor(minutes || 0)).padStart(2, '0')}m ${String(Math.floor(seconds || 0)).padStart(2, '0')}s`
+                    : `${String(Math.floor(hours || 0)).padStart(2, '0')}:${String(Math.floor(minutes || 0)).padStart(2, '0')}:${String(Math.floor(seconds || 0)).padStart(2, '0')}`;
+
+                setRemainingTime(formattedTime);
             }
         };
 
