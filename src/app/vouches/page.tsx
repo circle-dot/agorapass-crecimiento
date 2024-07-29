@@ -11,12 +11,13 @@ import Loader from "@/components/ui/Loader";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+
 const truncateAddress = (address: string, length: number) => {
     if (address.length <= length) return address;
     return `${address.slice(0, length)}...${address.slice(-length)}`;
 };
 
-export const useOutsideClick = (
+const useOutsideClick = (
     ref: React.RefObject<HTMLDivElement>,
     callback: Function
 ) => {
