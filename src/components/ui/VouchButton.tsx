@@ -62,6 +62,17 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
             return;
         }
 
+        //Cant vouch yourself!
+        if (recipient === user.wallet.address) {
+            MySwal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: "You can't vouch yourself.",
+            });
+            return;
+        }
+
+
         const power = "1";
         const endorsementType = "Social";
         const platform = "Agora Pass";
@@ -251,7 +262,6 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
 
 
             // console.log('signature', signature)
-
 
             const resultAttestation = await generateAttestation(token, power, endorsementType, platform, recipient, attester, signature);
             console.log('Result', resultAttestation)
