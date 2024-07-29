@@ -12,7 +12,7 @@ export const navSections = [
     },
     {
         label: "History",
-        href: "/attestations",
+        href: "/vouches",
         className: "transition-colors hover:text-foreground"
     },
     {

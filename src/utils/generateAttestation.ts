@@ -21,7 +21,12 @@ async function generateAttestation(token: string, power: string, endorsementType
     });
 
     if (!response.ok) {
-        throw new Error(`Error creating attestation: ${response.statusText}`);
+        if (response.status === 550) {
+            throw new Error('550');
+        } else {
+            // Throw a general error for other status codes
+            throw new Error(`Error creating attestation: ${response.statusText}`);
+        }
     }
 
     return await response.json();

@@ -75,7 +75,7 @@ const Attestations: React.FC = () => {
                                 {page.map((attestation: Attestation, attestationIndex: number) => (
                                     <TableRow key={`${pageIndex}-${attestationIndex}`}>
                                         <TableCell className="truncate">
-                                            <Link href={`/attestation/${attestation.id}`} className="text-link">
+                                            <Link href={`/vouch/${attestation.id}`} className="text-link">
                                                 {truncateAddress(attestation.id, 20)} {/* Truncate to 20 characters */}
 
                                             </Link>

@@ -73,7 +73,7 @@ const SearchBar = () => {
         } else if (result.type === "ENS Name") {
             return `/address/${result.id}`;
         } else if (result.type === "Attestation ID") {
-            return `/attestation/${result.value}`;
+            return `/vouch/${result.value}`;
         }
         return "#";
     };

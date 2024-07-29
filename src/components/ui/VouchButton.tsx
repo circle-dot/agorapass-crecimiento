@@ -253,21 +253,50 @@ const VouchButtonCustom: React.FC<VouchButtonCustomProps> = ({ recipient, classN
             // console.log('signature', signature)
 
 
-            const result = await generateAttestation(token, power, endorsementType, platform, recipient, attester, signature);
-            console.log('Result', result)
+            const resultAttestation = await generateAttestation(token, power, endorsementType, platform, recipient, attester, signature);
+            console.log('Result', resultAttestation)
             MySwal.fire({
                 icon: 'success',
                 title: 'Success!',
                 text: 'Vouch created successfully.',
+                showCancelButton: true,
+                confirmButtonText: 'Go to vouch',
+                cancelButtonText: 'Close',
+                cancelButtonColor: '#d33',
+                confirmButtonColor: '#3085d6',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to the attestation page or URL
+                    window.location.href = '/vouch/' + resultAttestation.newAttestationUID; // Replace with the actual URL or logic
+                }
+                // If 'Close' is clicked, no additional action i    s needed (popup will close automatically)
             });
             // console.log('Vouch created:', result);
         } catch (error) {
-            MySwal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: 'An error occurred while creating the vouch.',
-            });
-            console.error('Error creating vouch:', error);
+            // Type guard for 'Error'
+            if (error instanceof Error) {
+                const errorMessage = error.message;
+
+                if (errorMessage === '550') {
+                    MySwal.fire({
+                        icon: 'error',
+                        title: 'No Vouches Available',
+                        text: "You don't have any vouches available.",
+                    });
+                } else {
+                    MySwal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'An error occurred while creating the vouch.',
+                    });
+                }
+            } else {
+                MySwal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'An unknown error occurred.',
+                });
+            }
         }
     };
 
