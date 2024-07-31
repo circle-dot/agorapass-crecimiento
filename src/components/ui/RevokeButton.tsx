@@ -156,10 +156,10 @@ const RevokeButton: React.FC<RevokeButtonCustomProps> = ({ UID, className }) => 
                 }
             })
         }
-        console.log('signature', signature)
+        // console.log('signature', signature)
         const wallet = user.wallet;
-        console.log('wallet', wallet)
-        console.log('UID', UID)
+        // console.log('wallet', wallet)
+        // console.log('UID', UID)
         const resultAttestation = await revokeAttestation(signature, UID, token);
         console.log('Result', resultAttestation)
 

@@ -56,26 +56,26 @@ export async function POST(request: NextRequest) {
         }
 
         const walletAddress = user.wallet;
-        console.log(walletAddress);
+        // console.log(walletAddress);
 
 
 
         let flatSig = signature
-        console.log('Signature', flatSig)
+        // console.log('Signature', flatSig)
         let expandedSig = Utils.splitSignature(flatSig);
-        console.log('expandedSig', expandedSig)
-        console.log('schemaUID', schemaUID)
-        console.log('uid', uid)
-        console.log('revokeer', walletAddress)
+        // console.log('expandedSig', expandedSig)
+        // console.log('schemaUID', schemaUID)
+        // console.log('uid', uid)
+        // console.log('revokeer', walletAddress)
 
 
-        const transaction2 = await eas.revoke({
+        const revoke = await eas.revoke({
             schema: schemaUID,
             data: {
                 uid: uid,
             }
         });
-        console.log(transaction2)
+        console.log(revoke)
 
         const transaction = await eas.revokeByDelegation({
             schema: schemaUID,
@@ -88,18 +88,24 @@ export async function POST(request: NextRequest) {
         });
 
         // Optional: Wait for transaction to be validated
-        const newAttestationUID = await transaction.wait();
+        const newAttestationRevoke = await transaction.wait();
+        console.log(newAttestationRevoke)
         // Update user's vouchesAvailables
         // await prisma.user.update({
         //     where: { id: id },
         //     data: { vouchesAvailables: { decrement: 1 } },
         // });
-
-        console.log('New attestation UID:', newAttestationUID);
+        // console.log(transaction)
         // console.log('Transaction receipt:', transaction.receipt);
 
         // Return success response with the newly created attestation UID
-        return NextResponse.json({ newAttestationUID });
+        // Convert BigInt values in the transaction object to strings
+        const transactionObject = JSON.parse(JSON.stringify(transaction, (key, value) =>
+            typeof value === 'bigint' ? value.toString() : value
+        ));
+
+        // Return success response with the transaction object
+        return Response.json({ transaction: transactionObject });
     } catch (error) {
         console.error('Error revoking attestation:', error);
         // Return error response if something goes wrong
