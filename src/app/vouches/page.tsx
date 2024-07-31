@@ -181,7 +181,7 @@ const Attestations: React.FC = () => {
                         <div className="fixed inset-0  grid place-items-center z-[100]">
                             <motion.div
                                 layoutId={`card-${activeCard.title}-${id}`}
-                                className="w-full max-w-[500px] h-full md:h-fit md:max-h-[90%] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden"
+                                className="w-full max-w-[500px] h-auto md:h-fit  md:max-h-[90%] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden"
                                 ref={cardRef}
                             >
                                 <motion.div layoutId={`image-${activeCard.title}-${id}`}>
@@ -195,7 +195,7 @@ const Attestations: React.FC = () => {
                                     />
                                 </motion.div>
                                 <div>
-                                    <div className="flex justify-between items-start p-4">
+                                    <div className="flex  justify-center items-center lg:justify-between lg:items-start p-4 flex-col lg:flex-row">
                                         <div>
                                             <motion.h3
                                                 layoutId={`title-${activeCard.title}-${id}`}
@@ -213,23 +213,13 @@ const Attestations: React.FC = () => {
                                         <motion.a
                                             layoutId={`button-${activeCard.title}-${id}`}
                                             href={activeCard.ctaLink}
-                                            target="_blank"
+                                            // target="_blank"
                                             className="px-4 py-3 text-sm rounded-full font-bold bg-green-500 text-white"
                                         >
                                             {activeCard.ctaText}
                                         </motion.a>
                                     </div>
-                                    <div className="pt-4 relative px-4">
-                                        <motion.div
-                                            layout
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            exit={{ opacity: 0 }}
-                                            className="text-neutral-600 text-xs md:text-sm lg:text-base h-40 md:h-fit pb-10 flex flex-col items-start gap-4 overflow-auto dark:text-neutral-400 [mask:linear-gradient(to_bottom,white,white,transparent)] [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]"
-                                        >
-                                            {/* Add any additional content here if needed */}
-                                        </motion.div>
-                                    </div>
+
                                 </div>
                             </motion.div>
                         </div>
