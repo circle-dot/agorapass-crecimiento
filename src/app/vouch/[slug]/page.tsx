@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAttestation } from "@/lib/fetchers/attestations";
 import { motion } from "framer-motion";
@@ -13,7 +13,17 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import Loader from "@/components/ui/Loader";
+import { usePrivy } from '@privy-io/react-auth';
+import RevokeButton from "@/components/ui/RevokeButton";
 export default function Page({ params }: { params: { slug: string } }) {
+    const [authStatus, setAuthStatus] = useState(false);
+    const { ready, authenticated, user } = usePrivy();
+    useEffect(() => {
+        if (ready) {
+            setAuthStatus(authenticated);
+        }
+    }, [ready, authenticated]);
+
     // Fetch attestation data
     const { data, error, isLoading } = useQuery({
         queryKey: ["attestation", params.slug],
@@ -148,6 +158,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                                         </Tooltip>
                                     </div>
                                 </div>
+                                {authStatus && user?.wallet?.address === data.attester && data.revoked === false && <div className="flex items-center justify-center"><RevokeButton UID={params.slug} /></div>}
                             </div>
                         </CardContent>
                     </Card>
