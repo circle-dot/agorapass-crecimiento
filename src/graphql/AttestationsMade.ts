@@ -1,13 +1,22 @@
 import gql from 'graphql-tag';
 
-const COUNT_ATTESTATIONS_MADE = gql`
-  query CountAttestationsMade($where: AttestationWhereInput) {
-    aggregateAttestation(where: $where) {
-      _count {
-        attester
+const ATTESTATIONS_MADE = gql`
+  query AttestationsMade($schemaId: String!, $address: String!) {
+    attestations(
+      where: {
+        schemaId: { equals: $schemaId },
+        attester: { equals: $address }
       }
+    ) {
+      id
+      recipient
+      time
+      timeCreated
+      revoked
+      revocationTime
+      txid
     }
   }
 `;
 
-export default COUNT_ATTESTATIONS_MADE
+export default ATTESTATIONS_MADE;

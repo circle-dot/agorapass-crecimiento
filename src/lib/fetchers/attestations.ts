@@ -3,11 +3,12 @@ import GET_ATTESTATIONS from '@/graphql/Attestations';
 import GET_ATTESTATIONS_REDUCED from '@/graphql/AttestationsReduced';
 import GET_AGGREGATE_ATTESTATIONS from '@/graphql/AggregateAttestation';
 import GET_ATTESTATION from '@/graphql/getAttestation';
-import COUNT_ATTESTATIONS_MADE from '@/graphql/AttestationsMade';
-import COUNT_ATTESTATIONS_RECEIVED from '@/graphql/AttestationsReceived';
+import COUNT_ATTESTATIONS_MADE from '@/graphql/AttestationsMadeCount';
+import COUNT_ATTESTATIONS_RECEIVED from '@/graphql/AttestationsReceivedCount';
 import SEARCH_ENS_NAMES_BY_ADDRESS from '@/graphql/getENSNamebyAddress';
 import LAST_THREE_ATTESTATIONS from '@/graphql/LastThreeAttestations';
-
+import ATTESTATIONS_MADE from '@/graphql/AttestationsMade';
+import ATTESTATIONS_RECEIVED from '@/graphql/AttestationsReceived';
 import { Attestation } from "@/types/attestations";
 
 export const fetchAttestations = async (page: number, pageSize: number) => {
@@ -46,7 +47,7 @@ export const fetchAttestation = async (id: string) => {
     return data.getAttestation;
 };
 
-export const fetchAttestationsMade = async (schemaId: string, address: string) => {
+export const fetchAttestationsMadeCount = async (schemaId: string, address: string) => {
     const { data } = await client.query({
         query: COUNT_ATTESTATIONS_MADE,
         variables: {
@@ -59,7 +60,7 @@ export const fetchAttestationsMade = async (schemaId: string, address: string) =
     return data.aggregateAttestation._count.attester;
 };
 
-export const fetchAttestationsReceived = async (schemaId: string, address: string) => {
+export const fetchAttestationsReceivedCount = async (schemaId: string, address: string) => {
     const { data } = await client.query({
         query: COUNT_ATTESTATIONS_RECEIVED,
         variables: {
@@ -108,6 +109,28 @@ export const LastThreeAttestations = async (schemaId: string, attester: string) 
             attester,
             take: 3,
             orderBy: [{ timeCreated: 'desc' }] // Pass orderBy as an array
+        },
+    });
+    return data.attestations;
+};
+
+export const fetchAttestationsMade = async (schemaId: string, address: string) => {
+    const { data } = await client.query({
+        query: ATTESTATIONS_MADE,
+        variables: {
+            schemaId,
+            address,
+        },
+    });
+    return data.attestations;
+};
+
+export const fetchAttestationsReceived = async (schemaId: string, address: string) => {
+    const { data } = await client.query({
+        query: ATTESTATIONS_RECEIVED,
+        variables: {
+            schemaId,
+            address,
         },
     });
     return data.attestations;

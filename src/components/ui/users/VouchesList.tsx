@@ -63,10 +63,8 @@ export function VouchesList({ vouches }: VouchesListProps) {
                                         </DropdownMenuItem>
                                         <DropdownMenuSeparator />
                                         {!vouch.revoked && (
-                                            <DropdownMenuItem asChild>
-                                                <Button variant="outline" className="p-2 cursor-pointer" asChild>
-                                                    <RevokeButton UID={vouch.id} />
-                                                </Button>
+                                            <DropdownMenuItem className="p-0">
+                                                <RevokeButton UID={vouch.id} />
                                             </DropdownMenuItem>
                                         )}
                                     </DropdownMenuContent>
