@@ -106,7 +106,8 @@ export const LastThreeAttestations = async (schemaId: string, attester: string) 
         variables: {
             schemaId,
             attester,
-            take: 3
+            take: 3,
+            orderBy: [{ timeCreated: 'desc' }] // Pass orderBy as an array
         },
     });
     return data.attestations;
