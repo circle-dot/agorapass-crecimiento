@@ -24,7 +24,6 @@ export function VouchesList({ vouches }: VouchesListProps) {
         // Keep the first 6 characters and the last 4 characters
         return wallet.slice(0, 6) + '...' + wallet.slice(-4);
     }
-    console.log(vouches)
     return (
         <div className="bg-white p-4 rounded-lg shadow-md">
             <h2 className="text-xl font-bold mb-4">Your latest vouches</h2>
