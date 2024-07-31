@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { XCircle, CheckCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import Link from "next/link";
 import { motion } from "framer-motion";
 import RevokeButton from "../RevokeButton";
@@ -12,6 +12,7 @@ interface Vouch {
     attesterWallet: string;
     recipient: string;
     timeCreated: number;  // UNIX timestamp
+    revoked: boolean;
 }
 
 interface VouchesListProps {
@@ -23,7 +24,7 @@ export function VouchesList({ vouches }: VouchesListProps) {
         // Keep the first 6 characters and the last 4 characters
         return wallet.slice(0, 6) + '...' + wallet.slice(-4);
     }
-
+    console.log(vouches)
     return (
         <div className="bg-white p-4 rounded-lg shadow-md">
             <h2 className="text-xl font-bold mb-4">Your latest vouches</h2>
@@ -31,7 +32,7 @@ export function VouchesList({ vouches }: VouchesListProps) {
                 {vouches.map((vouch, index) => (
                     <motion.div
                         key={index}
-                        className="bg-gray-50 p-4 rounded-lg shadow-sm"
+                        className={`p-4 rounded-lg shadow-sm ${vouch.revoked ? 'bg-red-50' : 'bg-gray-50'}`}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 + index * 0.1, duration: 0.5, ease: "easeOut" }}
@@ -62,9 +63,13 @@ export function VouchesList({ vouches }: VouchesListProps) {
                                             </Button>
                                         </DropdownMenuItem>
                                         <DropdownMenuSeparator />
-                                        <DropdownMenuItem >
-                                            <RevokeButton UID={vouch.id} />
-                                        </DropdownMenuItem>
+                                        {!vouch.revoked && (
+                                            <DropdownMenuItem asChild>
+                                                <Button variant="outline" className="p-2 cursor-pointer" asChild>
+                                                    <RevokeButton UID={vouch.id} />
+                                                </Button>
+                                            </DropdownMenuItem>
+                                        )}
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>

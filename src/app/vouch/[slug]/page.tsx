@@ -51,7 +51,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 className="bg-white bg-opacity-90 shadow-lg p-6 rounded-lg max-w-md w-full"
             >
                 <TooltipProvider>
-                    <Card className="bg-white w-full">
+                    <Card className={`w-full ${data.revoked ? 'bg-red-50' : 'bg-gray-50'}`}>
                         <CardHeader className="text-center">
                             <CardTitle className="text-2xl font-semibold">Vouch Details</CardTitle>
                         </CardHeader>

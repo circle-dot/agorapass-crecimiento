@@ -15,6 +15,7 @@ const LAST_THREE_ATTESTATIONS = gql`
       data
       timeCreated
       recipient
+      revoked
     }
   }
 `;
