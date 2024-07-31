@@ -4,6 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { XCircle, CheckCircle } from 'lucide-react';
 import Link from "next/link";
 import { motion } from "framer-motion";
+import RevokeButton from "../RevokeButton";
 
 interface Vouch {
     id: string;
@@ -61,11 +62,8 @@ export function VouchesList({ vouches }: VouchesListProps) {
                                             </Button>
                                         </DropdownMenuItem>
                                         <DropdownMenuSeparator />
-                                        <DropdownMenuItem asChild>
-                                            <Button variant="outline" className="p-2 cursor-pointer" onClick={() => {/* Add revoke vouch logic here */ }}>
-                                                Remove vouch
-                                                <XCircle className="text-red-500 w-4 h-4 ml-2" />
-                                            </Button>
+                                        <DropdownMenuItem >
+                                            <RevokeButton UID={vouch.id} />
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
