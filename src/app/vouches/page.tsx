@@ -99,7 +99,7 @@ const Attestations: React.FC = () => {
 
     useOutsideClick(cardRef, () => setActiveCard(null));
 
-    if (isLoading) return <div className="flex items-center justify-center w-screen"><Loader /></div>;
+    if (isLoading) return <div className="flex items-center justify-center w-full"><Loader /></div>;
     if (isError) return <p>Error loading data...</p>;
 
     const cards = data?.pages.flatMap(page =>
@@ -124,7 +124,7 @@ const Attestations: React.FC = () => {
     ) || [];
 
     return (
-        <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex w-screen justify-center items-center">
+        <div className="h-full flex-1 flex-col space-y-8 py-8 md:flex w-full justify-center items-center">
             <div className="overflow-x-auto md:w-3/4 mx-auto">
                 <ul className="max-w-2xl mx-auto w-full gap-4">
                     {cards.map((card, index) => (
@@ -132,7 +132,7 @@ const Attestations: React.FC = () => {
                             layoutId={`card-${card.title}-${id}`}
                             key={`card-${card.title}-${id}`}
                             onClick={() => setActiveCard(card)}
-                            className="p-4 flex flex-col md:flex-row justify-between items-center hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-xl cursor-pointer"
+                            className="py-4 flex flex-col md:flex-row justify-between items-center hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-xl cursor-pointer"
                         >
                             <div className="flex gap-4 flex-col md:flex-row">
                                 <motion.div layoutId={`image-${card.title}-${id}`}>
@@ -178,7 +178,7 @@ const Attestations: React.FC = () => {
                 {activeCard && (
                     <>
 
-                        <div className="fixed inset-0  grid place-items-center z-[100]">
+                        <div className="fixed inset-0 grid place-items-start lg:place-items-center z-[100]">
                             <motion.div
                                 layoutId={`card-${activeCard.title}-${id}`}
                                 className="w-full max-w-[500px] h-auto md:h-fit  md:max-h-[90%] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden"
@@ -195,7 +195,7 @@ const Attestations: React.FC = () => {
                                     />
                                 </motion.div>
                                 <div>
-                                    <div className="flex  justify-center items-center lg:justify-between lg:items-start p-4 flex-col lg:flex-row">
+                                    <div className="flex  justify-center items-center lg:justify-between lg:items-start py-4 flex-col lg:flex-row">
                                         <div>
                                             <motion.h3
                                                 layoutId={`title-${activeCard.title}-${id}`}
