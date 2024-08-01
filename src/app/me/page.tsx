@@ -103,7 +103,7 @@ export default function Page() {
     updateUser();
   }
 
-  if (initialLoading) return <Loader />;
+  if (initialLoading) return <div className="w-screen flex items-center justify-center"><Loader /></div>;
 
   // Handle errors
   if (error) return <p>Error loading profile: {error.message}</p>;
