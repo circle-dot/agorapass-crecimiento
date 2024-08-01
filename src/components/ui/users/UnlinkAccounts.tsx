@@ -1,21 +1,27 @@
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { User } from '@privy-io/react-auth';
 import { usePrivy } from '@privy-io/react-auth';
+import { User } from '@privy-io/react-auth';
 const MySwal = withReactContent(Swal);
 
-type UnlinkAccountsProps = {
-    user?: {
-        twitter?: {
-            username: string;
-        };
-        farcaster?: {
-            username: string;
-        };
-    } | null;
-    unlinkTwitter: (username: string) => Promise<User>;
-    unlinkFarcaster: (username: string) => Promise<User>;
-};
+
+// Define interfaces for the props
+interface TwitterUser {
+    username: string;
+    subject: string;
+}
+
+interface FarcasterUser {
+    username: string;
+    fid: string;
+}
+
+
+interface UnlinkAccountsProps {
+    user?: User | null | undefined;  // Updated to accept null
+    unlinkTwitter: (subject: string) => Promise<User>;
+    unlinkFarcaster: (fid: number) => Promise<User>;
+}
 
 const UnlinkAccounts: React.FC<UnlinkAccountsProps> = ({ user, unlinkTwitter, unlinkFarcaster }) => {
     const { getAccessToken } = usePrivy();
@@ -64,7 +70,7 @@ const UnlinkAccounts: React.FC<UnlinkAccountsProps> = ({ user, unlinkTwitter, un
                         MySwal.fire('Error!', 'Twitter username is missing.', 'error');
                         return;
                     }
-                    unlinkTwitter(user.twitter.username)
+                    unlinkTwitter(user.twitter.subject)
                         .then(() => {
                             return updateAccountDisplay('Twitter', false);
                         })
@@ -75,11 +81,11 @@ const UnlinkAccounts: React.FC<UnlinkAccountsProps> = ({ user, unlinkTwitter, un
                             MySwal.fire('Error!', error.message, 'error');
                         });
                 } else if (platform === 'Farcaster') {
-                    if (!user.farcaster) {
+                    if (!user.farcaster || user.farcaster.fid === null) {
                         MySwal.fire('Error!', 'Farcaster username is missing.', 'error');
                         return;
                     }
-                    unlinkFarcaster(user.farcaster.username)
+                    unlinkFarcaster(user.farcaster.fid)
                         .then(() => {
                             return updateAccountDisplay('Farcaster', false);
                         })

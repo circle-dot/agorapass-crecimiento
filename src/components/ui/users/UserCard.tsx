@@ -24,7 +24,8 @@ import { getAvatar } from './getAvatarImg';
 import { BlendIcon } from 'lucide-react';
 import Link from 'next/link';
 import VouchButtonCustom from '@/components/ui/VouchButton';
-
+import FarcasterLogo from '@/../../public/purple-white.svg'
+import Image from 'next/image';
 function truncateWallet(wallet: string) {
     return wallet.slice(0, 6) + '...' + wallet.slice(-4);
 }
@@ -39,7 +40,7 @@ function truncateName(name: string) {
 }
 
 const UserCard: React.FC<{ user: User }> = ({ user }) => {
-    const { name, wallet, bio, twitter, avatarType, rankScore } = user;
+    const { name, wallet, bio, twitter, avatarType, rankScore, farcaster } = user;
 
     const [authStatus, setAuthStatus] = useState(false);
     const { ready, authenticated } = usePrivy();
@@ -91,10 +92,15 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
 
             {/* TODO: Check twitter is connected */}
             <CardContent>
-                <div className="flex text-sm text-muted-foreground justify-between mt-auto">
+                <div className="flex text-sm text-muted-foreground justify-start mt-auto gap-x-2">
                     {twitter && (
                         <div className="flex items-center">
-                            <a target="_blank" href={twitter}><TwitterLogoIcon className="mr-1 h-4 w-4 fill-sky-400 text-sky-400" /></a>
+                            <a target="_blank" href={'https://x.com/' + twitter}><TwitterLogoIcon className="mr-1 h-4 w-4 fill-sky-400 text-sky-400" /></a>
+                        </div>
+                    )}
+                    {farcaster && (
+                        <div className="flex items-center">
+                            <a target="_blank" href={'https://warpcast.com/' + farcaster}><Image src={FarcasterLogo} alt='Connect with Farcaster' className='mr-1 h-4 w-4' /></a>
                         </div>
                     )}
                 </div>

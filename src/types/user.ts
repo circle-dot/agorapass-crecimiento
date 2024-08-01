@@ -4,6 +4,7 @@ export interface User {
     trustedBy: number;
     bio?: string;
     twitter?: string;
+    farcaster?: string;
     image?: string;
     rankScore?: number;
     attestationReceived?: number;
