@@ -22,10 +22,10 @@ import { Twitter } from 'lucide-react';
 import FarcasterLogo from '@/../../public/purple-white.svg'
 import { usePrivy } from '@privy-io/react-auth';
 import Swal from 'sweetalert2';
-import Link from 'next/link';
 import withReactContent from 'sweetalert2-react-content';
 import LinkedButton from './LinkedButton';
 import UnlinkAccounts from './UnlinkAccounts';
+
 const MySwal = withReactContent(Swal);
 
 export const FormSchema = z.object({
@@ -41,7 +41,7 @@ interface ProfileCardProps {
 
 export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
     const { ready, authenticated, user, linkTwitter, linkFarcaster, unlinkTwitter, unlinkFarcaster } = usePrivy();
-    const { email, wallet, rankScore, vouchesAvailables, createdAt, vouchReset, name, bio, avatarType } = data || {};
+    const { email, wallet, rankScore, vouchesAvailables, createdAt, vouchReset, name, bio, avatarType, displayFarcaster, displayTwitter } = data || {};
     const icon = blockies.create({ seed: wallet, size: 8, scale: 4 }).toDataURL();
     const [remainingTime, setRemainingTime] = useState('00:00:00');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -143,6 +143,7 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                     <div className='flex items-center justify-around flex-row p-1 gap-1 w-full '>
                         <LinkedButton
                             isLinked={!!user?.twitter}
+                            displayColumn="twitter"
                             linkUrl={`https://x.com/${user?.twitter?.username}`}
                             onClick={handleLinkTwitterClick}
                             text="Link Twitter"
@@ -150,9 +151,13 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                             icon={<Twitter className='w-6 h-6 ml-1' />}
                             className='text-gray-500'
                             linkedColor='text-[#1DA1F2]'
+                            username={user?.twitter?.username || ''}
+                            isDisplayed={displayTwitter}
+
                         />
                         <LinkedButton
                             isLinked={!!user?.farcaster}
+                            displayColumn="farcaster"
                             linkUrl={`https://warpcast.com/${user?.farcaster?.username}`}
                             onClick={linkFarcaster}
                             text="Link Farcaster"
@@ -160,6 +165,9 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                             icon={<Image src={FarcasterLogo} alt='Connect with Farcaster' className='w-6 h-6 ml-1' />}
                             className='text-gray-500'
                             linkedColor='text-[#8a63d2]'
+                            username={user?.farcaster?.username || ''}
+                            isDisplayed={displayTwitter}
+
                         />
 
                     </div>

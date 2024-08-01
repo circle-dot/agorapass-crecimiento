@@ -21,6 +21,8 @@ model User {
   wallet              String    @unique
   twitter             String?
   farcaster           String?
+  displayTwitter      Boolean?  @default(false)
+  displayFarcaster    Boolean?  @default(false)
   // privyId             String    @unique
   chainType           String?   @default("ethereum")
   vouchesAvailables   Int       @default(3)
