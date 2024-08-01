@@ -17,6 +17,16 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import blockies from 'ethereum-blockies';
 import { copyToClipboard } from '@/utils/copyToClipboard';
+import Image from 'next/image';
+import { Twitter } from 'lucide-react';
+import FarcasterLogo from '@/../../public/purple-white.svg'
+import { usePrivy } from '@privy-io/react-auth';
+import Swal from 'sweetalert2';
+import Link from 'next/link';
+import withReactContent from 'sweetalert2-react-content';
+import LinkedButton from './LinkedButton';
+import UnlinkAccounts from './UnlinkAccounts';
+const MySwal = withReactContent(Swal);
 
 export const FormSchema = z.object({
     username: z.string().min(2, { message: "Username must be at least 2 characters." }),
@@ -30,6 +40,7 @@ interface ProfileCardProps {
 }
 
 export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
+    const { ready, authenticated, user, linkTwitter, linkFarcaster, unlinkTwitter, unlinkFarcaster } = usePrivy();
     const { email, wallet, rankScore, vouchesAvailables, createdAt, vouchReset, name, bio, avatarType } = data || {};
     const icon = blockies.create({ seed: wallet, size: 8, scale: 4 }).toDataURL();
     const [remainingTime, setRemainingTime] = useState('00:00:00');
@@ -87,6 +98,24 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
     const handleCopy = () => {
         copyToClipboard(wallet);
     };
+
+    const handleLinkTwitterClick = () => {
+        MySwal.fire({
+            title: 'Are you sure?',
+            text: "You are about to link your X account. This will redirect you to X.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, link it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                linkTwitter();
+            }
+        });
+    };
+
+
     return (
         <Card className="shadow-lg">
             <CardHeader className="text-center">
@@ -111,6 +140,29 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                     className="flex flex-col items-center space-y-2"
                 >
                     <p className="text-lg font-medium">{name ? name : email}</p>
+                    <div className='flex items-center justify-around flex-row p-1 gap-1 w-full '>
+                        <LinkedButton
+                            isLinked={!!user?.twitter}
+                            linkUrl={`https://x.com/${user?.twitter?.username}`}
+                            onClick={handleLinkTwitterClick}
+                            text="Link Twitter"
+                            linkedText="Linked with Twitter"
+                            icon={<Twitter className='w-6 h-6 ml-1' />}
+                            className='text-gray-500'
+                            linkedColor='text-[#1DA1F2]'
+                        />
+                        <LinkedButton
+                            isLinked={!!user?.farcaster}
+                            linkUrl={`https://warpcast.com/${user?.farcaster?.username}`}
+                            onClick={linkFarcaster}
+                            text="Link Farcaster"
+                            linkedText="Linked with Farcaster"
+                            icon={<Image src={FarcasterLogo} alt='Connect with Farcaster' className='w-6 h-6 ml-1' />}
+                            className='text-gray-500'
+                            linkedColor='text-[#8a63d2]'
+                        />
+
+                    </div>
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger asChild>
@@ -135,6 +187,11 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                     </div>
                     <p>Vouches available: {vouchesAvailables}</p>
                     <p>It refreshes in: {remainingTime}</p>
+                    <UnlinkAccounts
+                        user={user}
+                        unlinkTwitter={unlinkTwitter}
+                        unlinkFarcaster={unlinkFarcaster}
+                    />
                 </motion.div>
             </CardContent>
             <CardFooter className="flex justify-center items-center flex-col">
@@ -230,11 +287,11 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                                         <Button type="submit">
                                             Save changes
                                         </Button>
-                                        <DialogClose asChild>
+                                        {/* <DialogClose asChild>
                                             <Button type="button" variant="secondary">
                                                 Close
                                             </Button>
-                                        </DialogClose>
+                                        </DialogClose> */}
                                     </DialogFooter>
                                 </form>
                             </Form>

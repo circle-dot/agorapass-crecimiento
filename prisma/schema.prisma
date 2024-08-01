@@ -19,6 +19,8 @@ model User {
   name                String?
   bio                 String?
   wallet              String    @unique
+  twitter             String?
+  farcaster           String?
   // privyId             String    @unique
   chainType           String?   @default("ethereum")
   vouchesAvailables   Int       @default(3)
