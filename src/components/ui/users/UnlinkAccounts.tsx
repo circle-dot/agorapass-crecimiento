@@ -5,20 +5,9 @@ import { User } from '@privy-io/react-auth';
 const MySwal = withReactContent(Swal);
 
 
-// Define interfaces for the props
-interface TwitterUser {
-    username: string;
-    subject: string;
-}
-
-interface FarcasterUser {
-    username: string;
-    fid: string;
-}
-
 
 interface UnlinkAccountsProps {
-    user?: User | null | undefined;  // Updated to accept null
+    user?: User | null | undefined;
     unlinkTwitter: (subject: string) => Promise<User>;
     unlinkFarcaster: (fid: number) => Promise<User>;
 }
@@ -26,20 +15,20 @@ interface UnlinkAccountsProps {
 const UnlinkAccounts: React.FC<UnlinkAccountsProps> = ({ user, unlinkTwitter, unlinkFarcaster }) => {
     const { getAccessToken } = usePrivy();
 
-    const updateAccountDisplay = async (platform: string, display: boolean) => {
+    const updateAccountDisplay = async (platform: string) => {
         try {
             const token = await getAccessToken();
 
-            const response = await fetch('/api/user/LinkAccount', {
+            const response = await fetch('/api/user/linkAccount', {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({
-                    username: platform === 'Twitter' ? user?.twitter?.username : user?.farcaster?.username,
+                    username: '',//platform === 'Twitter' ? user?.twitter?.username : user?.farcaster?.username,
                     displayColumn: platform.toLowerCase(),
-                    display,
+                    display: false,
                 }),
             });
             const result = await response.json();
@@ -72,7 +61,7 @@ const UnlinkAccounts: React.FC<UnlinkAccountsProps> = ({ user, unlinkTwitter, un
                     }
                     unlinkTwitter(user.twitter.subject)
                         .then(() => {
-                            return updateAccountDisplay('Twitter', false);
+                            return updateAccountDisplay('Twitter');
                         })
                         .then(() => {
                             MySwal.fire('Unlinked!', 'Your Twitter account has been unlinked.', 'success');
@@ -87,7 +76,7 @@ const UnlinkAccounts: React.FC<UnlinkAccountsProps> = ({ user, unlinkTwitter, un
                     }
                     unlinkFarcaster(user.farcaster.fid)
                         .then(() => {
-                            return updateAccountDisplay('Farcaster', false);
+                            return updateAccountDisplay('Farcaster');
                         })
                         .then(() => {
                             MySwal.fire('Unlinked!', 'Your Farcaster account has been unlinked.', 'success');
