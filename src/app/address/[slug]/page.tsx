@@ -26,6 +26,11 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
+import {
+    TwitterLogoIcon
+} from "@radix-ui/react-icons";
+import FarcasterLogo from '@/../../public/purple-white.svg'
+import Image from 'next/image';
 //!TODO replace this schemaId
 const schemaId = process.env.NEXT_PUBLIC_SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3"; // Replace with your schemaId
 
@@ -61,15 +66,25 @@ export default function Page({ params }: { params: { slug: string } }) {
         queryFn: () => fetchEnsNamesByAddress(id),
     });
 
-    const { data: rankScore, error: rankScoreError, isLoading: rankScoreLoading } = useQuery({
+    const { data: userData, error: rankScoreError, isLoading: rankScoreLoading } = useQuery({
         queryKey: ['userRankScore', address],
         queryFn: async () => {
             const res = await fetch(`/api/user/${address}`);
+            if (res.status === 404) {
+                return null; // Return null or any fallback value if user not found
+            }
             if (!res.ok) {
                 throw new Error('Network response was not ok');
             }
             return res.json();
         },
+        retry: (failureCount, error) => {
+            if (error) {
+                return false; // Don't retry for any other errors
+            }
+            return failureCount < 3; // Retry up to 3 times for network issues
+        },
+        staleTime: Infinity,
     });
 
     const { data: madeVouchesData, error: madeVouchesError, isLoading: madeVouchesLoading } = useQuery({
@@ -86,11 +101,11 @@ export default function Page({ params }: { params: { slug: string } }) {
         staleTime: Infinity,
     });
 
-    const avatarType = rankScore ? rankScore.avatarType || 'metamask' : 'metamask';
+    const avatarType = userData ? userData.avatarType || 'metamask' : 'metamask';
     const avatar = getAvatar(address, avatarType);
 
-    if (madeLoading || receivedLoading || ensNameLoading || rankScoreLoading) return <div className="w-screen flex items-center justify-center"><Loader /></div>;
-    if (madeError || receivedError || ensNameerror || rankScoreError) return <div>Error: {madeError?.message || receivedError?.message}</div>;
+    if (madeLoading || receivedLoading || ensNameLoading) return <div className="w-screen flex items-center justify-center"><Loader /></div>;
+    if (madeError || receivedError || ensNameerror) return <div>Error: {madeError?.message || receivedError?.message}</div>;
     const handleCopy = () => {
         copyToClipboard(address);
     };
@@ -100,8 +115,6 @@ export default function Page({ params }: { params: { slug: string } }) {
     const handleReceivedOpen = () => {
         setDialogOpenedReceived(true);
     };
-
-
     return (
         <div className="flex items-center justify-center bg-gray-100 w-screen p-4">
             <motion.div
@@ -126,15 +139,18 @@ export default function Page({ params }: { params: { slug: string } }) {
                         ) : (
                             avatar
                         )}
-                        {/* <AvatarFallback className="flex items-center justify-center">{email?.charAt(0)}</AvatarFallback> */}
                     </Avatar>
                 </div>
                 <div className="text-center">
-
                     <div>
-                        <h1>Trust Score: {rankScore.rankScore ?? 'N/A'}</h1>
+                        {userData?.name && (
+                            <h1>{userData.name}</h1>
+                        )}
+                        <h1>Trust Score: {userData?.rankScore ?? 'N/A'}</h1>
                     </div>
                     <div className="flex flex-col gap-4 items-center">
+
+
                         <div className="flex flex-col sm:flex-row sm:space-x-8">
                             <div>
                                 <span className="block text-xl font-bold">{receivedData}</span>
@@ -143,9 +159,6 @@ export default function Page({ params }: { params: { slug: string } }) {
                                     <DialogContent>
                                         <DialogHeader>
                                             <DialogTitle>List of vouches received</DialogTitle>
-                                            {/* <DialogDescription>
-                                                You can customize this message as needed 
-                                            </DialogDescription> */}
                                         </DialogHeader>
                                         {receivedVouchesLoading ? (
                                             <Loader />
@@ -170,9 +183,6 @@ export default function Page({ params }: { params: { slug: string } }) {
                                     <DialogContent>
                                         <DialogHeader>
                                             <DialogTitle>List of vouches made</DialogTitle>
-                                            {/* <DialogDescription>
-                                                 You can customize this message as needed 
-                                            </DialogDescription> */}
                                         </DialogHeader>
                                         {madeVouchesLoading ? (
                                             <Loader />
@@ -190,25 +200,48 @@ export default function Page({ params }: { params: { slug: string } }) {
                                     </DialogContent>
                                 </Dialog>
                             </div>
+
                         </div>
+
                     </div>
                     <div className="mt-6">
+                        {/* {userData?.createdAt && (
+                            <div>Joined: {new Date(userData.createdAt).toLocaleDateString()}</div>
+                        )} */}
+
                         <h3 className="text-2xl font-semibold truncate">
                             <TooltipProvider>
                                 <Tooltip>
-                                    <TooltipTrigger asChild onClick={handleCopy}                                    >
-                                        <p className="whitespace-nowrap truncate cursor-pointer">{ensName?.length > 0 ? ensName[0].name : params.slug || "No Data Available"}</p>
+                                    <TooltipTrigger asChild onClick={handleCopy}>
+                                        <p className="whitespace-nowrap truncate cursor-pointer">{ensName?.length > 0 ? ensName[0].name : address || "No Data Available"}</p>
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                        <p>{ensName?.length > 0 ? ensName[0].name : params.slug || "No Data Available"}</p>
+                                        <p>{ensName?.length > 0 ? ensName[0].name : address || "No Data Available"}</p>
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
                         </h3>
-                        <div className="mt-4 text-gray-600">
-                            <a href={process.env.NEXT_PUBLIC_EASSCAN + '/address/' + params.slug} target='_blank' className="underline">Check in EAS</a>
+                        <div className="mb-4 text-gray-600">
+                            <a href={process.env.NEXT_PUBLIC_EASSCAN + '/address/' + address} target='_blank' className="underline">Check in EAS</a>
+                        </div>
+
+                        <div className='flex items-center justify-center flex-row'>
+                            {userData?.twitter && (
+                                <a target="_blank" href={'https://x.com/' + userData.twitter}><TwitterLogoIcon className="mr-1 h-8 w-8 fill-sky-400 text-sky-400" /></a>
+                            )}
+                            {userData?.farcaster && (
+                                <a target="_blank" href={'https://warpcast.com/' + userData.farcaster}><Image src={FarcasterLogo} alt='User with Farcaster' className='mr-1 h-8 w-8' /></a>
+                            )}
                         </div>
                         <hr className="my-4 border-gray-300" />
+                        {userData?.bio && (
+                            <>
+                                <div>{userData.bio}</div>
+                                <hr className="my-4 border-gray-300" />
+                            </>
+                        )}
+
+
                         <VouchButtonCustom recipient={address} className='!w-full py-1' authStatus={authStatus} />
                     </div>
                 </div>
@@ -216,3 +249,4 @@ export default function Page({ params }: { params: { slug: string } }) {
         </div>
     );
 }
+
