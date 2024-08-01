@@ -57,7 +57,14 @@ const LinkedButton: FC<LinkedButtonProps> = ({
 
         if (result.isConfirmed) {
             try {
-                Swal.showLoading();
+                MySwal.fire({
+                    title: 'Processing...',
+                    text: 'Please wait while your request is being processed.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
 
                 const response = await fetch('/api/user/linkAccount', {
                     method: 'PATCH',

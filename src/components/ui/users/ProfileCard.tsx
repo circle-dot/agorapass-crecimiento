@@ -166,7 +166,7 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                             className='text-gray-500'
                             linkedColor='text-[#8a63d2]'
                             username={user?.farcaster?.username || ''}
-                            isDisplayed={displayTwitter}
+                            isDisplayed={displayFarcaster}
 
                         />
 

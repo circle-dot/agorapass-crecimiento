@@ -20,44 +20,30 @@ export async function PATCH(request: NextRequest) {
             return NextResponse.json({ error: 'Token verification failed' }, { status: 401 });
         }
 
-        const { twitter, farcaster, displayTwitter, displayFarcaster } = await request.json();
+        const { username, displayColumn, display } = await request.json();
 
-        // Prepare data to update
+        // Prepare the data to update based on `displayColumn`
         const updateData: {
-            twitter?: { username: string };
-            farcaster?: { username: string };
+            twitter?: string;
+            farcaster?: string;
             displayTwitter?: boolean;
             displayFarcaster?: boolean;
         } = {};
 
-        if (twitter) {
-            updateData.twitter = { username: twitter.username };
-        }
-
-        if (farcaster) {
-            updateData.farcaster = { username: farcaster.username };
-        }
-
-        if (displayTwitter !== undefined) {
-            updateData.displayTwitter = displayTwitter;
-        }
-
-        if (displayFarcaster !== undefined) {
-            updateData.displayFarcaster = displayFarcaster;
+        if (displayColumn === 'twitter') {
+            updateData.twitter = username;
+            updateData.displayTwitter = display;
+        } else if (displayColumn === 'farcaster') {
+            updateData.farcaster = username;
+            updateData.displayFarcaster = display;
         }
 
         const updateUser = await prisma.user.update({
             where: {
                 id: verifiedClaims.userId,
             },
-            data: {
-                twitter: updateData.twitter?.username ?? null,
-                farcaster: updateData.farcaster?.username ?? null,
-                displayTwitter: updateData.displayTwitter,
-                displayFarcaster: updateData.displayFarcaster,
-            },
+            data: updateData,
         });
-
 
         return NextResponse.json(updateUser);
     } catch (error) {
