@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import TwitterLogo from '@/../../public/X.svg'
-
+import { View } from 'lucide-react';
 import FarcasterLogo from '@/../../public/purple-white.svg'
 import Image from 'next/image';
 //!TODO replace this schemaId
@@ -154,7 +154,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                             <div>
                                 <span className="block text-xl font-bold">{receivedData}</span>
                                 <Dialog onOpenChange={handleReceivedOpen}>
-                                    <DialogTrigger className="text-gray-500 text-sm">Vouches received</DialogTrigger>
+                                    <DialogTrigger className="text-gray-500 text-sm underline cursor-pointer">Vouches received</DialogTrigger>
                                     <DialogContent>
                                         <DialogHeader>
                                             <DialogTitle>List of vouches received</DialogTitle>
@@ -167,7 +167,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                                             <div className="max-h-96 overflow-y-auto">
                                                 {receivedVouchesData?.map((attestationReceived: any) => (
                                                     <div key={attestationReceived.id} className={`p-4 my-2 rounded-lg shadow-sm ${attestationReceived.revoked ? 'bg-red-50' : 'bg-gray-50'}`}>
-                                                        Received a vouch from <Link href={'/address/' + attestationReceived.attester} className="text-blue-600 hover:underline">{attestationReceived.attester}</Link> on {new Date(attestationReceived.timeCreated * 1000).toLocaleDateString()} {attestationReceived.revoked && <Badge variant="destructive">Revoked on {new Date(attestationReceived.revocationTime * 1000).toLocaleDateString()}</Badge>}
+                                                        Received a vouch from <Link href={'/address/' + attestationReceived.attester} className="text-blue-600 hover:underline">{attestationReceived.attester}</Link> on {new Date(attestationReceived.timeCreated * 1000).toLocaleDateString()} <Link href={'/vouch/' + attestationReceived.id}> <br /> <span className='flex flex-row justify-start items-center'>See details<View className="h-5 w-5" /></span> </Link> {attestationReceived.revoked && <Badge variant="destructive">Revoked on {new Date(attestationReceived.revocationTime * 1000).toLocaleDateString()}</Badge>}
                                                     </div>
                                                 ))}
                                             </div>
@@ -178,7 +178,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                             <div>
                                 <span className="block text-xl font-bold">{madeData}</span>
                                 <Dialog onOpenChange={handleMadeOpen}>
-                                    <DialogTrigger className="text-gray-500 text-sm">Vouches made</DialogTrigger>
+                                    <DialogTrigger className="text-gray-500 text-sm underline cursor-pointer">Vouches made</DialogTrigger>
                                     <DialogContent>
                                         <DialogHeader>
                                             <DialogTitle>List of vouches made</DialogTitle>
@@ -191,7 +191,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                                             <div className="max-h-96 overflow-y-auto">
                                                 {madeVouchesData?.map((attestation: any) => (
                                                     <div key={attestation.id} className={`p-4 my-2 rounded-lg shadow-sm ${attestation.revoked ? 'bg-red-50' : 'bg-gray-50'}`}>
-                                                        Vouched for <Link href={'/address/' + attestation.recipient} className="text-blue-600 hover:underline">{attestation.recipient}</Link> on {new Date(attestation.timeCreated * 1000).toLocaleDateString()}  {attestation.revoked && <Badge variant="destructive">Revoked on {new Date(attestation.revocationTime * 1000).toLocaleDateString()}</Badge>}
+                                                        Vouched for <Link href={'/address/' + attestation.recipient} className="text-blue-600 hover:underline">{attestation.recipient}</Link> on {new Date(attestation.timeCreated * 1000).toLocaleDateString()} <Link href={'/vouch/' + attestation.id}> <br /> <span className='flex flex-row justify-start items-center'>See details<View className="h-5 w-5" /></span> </Link> {attestation.revoked && <Badge variant="destructive">Revoked on {new Date(attestation.revocationTime * 1000).toLocaleDateString()}</Badge>}
                                                     </div>
                                                 ))}
                                             </div>
