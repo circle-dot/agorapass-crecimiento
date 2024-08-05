@@ -106,7 +106,7 @@ function ProfileAvatar() {
                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem asChild><Link href='/me' className='cursor-pointer'>My Profile</Link></DropdownMenuItem>
-                        <DropdownMenuItem asChild><a href="#" className='cursor-pointer'>Support</a></DropdownMenuItem>
+                        <DropdownMenuItem asChild><a href={"mailto:" + process.env.NEXT_PUBLIC_MAIL_SUPPORT} className='cursor-pointer'>Support</a></DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={logout} className='cursor-pointer'>
                             Log out
