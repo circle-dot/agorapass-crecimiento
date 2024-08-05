@@ -40,19 +40,59 @@ interface ProfileCardProps {
 }
 
 export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
-    const { ready, authenticated, user, unlinkTwitter, unlinkFarcaster } = usePrivy();
-
+    const { ready, authenticated, user, unlinkTwitter, unlinkFarcaster, getAccessToken } = usePrivy();
 
     const { linkTwitter, linkFarcaster } = useLinkAccount({
         onSuccess: (user, linkMethod, linkedAccount) => {
             console.log(user, linkMethod, linkedAccount);
-            console.log('here!!!!!!!!!!!!!!!!!!!')
-            // Any logic you'd like to execute if the user successfully links an account while this
-            // component is mounted
+
+            getAccessToken()
+                .then((token) => {
+                    // Prepara los datos para la solicitud
+                    Swal.showLoading();
+                    const requestData = {
+                        //@ts-expect-error it doesnt exist in the type, but is returned
+                        twitter: linkMethod === 'twitter' ? linkedAccount.username : undefined,
+                        //@ts-expect-error it doesnt exist in the type, but is returned
+                        farcaster: linkMethod === 'farcaster' ? linkedAccount.username : undefined,
+                    };
+
+                    // Enviar la solicitud PATCH al endpoint
+                    return fetch('/api/user/linkAccount', {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                        },
+                        body: JSON.stringify(requestData),
+                    });
+                })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Failed to update user data');
+                    }
+                    return response.json();
+                })
+                .then((updatedUser) => {
+                    console.log('User updated successfully', updatedUser);
+                    MySwal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'User updated successfully.',
+                    })
+                })
+                .catch((error) => {
+                    console.error('Error linking account:', error);
+                    MySwal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong. Try reloading the page.',
+                    });
+                });
         },
         onError: (error) => {
             console.log(error);
-            // Any logic you'd like to execute after a user exits the link flow or there is an error
+            // Cualquier lógica adicional en caso de error
         },
     });
 

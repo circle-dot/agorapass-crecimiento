@@ -1,9 +1,8 @@
 import React from 'react';
 import { useEffect, useState } from "react";
 import { usePrivy } from '@privy-io/react-auth';
-import {
-    TwitterLogoIcon
-} from "@radix-ui/react-icons";
+import TwitterLogo from '@/../../public/X.svg'
+
 import {
     Card,
     CardContent,
@@ -98,7 +97,7 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <a target="_blank" href={'https://x.com/' + twitter}><TwitterLogoIcon className="mr-1 h-4 w-4 fill-sky-400 text-sky-400" /></a>
+                                        <a target="_blank" href={'https://x.com/' + twitter}><Image src={TwitterLogo} alt='User with Twitter' className='mx-1 h-4 w-4 ' /></a>
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         @{twitter}

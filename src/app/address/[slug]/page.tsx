@@ -26,9 +26,8 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
-import {
-    TwitterLogoIcon
-} from "@radix-ui/react-icons";
+import TwitterLogo from '@/../../public/X.svg'
+
 import FarcasterLogo from '@/../../public/purple-white.svg'
 import Image from 'next/image';
 //!TODO replace this schemaId
@@ -227,10 +226,10 @@ export default function Page({ params }: { params: { slug: string } }) {
 
                         <div className='flex items-center justify-center flex-row'>
                             {userData?.twitter && (
-                                <a target="_blank" href={'https://x.com/' + userData.twitter} className='flex flex-row justify-center items-center  text-sky-400'><TwitterLogoIcon className="mr-1 h-6 w-6 fill-sky-400" />@{userData.twitter}</a>
+                                <a target="_blank" href={'https://x.com/' + userData.twitter} className='flex flex-row justify-center items-center  text-sky-400'><Image src={TwitterLogo} alt='User with Farcaster' className='mx-1 h-6 w-6 ' />@{userData.twitter}</a>
                             )}
                             {userData?.farcaster && (
-                                <a target="_blank" href={'https://warpcast.com/' + userData.farcaster} className='flex items-center justify-center flex-row text-[#8a63d2]'><Image src={FarcasterLogo} alt='User with Farcaster' className='mr-1 h-8 w-8 ' />@{userData.farcaster}</a>
+                                <a target="_blank" href={'https://warpcast.com/' + userData.farcaster} className='flex items-center justify-center flex-row text-[#8a63d2]'><Image src={FarcasterLogo} alt='User with Farcaster' className='mx-1 h-6 w-6 ' />@{userData.farcaster}</a>
                             )}
                         </div>
                         <hr className="my-4 border-gray-300" />
