@@ -95,12 +95,31 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
                 <div className="flex text-sm text-muted-foreground justify-start mt-auto gap-x-2">
                     {twitter && (
                         <div className="flex items-center">
-                            <a target="_blank" href={'https://x.com/' + twitter}><TwitterLogoIcon className="mr-1 h-4 w-4 fill-sky-400 text-sky-400" /></a>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <a target="_blank" href={'https://x.com/' + twitter}><TwitterLogoIcon className="mr-1 h-4 w-4 fill-sky-400 text-sky-400" /></a>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        @{twitter}
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+
                         </div>
                     )}
                     {farcaster && (
                         <div className="flex items-center">
-                            <a target="_blank" href={'https://warpcast.com/' + farcaster}><Image src={FarcasterLogo} alt='Connect with Farcaster' className='mr-1 h-4 w-4' /></a>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <a target="_blank" href={'https://warpcast.com/' + farcaster}><Image src={FarcasterLogo} alt='Connect with Farcaster' className='mr-1 h-4 w-4' /></a>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        @{farcaster}
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
                         </div>
                     )}
                 </div>
