@@ -2,9 +2,8 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { usePrivy } from '@privy-io/react-auth';
 import { User } from '@privy-io/react-auth';
+
 const MySwal = withReactContent(Swal);
-
-
 
 interface UnlinkAccountsProps {
     user?: User | null | undefined;
@@ -17,7 +16,13 @@ const UnlinkAccounts: React.FC<UnlinkAccountsProps> = ({ user, unlinkTwitter, un
 
     const updateAccountDisplay = async (platform: string) => {
         try {
+            Swal.showLoading();
             const token = await getAccessToken();
+
+            const requestData = {
+                twitter: platform === 'Twitter' ? '' : undefined,
+                farcaster: platform === 'Farcaster' ? '' : undefined,
+            };
 
             const response = await fetch('/api/user/linkAccount', {
                 method: 'PATCH',
@@ -25,12 +30,9 @@ const UnlinkAccounts: React.FC<UnlinkAccountsProps> = ({ user, unlinkTwitter, un
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify({
-                    username: '',//platform === 'Twitter' ? user?.twitter?.username : user?.farcaster?.username,
-                    displayColumn: platform.toLowerCase(),
-                    display: false,
-                }),
+                body: JSON.stringify(requestData),
             });
+
             const result = await response.json();
             if (!response.ok) {
                 throw new Error(result.error || 'Failed to update display status');
@@ -56,15 +58,13 @@ const UnlinkAccounts: React.FC<UnlinkAccountsProps> = ({ user, unlinkTwitter, un
             if (result.isConfirmed) {
                 if (platform === 'Twitter') {
                     if (!user.twitter) {
-                        MySwal.fire('Error!', 'Twitter username is missing.', 'error');
+                        MySwal.fire('Error!', 'X username is missing.', 'error');
                         return;
                     }
                     unlinkTwitter(user.twitter.subject)
+                        .then(() => updateAccountDisplay('Twitter'))
                         .then(() => {
-                            return updateAccountDisplay('Twitter');
-                        })
-                        .then(() => {
-                            MySwal.fire('Unlinked!', 'Your Twitter account has been unlinked.', 'success');
+                            MySwal.fire('Unlinked!', 'Your X account has been unlinked.', 'success');
                         })
                         .catch((error: Error) => {
                             MySwal.fire('Error!', error.message, 'error');
@@ -75,9 +75,7 @@ const UnlinkAccounts: React.FC<UnlinkAccountsProps> = ({ user, unlinkTwitter, un
                         return;
                     }
                     unlinkFarcaster(user.farcaster.fid)
-                        .then(() => {
-                            return updateAccountDisplay('Farcaster');
-                        })
+                        .then(() => updateAccountDisplay('Farcaster'))
                         .then(() => {
                             MySwal.fire('Unlinked!', 'Your Farcaster account has been unlinked.', 'success');
                         })
@@ -97,7 +95,7 @@ const UnlinkAccounts: React.FC<UnlinkAccountsProps> = ({ user, unlinkTwitter, un
                         onClick={() => handleUnlink('Twitter')}
                         className='w-full py-2 px-4 bg-black text-white rounded-lg hover:bg-red-700 transition-colors'
                     >
-                        Unlink Twitter
+                        Unlink X
                     </button>
                 )}
                 {user?.farcaster && (

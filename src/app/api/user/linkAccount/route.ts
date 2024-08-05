@@ -22,24 +22,27 @@ export async function PATCH(request: NextRequest) {
 
         const { twitter, farcaster } = await request.json();
 
-        // Prepare the data to update
+        // Prepare the data to update only if the value is provided
         const updateData: {
-            twitter?: string;
-            farcaster?: string;
+            twitter?: string | null;
+            farcaster?: string | null;
         } = {};
 
-        if (twitter) {
-            updateData.twitter = twitter;
+        if (twitter !== undefined) {
+            updateData.twitter = twitter === "" ? null : twitter; // Set to null if the value is an empty string
         }
 
-        if (farcaster) {
-            updateData.farcaster = farcaster;
+        if (farcaster !== undefined) {
+            updateData.farcaster = farcaster === "" ? null : farcaster; // Set to null if the value is an empty string
+        }
+
+        // If no data to update, return an error
+        if (Object.keys(updateData).length === 0) {
+            return NextResponse.json({ error: 'No data provided for update' }, { status: 400 });
         }
 
         const updateUser = await prisma.user.update({
-            where: {
-                id: verifiedClaims.userId,
-            },
+            where: { id: verifiedClaims.userId },
             data: updateData,
         });
 
