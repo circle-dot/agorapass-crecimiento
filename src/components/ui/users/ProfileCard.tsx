@@ -18,9 +18,9 @@ import { MetaMaskAvatar } from 'react-metamask-avatar';
 import blockies from 'ethereum-blockies';
 import { copyToClipboard } from '@/utils/copyToClipboard';
 import Image from 'next/image';
-import { Twitter } from 'lucide-react';
+import TwitterLogo from '@/../../public/X.svg'
 import FarcasterLogo from '@/../../public/purple-white.svg'
-import { usePrivy } from '@privy-io/react-auth';
+import { usePrivy, useLinkAccount } from '@privy-io/react-auth';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import LinkedButton from './LinkedButton';
@@ -40,8 +40,24 @@ interface ProfileCardProps {
 }
 
 export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
-    const { ready, authenticated, user, linkTwitter, linkFarcaster, unlinkTwitter, unlinkFarcaster } = usePrivy();
-    const { email, wallet, rankScore, vouchesAvailables, createdAt, vouchReset, name, bio, avatarType, displayFarcaster, displayTwitter } = data || {};
+    const { ready, authenticated, user, unlinkTwitter, unlinkFarcaster } = usePrivy();
+
+
+    const { linkTwitter, linkFarcaster } = useLinkAccount({
+        onSuccess: (user, linkMethod, linkedAccount) => {
+            console.log(user, linkMethod, linkedAccount);
+            console.log('here!!!!!!!!!!!!!!!!!!!')
+            // Any logic you'd like to execute if the user successfully links an account while this
+            // component is mounted
+        },
+        onError: (error) => {
+            console.log(error);
+            // Any logic you'd like to execute after a user exits the link flow or there is an error
+        },
+    });
+
+
+    const { email, wallet, rankScore, vouchesAvailables, createdAt, vouchReset, name, bio, avatarType } = data || {};
     const icon = blockies.create({ seed: wallet, size: 8, scale: 4 }).toDataURL();
     const [remainingTime, setRemainingTime] = useState('00:00:00');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -145,21 +161,18 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                     <div className='flex items-center justify-around flex-row p-1 gap-1 w-full '>
                         <LinkedButton
                             isLinked={!!user?.twitter}
-                            displayColumn="twitter"
                             linkUrl={`https://x.com/${user?.twitter?.username}`}
                             onClick={handleLinkTwitterClick}
                             text="Link Twitter"
                             linkedText="Linked with Twitter"
-                            icon={<Twitter className='w-6 h-6 ml-1' />}
+                            icon={<Image src={TwitterLogo} alt='Connect with X' className='w-6 h-6 ml-1' />}
                             className='text-gray-500'
                             linkedColor='text-[#1DA1F2]'
                             username={user?.twitter?.username || ''}
-                            isDisplayed={displayTwitter}
 
                         />
                         <LinkedButton
                             isLinked={!!user?.farcaster}
-                            displayColumn="farcaster"
                             linkUrl={`https://warpcast.com/${user?.farcaster?.username}`}
                             onClick={linkFarcaster}
                             text="Link Farcaster"
@@ -168,7 +181,6 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                             className='text-gray-500'
                             linkedColor='text-[#8a63d2]'
                             username={user?.farcaster?.username || ''}
-                            isDisplayed={displayFarcaster}
 
                         />
 

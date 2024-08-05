@@ -1,16 +1,8 @@
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import Link from 'next/link';
-import { Switch } from '../switch';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { CircleHelp } from 'lucide-react';
-import { usePrivy } from '@privy-io/react-auth';
+
 const MySwal = withReactContent(Swal);
 
 interface LinkedButtonProps {
@@ -23,8 +15,7 @@ interface LinkedButtonProps {
     linkedText: string;
     linkedColor: string;
     username?: string;
-    displayColumn: string;
-    isDisplayed: boolean;
+
 }
 
 const LinkedButton: FC<LinkedButtonProps> = ({
@@ -34,83 +25,18 @@ const LinkedButton: FC<LinkedButtonProps> = ({
     text,
     icon,
     className,
-    linkedText,
+    // linkedText,
     linkedColor,
-    username,
-    displayColumn,
-    isDisplayed: initialIsDisplayed
+    username
 }) => {
-    const [isDisplayed, setIsDisplayed] = useState(initialIsDisplayed); // Use the initial value
-    const { getAccessToken } = usePrivy();
 
-    const handleSwitchChange = async () => {
-        console.log('here')
-        const token = await getAccessToken();
-        const result = await MySwal.fire({
-            title: 'Are you sure?',
-            text: `Do you want to ${isDisplayed ? 'hide' : 'show'} your username publicly?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        });
-
-        if (result.isConfirmed) {
-            try {
-                MySwal.fire({
-                    title: 'Processing...',
-                    text: 'Please wait while your request is being processed.',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    },
-                });
-
-                const response = await fetch('/api/user/linkAccount', {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
-                    },
-                    body: JSON.stringify({
-                        username,
-                        displayColumn,
-                        display: !isDisplayed,
-                    }),
-                });
-
-                if (response.ok) {
-                    setIsDisplayed(!isDisplayed);
-                    MySwal.fire('Updated!', 'Your preferences have been updated.', 'success');
-                } else {
-                    MySwal.fire('Error!', 'Something went wrong. Please try again.', 'error');
-                }
-            } catch (error) {
-                MySwal.fire('Error!', 'Something went wrong. Please try again.', 'error');
-            }
-        }
-    };
 
     return isLinked ? (
         <div>
             <Link href={linkUrl} className={`flex flex-row items-center ${linkedColor}`}>
-                {linkedText}
+                @{username}
                 {icon}
             </Link>
-            <div className='flex flex-row justify-center items-center gap-x-1'>
-                Display
-                <TooltipProvider>
-                    <Tooltip>
-                        <TooltipTrigger>
-                            <CircleHelp className='h-4 w-4' />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p>Show it in your profile publicly</p>
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
-                <Switch id={linkedText} checked={isDisplayed} onCheckedChange={handleSwitchChange} />
-            </div>
         </div>
     ) : (
         <button

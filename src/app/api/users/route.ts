@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
     const skip = (pageNumber - 1) * pageSize;
 
     try {
-        const rawusers = await prisma.user.findMany({
+        const users = await prisma.user.findMany({
             skip,
             take: pageSize,
             orderBy: {
@@ -74,23 +74,12 @@ export async function GET(req: NextRequest) {
                 name: true,
                 bio: true,
                 avatarType: true,
-                displayFarcaster: true,
-                displayTwitter: true,
                 twitter: true,
                 farcaster: true,
             },
         });
 
-        // Process users to remove fields based on `displayFarcaster` and `displayTwitter`
-        const users = rawusers.map(user => {
-            const { displayFarcaster, displayTwitter, farcaster, twitter, ...rest } = user;
 
-            return {
-                ...rest,
-                ...(displayFarcaster ? { farcaster } : {}),
-                ...(displayTwitter ? { twitter } : {}),
-            };
-        });
 
         const totalUsers = await prisma.user.count({
             where: {

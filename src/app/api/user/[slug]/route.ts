@@ -14,8 +14,6 @@ export async function GET(
             bio: true,
             twitter: true,
             farcaster: true,
-            displayFarcaster: true,
-            displayTwitter: true,
             createdAt: true,
             name: true
         },
@@ -25,17 +23,9 @@ export async function GET(
         return new Response('User not found', { status: 404 });
     }
 
-    const filteredUser = (() => {
-        const { displayFarcaster, displayTwitter, farcaster, twitter, ...rest } = user;
 
-        return {
-            ...rest,
-            ...(displayFarcaster ? { farcaster } : {}),
-            ...(displayTwitter ? { twitter } : {}),
-        };
-    })();
 
-    return new Response(JSON.stringify(filteredUser), {
+    return new Response(JSON.stringify(user), {
         headers: { 'Content-Type': 'application/json' },
     });
 }
