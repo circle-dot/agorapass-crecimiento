@@ -61,27 +61,29 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
     useEffect(() => {
         const updateRemainingTime = () => {
             const now = DateTime.now();
-            const remainingDuration = vouchResetDate.diff(now, ['days', 'hours', 'minutes', 'seconds']);
+            const remainingDuration = vouchResetDate.diff(now, ['days', 'hours', 'minutes']);
 
             if (remainingDuration.as('milliseconds') <= 0) {
-                setRemainingTime('00:00:00');
+                setRemainingTime('00:00');
             } else {
                 // Extract values with default to 0 if undefined
-                const { days = 0, hours = 0, minutes = 0, seconds = 0 } = remainingDuration.shiftTo('days', 'hours', 'minutes', 'seconds').toObject();
+                const { days = 0, hours = 0, minutes = 0 } = remainingDuration.shiftTo('days', 'hours', 'minutes').toObject();
 
                 // Format remaining time
                 const formattedTime = days > 0
-                    ? `${String(Math.floor(days)).padStart(2, '0')}d ${String(Math.floor(hours)).padStart(2, '0')}h ${String(Math.floor(minutes)).padStart(2, '0')}m ${String(Math.floor(seconds)).padStart(2, '0')}s`
-                    : `${String(Math.floor(hours)).padStart(2, '0')}:${String(Math.floor(minutes)).padStart(2, '0')}:${String(Math.floor(seconds)).padStart(2, '0')}`;
+                    ? `${String(Math.floor(days)).padStart(2, '0')}d ${String(Math.floor(hours)).padStart(2, '0')}h ${String(Math.floor(minutes)).padStart(2, '0')}m`
+                    : `${String(Math.floor(hours)).padStart(2, '0')}:${String(Math.floor(minutes)).padStart(2, '0')}`;
 
                 setRemainingTime(formattedTime);
             }
         };
+
         updateRemainingTime();
-        const intervalId = setInterval(updateRemainingTime, 1000);
+        const intervalId = setInterval(updateRemainingTime, 60000); // Update every minute
 
         return () => clearInterval(intervalId);
     }, [vouchResetDate]);
+
 
     const handleFormSubmit = (data: z.infer<typeof FormSchema>) => {
         onSubmit(data);

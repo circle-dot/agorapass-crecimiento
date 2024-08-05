@@ -30,35 +30,6 @@ export default function Page() {
     enabled: !!attester, // Ensure the query only runs if attester is defined
   });
 
-  useEffect(() => {
-    if (!data?.vouchReset) return;
-
-    const vouchResetDate = DateTime.fromISO(data.vouchReset);
-
-    const updateRemainingTime = () => {
-      const now = DateTime.now();
-      if (now > vouchResetDate) {
-        setRemainingTime("00:00:00");
-        return;
-      }
-
-      const duration = vouchResetDate.diff(now, ['days', 'hours', 'minutes', 'seconds']).toObject();
-      const days = duration.days ?? 0;
-      const hours = duration.hours ?? 0;
-      const minutes = duration.minutes ?? 0;
-      const seconds = duration.seconds ?? 0;
-
-      setRemainingTime(
-        `${Math.floor(days * 24 + hours).toString().padStart(2, '0')}:${Math.floor(minutes).toString().padStart(2, '0')}:${Math.floor(seconds).toString().padStart(2, '0')}`
-      );
-    };
-
-    updateRemainingTime();
-    const intervalId = setInterval(updateRemainingTime, 1000);
-
-    return () => clearInterval(intervalId);
-  }, [data?.vouchReset]);
-
   // Effect to handle loading state for last three attestations
   useEffect(() => {
     if (!receivedLoading && !isLoading) {
