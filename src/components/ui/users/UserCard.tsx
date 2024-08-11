@@ -23,11 +23,9 @@ import { getAvatar } from './getAvatarImg';
 import { BlendIcon } from 'lucide-react';
 import Link from 'next/link';
 import VouchButtonCustom from '@/components/ui/VouchButton';
-import FarcasterLogo from '@/../../public/purple-white.svg'
+import FarcasterLogo from '@/../../public/farcaster.svg'
 import Image from 'next/image';
-function truncateWallet(wallet: string) {
-    return wallet.slice(0, 6) + '...' + wallet.slice(-4);
-}
+import truncateWallet from '@/utils/truncateWallet'
 
 function truncateName(name: string) {
     const maxLength = 30; // Maximum characters to display before truncating

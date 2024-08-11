@@ -34,18 +34,18 @@ const LinkedButton: FC<LinkedButtonProps> = ({
     return isLinked ? (
         <div>
             <Link href={linkUrl} className={`flex flex-row items-center ${linkedColor}`}>
-                @{username}
                 {icon}
+                @{username}
             </Link>
         </div>
     ) : (
         <button
-            className={`flex flex-row ${className}`}
+            className={`flex flex-row items-center ${className}`}
             onClick={onClick}
             disabled={isLinked}
         >
-            {text}
             {icon}
+            {text}
         </button>
     );
 };

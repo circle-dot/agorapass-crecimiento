@@ -28,7 +28,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import TwitterLogo from '@/../../public/X.svg'
 import { View } from 'lucide-react';
-import FarcasterLogo from '@/../../public/purple-white.svg'
+import FarcasterLogo from '@/../../public/farcaster.svg'
 import Image from 'next/image';
 //!TODO replace this schemaId
 const schemaId = process.env.NEXT_PUBLIC_SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3"; // Replace with your schemaId
