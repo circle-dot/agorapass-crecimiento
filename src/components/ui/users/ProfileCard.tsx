@@ -15,16 +15,16 @@ import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@radix
 import { DateTime } from "luxon";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { MetaMaskAvatar } from 'react-metamask-avatar';
-import blockies from 'ethereum-blockies';
 import { copyToClipboard } from '@/utils/copyToClipboard';
 import Image from 'next/image';
 import TwitterLogo from '@/../../public/X.svg'
-import FarcasterLogo from '@/../../public/purple-white.svg'
+import FarcasterLogo from '@/../../public/farcaster.svg'
 import { usePrivy, useLinkAccount } from '@privy-io/react-auth';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import LinkedButton from './LinkedButton';
 import UnlinkAccounts from './UnlinkAccounts';
+import truncateWallet from '@/utils/truncateWallet'
 
 const MySwal = withReactContent(Swal);
 
@@ -98,7 +98,6 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
 
 
     const { email, wallet, rankScore, vouchesAvailables, createdAt, vouchReset, name, bio, avatarType } = data || {};
-    const icon = blockies.create({ seed: wallet, size: 8, scale: 4 }).toDataURL();
     const [remainingTime, setRemainingTime] = useState('00:00:00');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -175,192 +174,215 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
 
 
     return (
-        <Card className="shadow-lg">
-            <CardHeader className="text-center">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
-                >
-                    <Avatar className="w-24 h-24 mx-auto mb-4">
-                        {typeof avatar === 'string' ? (
-                            <AvatarImage src={avatar} alt="Avatar Image" />
-                        ) : (
-                            avatar
-                        )}
-                        {/* <AvatarFallback className="flex items-center justify-center">{email?.charAt(0)}</AvatarFallback> */}
-                    </Avatar>
-                </motion.div>
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4, duration: 0.5, ease: "easeOut" }}
-                    className="flex flex-col items-center space-y-2"
-                >
-                    <p className="text-lg font-medium">{name ? name : email}</p>
-                    <div className='flex items-center justify-around flex-row p-1 gap-1 w-full '>
-                        <LinkedButton
-                            isLinked={!!user?.twitter}
-                            linkUrl={`https://x.com/${user?.twitter?.username}`}
-                            onClick={handleLinkTwitterClick}
-                            text="Link Twitter"
-                            linkedText="Linked with Twitter"
-                            icon={<Image src={TwitterLogo} alt='Connect with X' className='w-6 h-6 ml-1' />}
-                            className='text-gray-500'
-                            linkedColor='text-[#1DA1F2]'
-                            username={user?.twitter?.username || ''}
+        <>
+            <Card className="shadow-lg">
+                <CardHeader className="text-center">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
+                    >
+                        <Avatar className="w-20 h-20 mx-auto mb-2">
+                            {typeof avatar === 'string' ? (
+                                <AvatarImage src={avatar} alt="Avatar Image" />
+                            ) : (
+                                avatar
+                            )}
+                            {/* <AvatarFallback className="flex items-center justify-center">{email?.charAt(0)}</AvatarFallback> */}
+                        </Avatar>
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4, duration: 0.5, ease: "easeOut" }}
+                        className="flex flex-col items-center space-y-2"
+                    >
+                        <p className="text-lg font-medium">{name ? name : email}</p>
 
-                        />
-                        <LinkedButton
-                            isLinked={!!user?.farcaster}
-                            linkUrl={`https://warpcast.com/${user?.farcaster?.username}`}
-                            onClick={linkFarcaster}
-                            text="Link Farcaster"
-                            linkedText="Linked with Farcaster"
-                            icon={<Image src={FarcasterLogo} alt='Connect with Farcaster' className='w-6 h-6 ml-1' />}
-                            className='text-gray-500'
-                            linkedColor='text-[#8a63d2]'
-                            username={user?.farcaster?.username || ''}
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <p className="text-sm text-muted-foreground px-4 break-words border-zinc-400 rounded lg:rounded-full border cursor-pointer" onClick={handleCopy}>{truncateWallet(wallet)}</p>
+                                </TooltipTrigger>
+                                <TooltipContent className='bg-white border rounded p-0.5 m-2'>
+                                    <p>{wallet}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
 
-                        />
+                        <div className='flex items-center justify-around flex-row p-1 gap-2 w-full '>
+                            <LinkedButton
+                                isLinked={!!user?.twitter}
+                                linkUrl={`https://x.com/${user?.twitter?.username}`}
+                                onClick={handleLinkTwitterClick}
+                                text="Link Twitter"
+                                linkedText="Linked with Twitter"
+                                icon={<Image src={TwitterLogo} alt='Connect with X' className='w-4 h-4 mr-1' />}
+                                className='text-gray-500'
+                                linkedColor='text-[#1DA1F2]'
+                                username={user?.twitter?.username || ''}
+                            />
+                            <LinkedButton
+                                isLinked={!!user?.farcaster}
+                                linkUrl={`https://warpcast.com/${user?.farcaster?.username}`}
+                                onClick={linkFarcaster}
+                                text="Link Farcaster"
+                                linkedText="Linked with Farcaster"
+                                icon={<Image src={FarcasterLogo} alt='Connect with Farcaster' className='w-4 h-4 mr-1' />}
+                                className='text-gray-500'
+                                linkedColor='text-[#8a63d2]'
+                                username={user?.farcaster?.username || ''}
 
-                    </div>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <p className="text-sm text-muted-foreground truncate lg:truncate lg:w-9/12 px-4 break-words w-full border-zinc-400 rounded lg:rounded-full border cursor-pointer" onClick={handleCopy}>{wallet}</p>
-                            </TooltipTrigger>
-                            <TooltipContent className='bg-primarydark rounded p-0.5 m-2'>
-                                <p>{wallet}</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                    <p className="text-sm text-muted-foreground">Member since {formattedDate}</p>
-                </motion.div>
-            </CardHeader>
-            <CardContent className="text-center">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6, duration: 0.5, ease: "easeOut" }}
-                >
-                    <div>
-                        {bio}
-                    </div>
-                    <p>Vouches available: {vouchesAvailables}</p>
-                    <p>It refreshes in: {remainingTime}</p>
-                    <UnlinkAccounts
-                        user={user}
-                        unlinkTwitter={unlinkTwitter}
-                        unlinkFarcaster={unlinkFarcaster}
-                    />
-                </motion.div>
-            </CardContent>
-            <CardFooter className="flex justify-center items-center flex-col">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.8, duration: 0.5, ease: "easeOut" }}
-                >
-                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                        <DialogTrigger asChild>
-                            <Button variant="outline">Edit my profile</Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Edit Profile</DialogTitle>
-                            </DialogHeader>
-                            <Form {...form}>
-                                <form
-                                    onSubmit={form.handleSubmit(handleFormSubmit)}
-                                    className="space-y-4"
-                                >
-                                    <FormField
-                                        control={form.control}
-                                        name="username"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Username</FormLabel>
-                                                <FormControl>
-                                                    <Input {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="bio"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Bio</FormLabel>
-                                                <FormControl>
-                                                    <Textarea {...field} maxLength={160} />
-                                                </FormControl>
-                                                <FormDescription>
-                                                    Max 160 characters
-                                                </FormDescription>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="avatarType"
-                                        render={({ field }) => (
-                                            <FormItem className="space-y-3">
-                                                <FormLabel>Choose an avatar</FormLabel>
-                                                <FormControl>
-                                                    <RadioGroup
-                                                        onValueChange={field.onChange}
-                                                        defaultValue={field.value}
-                                                        className="flex flex-col md:flex-row md:items-start md:justify-start space-y-1 "
-                                                    >
-                                                        <FormItem className="flex items-center space-x-3 space-y-0">
-                                                            <FormControl>
-                                                                <RadioGroupItem value="blockies" />
-                                                            </FormControl>
-                                                            <FormLabel className="font-normal">
-                                                                <Avatar className="w-24 h-24 mx-auto mb-4">
-                                                                    <AvatarImage src={getAvatar(wallet, 'blockies') as string} alt="Blockies Avatar" className="w-full h-full object-cover" />
-                                                                    <AvatarFallback>{email?.charAt(0)}</AvatarFallback>
-                                                                </Avatar>
-                                                            </FormLabel>
-                                                        </FormItem>
-                                                        <FormItem className="flex items-center space-x-3 space-y-0 p-0 m-0">
-                                                            <FormControl>
-                                                                <RadioGroupItem value="metamask" />
-                                                            </FormControl>
-                                                            <FormLabel className="font-normal">
-                                                                <div className="w-24 h-24 mx-auto mb-4">
-                                                                    <MetaMaskAvatar address={wallet} size={96} className="w-full h-full object-cover" />
-                                                                </div>
-                                                            </FormLabel>
-                                                        </FormItem>
+                            />
 
-                                                    </RadioGroup>
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
+                        </div>
+                    </motion.div>
+                </CardHeader>
+                <CardContent className="text-center">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6, duration: 0.5, ease: "easeOut" }}
+                    >
+                        <div className='mt-5'>
+                            <div className='text-sm'>
+                                {bio}
+                            </div>
+                        </div>
 
-                                    <DialogFooter>
-                                        <Button type="submit">
-                                            Save changes
-                                        </Button>
-                                        {/* <DialogClose asChild>
+                    </motion.div>
+                </CardContent>
+                <CardFooter className="flex justify-center items-center flex-col  mt-5">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.8, duration: 0.5, ease: "easeOut" }}
+                    >
+                        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                            <DialogTrigger asChild>
+                                <Button variant="outline">Edit my profile</Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Edit Profile</DialogTitle>
+                                </DialogHeader>
+                                <Form {...form}>
+                                    <form
+                                        onSubmit={form.handleSubmit(handleFormSubmit)}
+                                        className="space-y-4"
+                                    >
+                                        <FormField
+                                            control={form.control}
+                                            name="username"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Username</FormLabel>
+                                                    <FormControl>
+                                                        <Input {...field} />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                        <FormField
+                                            control={form.control}
+                                            name="bio"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Bio</FormLabel>
+                                                    <FormControl>
+                                                        <Textarea {...field} maxLength={160} />
+                                                    </FormControl>
+                                                    <FormDescription>
+                                                        Max 160 characters
+                                                    </FormDescription>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                        <FormField
+                                            control={form.control}
+                                            name="avatarType"
+                                            render={({ field }) => (
+                                                <FormItem className="space-y-3">
+                                                    <FormLabel>Choose an avatar</FormLabel>
+                                                    <FormControl>
+                                                        <RadioGroup
+                                                            onValueChange={field.onChange}
+                                                            defaultValue={field.value}
+                                                            className="flex flex-col md:flex-row md:items-start md:justify-start space-y-1 "
+                                                        >
+                                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                                <FormControl>
+                                                                    <RadioGroupItem value="blockies" />
+                                                                </FormControl>
+                                                                <FormLabel className="font-normal">
+                                                                    <Avatar className="w-24 h-24 mx-auto mb-4">
+                                                                        <AvatarImage src={getAvatar(wallet, 'blockies') as string} alt="Blockies Avatar" className="w-full h-full object-cover" />
+                                                                        <AvatarFallback>{email?.charAt(0)}</AvatarFallback>
+                                                                    </Avatar>
+                                                                </FormLabel>
+                                                            </FormItem>
+                                                            <FormItem className="flex items-center space-x-3 space-y-0 p-0 m-0">
+                                                                <FormControl>
+                                                                    <RadioGroupItem value="metamask" />
+                                                                </FormControl>
+                                                                <FormLabel className="font-normal">
+                                                                    <div className="w-24 h-24 mx-auto mb-4">
+                                                                        <MetaMaskAvatar address={wallet} size={96} className="w-full h-full object-cover" />
+                                                                    </div>
+                                                                </FormLabel>
+                                                            </FormItem>
+
+                                                        </RadioGroup>
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <UnlinkAccounts
+                                            user={user}
+                                            unlinkTwitter={unlinkTwitter}
+                                            unlinkFarcaster={unlinkFarcaster}
+                                        />
+
+                                        <DialogFooter>
+                                            <Button type="submit">
+                                                Save changes
+                                            </Button>
+                                            {/* <DialogClose asChild>
                                             <Button type="button" variant="secondary">
                                                 Close
                                             </Button>
                                         </DialogClose> */}
-                                    </DialogFooter>
-                                </form>
-                            </Form>
-                        </DialogContent>
-                    </Dialog>
-                </motion.div>
-            </CardFooter>
-        </Card>
+                                        </DialogFooter>
+                                    </form>
+                                </Form>
+                            </DialogContent>
+                        </Dialog>
+                    </motion.div>
+                </CardFooter>
+            </Card>
+
+            <Card className="shadow-lg mt-5">
+                <CardHeader className='text-center'>
+                    <p className="text-lg font-medium font-bold">Vouching</p>
+                </CardHeader>
+                <CardContent>
+                    <div className='mt-2'>
+                        <div className='width-full display-flex flex flex-row justify-between'>
+                            <p>Available</p>
+                            <p>{vouchesAvailables}</p>
+                        </div>
+                        <div className='width-full display-flex flex flex-row justify-between'>
+                            <p>Refreshes in</p>
+                            <p>{remainingTime}</p>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+        </>
+
     );
 }
