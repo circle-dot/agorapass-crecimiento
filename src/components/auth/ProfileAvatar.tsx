@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { getAvatar } from '../ui/users/getAvatarImg';
 import { useFetchUser } from '@/hooks/useFetchUser';
-
+import ZupassButton from '../layout/ZupassButton';
 function ProfileAvatar() {
     const [updateTrigger, setUpdateTrigger] = useState(false);
     const { data, isLoading, error } = useFetchUser(updateTrigger);
@@ -104,6 +104,7 @@ function ProfileAvatar() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem asChild><Link href='/me' className='cursor-pointer'>My Profile</Link></DropdownMenuItem>
+                        <DropdownMenuItem ><ZupassButton /></DropdownMenuItem>
                         <DropdownMenuItem asChild><a href={"mailto:" + process.env.NEXT_PUBLIC_MAIL_SUPPORT} className='cursor-pointer'>Support</a></DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={logout} className='cursor-pointer'>

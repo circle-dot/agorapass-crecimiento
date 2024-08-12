@@ -6,11 +6,13 @@ import {
     ZKEdDSAEventTicketPCDPackage
 } from '@pcd/zk-eddsa-event-ticket-pcd';
 
-const nullifiers = new Set<string>();
+// const nullifiers = new Set<string>();    
 
 type TicketType = keyof typeof whitelistedTickets;
 
 export const POST = async (req: NextRequest) => {
+    const nullifiers = new Set<string>();
+
     try {
         const { pcds, nonce } = await req.json();
 
@@ -32,10 +34,63 @@ export const POST = async (req: NextRequest) => {
                 responses.push({ error: `Invalid PCD type: ${type}`, status: 400 });
                 continue;
             }
+            console.log("inputPCD", inputPCD);
+            const pcd = await ZKEdDSAEventTicketPCDPackage.deserialize(inputPCD);
+            console.log("pcd", pcd);
+            if (!inputPCD || !pcd) {
+                responses.push({
+                    error: "Invalid PCD format or deserialization error",
+                    status: 400
+                });
+                continue;
+            }
+            //here
+            //!TODO Save nonce in session, use watermark
+            // if (pcd.claim.watermark.toString() !== bigIntNonce.toString()) {
+            //     responses.push({ error: "PCD watermark doesn't match", status: 401 });
+            //     continue;
+            // }
+
+            if (!pcd.claim.nullifierHash) {
+                responses.push({
+                    error: "PCD ticket nullifier has not been defined",
+                    status: 401
+                });
+                continue;
+            }
+
+            if (pcd.claim.partialTicket.eventId) {
+                const eventId = pcd.claim.partialTicket.eventId;
+                if (!supportedEvents.includes(eventId)) {
+                    responses.push({
+                        error: `PCD ticket is not for a supported event: ${eventId}`,
+                        status: 400
+                    });
+                    continue;
+                }
+            } else {
+                let eventError = false;
+                for (const eventId of pcd.claim.validEventIds ?? []) {
+                    if (!supportedEvents.includes(eventId)) {
+                        responses.push({
+                            error: `PCD ticket is not restricted to supported events: ${eventId}`,
+                            status: 400
+                        });
+                        eventError = true;
+                        break;
+                    }
+                }
+                if (eventError) continue;
+            }
+
+            if (!(await ZKEdDSAEventTicketPCDPackage.verify(pcd))) {
+                responses.push({ error: "ZK ticket PCD is not valid", status: 401 });
+                continue;
+            }
 
             try {
                 const pcd = await ZKEdDSAEventTicketPCDPackage.deserialize(inputPCD);
-
+                // console.log('pcd', pcd)
                 const groups: string[] = [];
 
                 // Extract the desired fields and collect ticket types
@@ -52,12 +107,12 @@ export const POST = async (req: NextRequest) => {
                 }
                 groups.push(ticketType);
 
-                const payload = {
-                    nonce: nonce,
-                    email: pcd.claim.partialTicket.attendeeEmail,
-                    external_id: pcd.claim.partialTicket.attendeeSemaphoreId,
-                    add_groups: groups.join(",")
-                };
+                // const payload = {
+                //     nonce: nonce,
+                //     email: pcd.claim.partialTicket.attendeeEmail,
+                //     external_id: pcd.claim.partialTicket.attendeeSemaphoreId,
+                //     add_groups: groups.join(",")
+                // };
 
                 // console.log('Payload:', payload); // Log payload for verification
 
@@ -66,7 +121,7 @@ export const POST = async (req: NextRequest) => {
                 } else {
                     throw new Error("Nullifier hash is undefined.");
                 }
-
+                nullifiers.add(pcd.claim.nullifierHash);
                 validPcds.push(pcd);
             } catch (error) {
                 console.error('Error processing PCD:', error);
@@ -106,6 +161,7 @@ export const POST = async (req: NextRequest) => {
             // Ensure 'payload' is available in the scope
             const payload = {
                 nonce: nonce,
+                nullifiers: Array.from(nullifiers),
                 email: validPcds[0].claim.partialTicket.attendeeEmail,
                 external_id: validPcds[0].claim.partialTicket.attendeeSemaphoreId,
                 add_groups: validPcds.filter(pcd => pcd.claim.partialTicket.eventId && pcd.claim.partialTicket.productId)

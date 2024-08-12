@@ -367,7 +367,7 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
 
             <Card className="shadow-lg mt-5">
                 <CardHeader className='text-center'>
-                    <p className="text-lg font-medium font-bold">Vouching</p>
+                    <p className="text-lg font-bold">Vouching</p>
                 </CardHeader>
                 <CardContent>
                     <div className='mt-2'>
