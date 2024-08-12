@@ -61,7 +61,7 @@ export async function handleRevokeAttestation({ user, wallets, chainId, schemaUI
         if (!wallet) throw new Error('Desired wallet not found');
 
         await wallet.switchChain(chainId);
-        const signature = await signTypedData(wallet, typedData, chainId);
+        const signature = await signTypedData(user, wallets, chainId, typedData);
         const resultAttestation = await revokeAttestation(signature, UID, token);
 
         Swal.fire({
