@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
             { name: "nullifier", value: ethers.encodeBytes32String(''), type: "bytes32" },
             { name: "category", value: ethers.encodeBytes32String('Community'), type: "bytes32" },
             { name: "subcategory", value: ethers.encodeBytes32String('Pop-up cities'), type: "bytes32" },
-            { name: "subsubcategory", value: [], type: "bytes32[]" },
+            { name: "subsubcategory", value: [ethers.encodeBytes32String('short')], type: "bytes32[]" },
             { name: "app", value: ethers.encodeBytes32String('Crecimiento'), type: "bytes32" }
         ]);
         
