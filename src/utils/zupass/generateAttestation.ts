@@ -1,4 +1,4 @@
-async function generateAttestation(token: string, attester: string, signature: string, nullifier:number) {
+async function generateAttestation(token: string, attester: string, signature: string, nullifier:any) {
     const url = '/api/zupass/createAttestation';
 
     const body = JSON.stringify({

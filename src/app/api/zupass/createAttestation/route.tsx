@@ -52,16 +52,20 @@ export async function POST(request: NextRequest) {
 
         const walletAddress = user.wallet;
         console.log(walletAddress);
+        console.log('nullifier route', nullifier)
+
         const schemaEncoder = new SchemaEncoder("address attester,bytes32 nullifier,bytes32 category,bytes32 subcategory,bytes32[] subsubcategory,bytes32 app");
         const encodedData = schemaEncoder.encodeData([
             { name: "attester", value: recipient, type: "address" },
-            { name: "nullifier", value: "", type: "bytes32" },
-            { name: "category", value: "", type: "bytes32" },
-            { name: "subcategory", value: "", type: "bytes32", },
+            //!TODO change schema to be string instead of bytes32
+            // { name: "nullifier", value: ethers.encodeBytes32String(nullifier), type: "bytes32" },
+            { name: "nullifier", value: ethers.encodeBytes32String(''), type: "bytes32" },
+            { name: "category", value: ethers.encodeBytes32String('Community'), type: "bytes32" },
+            { name: "subcategory", value: ethers.encodeBytes32String('Pop-up cities'), type: "bytes32" },
             { name: "subsubcategory", value: [], type: "bytes32[]" },
-            { name: "app", value: "", type: "bytes32" }
+            { name: "app", value: ethers.encodeBytes32String('Crecimiento'), type: "bytes32" }
         ]);
-
+        
 
         let flatSig = signature
         console.log('Signature', flatSig)

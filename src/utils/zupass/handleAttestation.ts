@@ -21,7 +21,7 @@ export const handleVouch = async (
         showErrorAlert('Failed to fetch nonce.');
         return;
     }
-
+    console.log('payload',payload)
     showLoadingAlert();
 
     try {
@@ -34,21 +34,22 @@ export const handleVouch = async (
         const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '84532', 10);
         const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0x29888513d12699874efdd00b930a3b1589f3c29b04775d17471c80ff5f4533c4";
         const attester = user?.wallet.address;
-        const nullifier= payload.nullifier;
+        const nullifier= payload.nullifiers[0];
         const schemaEncoder = new SchemaEncoder("address attester,bytes32 nullifier,bytes32 category,bytes32 subcategory,bytes32[] subsubcategory,bytes32 app");
         const encodedData = schemaEncoder.encodeData([
             { name: "attester", value: attester, type: "address" },
-            { name: "nullifier", value: "", type: "bytes32" },
-            { name: "category", value: "", type: "bytes32" },
-            { name: "subcategory", value: "", type: "bytes32" },
+            //!TODO change schema to be string instead of bytes32
+            // { name: "nullifier", value: ethers.encodeBytes32String(nullifier), type: "bytes32" },
+            { name: "nullifier", value: ethers.encodeBytes32String(''), type: "bytes32" },
+            { name: "category", value: ethers.encodeBytes32String('Community'), type: "bytes32" },
+            { name: "subcategory", value: ethers.encodeBytes32String('Pop-up cities'), type: "bytes32" },
             { name: "subsubcategory", value: [], type: "bytes32[]" },
-            { name: "app", value: "", type: "bytes32" }
-        ]);
-        
-        console.log('encodedData', encodedData);
-        
-            console.log('encodedData',encodedData)
+            { name: "app", value: ethers.encodeBytes32String('Crecimiento'), type: "bytes32" }
+            ]);
             
+            console.log('encodedData', encodedData);
+            console.log('nullifier handler', nullifier)
+            console.log('skipped')
 
         const domain = {
             name: 'EAS',
