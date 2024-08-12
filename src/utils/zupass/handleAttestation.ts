@@ -3,27 +3,18 @@ import { signTypedData } from '../signTypedData';
 import fetchNonce from '../fetchNonce';
 import { showLoadingAlert, showErrorAlert, showSuccessAlert } from '../alertUtils';
 import { SchemaEncoder } from '@ethereum-attestation-service/eas-sdk';
-
+import { ethers } from 'ethers';
 export const handleVouch = async (
-    recipient: string,
-    authStatus: boolean,
     user: any,
     wallets: any,
-    getAccessToken: any
+    getAccessToken: any,
+    payload:any
 ) => {
     if (!user?.wallet?.address) {
         showErrorAlert('User wallet address is not defined.');
         return;
     }
 
-    if (recipient === user.wallet.address) {
-        showErrorAlert("You can't vouch yourself.");
-        return;
-    }
-
-    const power = "1";
-    const endorsementType = "Social";
-    const platform = "Agora Pass";
     const nonce = await fetchNonce(user.wallet.address);
 
     if (nonce === undefined) {
@@ -34,22 +25,30 @@ export const handleVouch = async (
     showLoadingAlert();
 
     try {
-        const token = await getAccessToken();
+        const token =getAccessToken;
         if (!token) {
             showErrorAlert('Something went wrong. Try reloading the page.');
             return;
         }
 
         const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '84532', 10);
-        const schemaUID = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3";
+        const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0x29888513d12699874efdd00b930a3b1589f3c29b04775d17471c80ff5f4533c4";
         const attester = user?.wallet.address;
-
-        const schemaEncoder = new SchemaEncoder("uint8 power,string endorsementType,string platform");
+        const nullifier= payload.nullifier;
+        const schemaEncoder = new SchemaEncoder("address attester,bytes32 nullifier,bytes32 category,bytes32 subcategory,bytes32[] subsubcategory,bytes32 app");
         const encodedData = schemaEncoder.encodeData([
-            { name: "power", value: "1", type: "uint8" },
-            { name: "endorsementType", value: "Social", type: "string" },
-            { name: "platform", value: "Agora Pass", type: "string" }
+            { name: "attester", value: attester, type: "address" },
+            { name: "nullifier", value: "", type: "bytes32" },
+            { name: "category", value: "", type: "bytes32" },
+            { name: "subcategory", value: "", type: "bytes32" },
+            { name: "subsubcategory", value: [], type: "bytes32[]" },
+            { name: "app", value: "", type: "bytes32" }
         ]);
+        
+        console.log('encodedData', encodedData);
+        
+            console.log('encodedData',encodedData)
+            
 
         const domain = {
             name: 'EAS',
@@ -74,7 +73,7 @@ export const handleVouch = async (
 
         const value = {
             schema: schemaUID,
-            recipient: recipient,
+            recipient: attester,
             expirationTime: 0,
             revocable: true,
             refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
@@ -92,19 +91,14 @@ export const handleVouch = async (
         };
 
         const signature = await signTypedData(user, wallets, chainId, typedData);
+        console.log('signature', signature)
+        const resultAttestation = await generateAttestation(token, attester, signature, nullifier);
 
-        const resultAttestation = await generateAttestation(token, power, endorsementType, platform, recipient, attester, signature);
-
-        showSuccessAlert('Vouch created successfully.', 'Go to vouch', `/vouch/${resultAttestation.newAttestationUID}`);
+        showSuccessAlert('Zupass connected succesfully.', 'Go to profile', `/vouch/${resultAttestation.newAttestationUID}`);
 
     } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
-        if (errorMessage === '550') {
-            showErrorAlert("You don't have any vouches available.");
-        } else if (errorMessage === "You can't vouch yourself.") {
-            showErrorAlert("You can't vouch yourself.");
-        } else {
+        // const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+        console.log(error)
             showErrorAlert('An error occurred while creating the vouch.');
-        }
     }
 };

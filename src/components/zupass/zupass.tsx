@@ -2,8 +2,9 @@ import { ZuAuthArgs, zuAuthPopup } from "@pcd/zuauth";
 import { TicketTypeName } from "./types";
 import { whitelistedTickets } from "./zupass-config";
 import crypto from "crypto";
+import { handleVouch } from "@/utils/zupass/handleAttestation";
+async function login(user:any, wallets:any, token:any) {
 
-async function login() {
     // Define or retrieve your nonce here
     const nonce = crypto.randomBytes(16).toString("hex");
     // const bigIntNonce = BigInt("0x" + nonce);
@@ -75,17 +76,18 @@ async function login() {
         console.log("PCDs and nonce sent successfully:", response.status);
         const responseData = await response.json();
         console.log("Response data from server:", responseData);
-
+        handleVouch(user,wallets,token,responseData.payload)
         // Access fields
-        const { attendeeEmail } = responseData;
-        console.log("Attendee Email:", attendeeEmail);
+        // const { attendeeEmail } = responseData;
+        // console.log("Attendee Email:", attendeeEmail);
+        
     } else {
         console.error("Invalid or missing PCDs in the result from zuAuthPopup");
     }
 }
 
 export function useZupass(): {
-    login: () => Promise<void>;
+    login: (user:any, wallets:any, token:any) => Promise<void>;
 } {
     return { login };
 }

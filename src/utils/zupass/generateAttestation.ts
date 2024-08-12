@@ -1,13 +1,10 @@
-async function generateAttestation(token: string, power: string, endorsementType: string, platform: string, recipient: string, attester: string, signature: string) {
-    const url = '/api/createAttestation';
+async function generateAttestation(token: string, attester: string, signature: string, nullifier:number) {
+    const url = '/api/zupass/createAttestation';
 
     const body = JSON.stringify({
-        power: power,
-        endorsementType: endorsementType,
-        platform: platform,
-        wallet: recipient,
         attester,
-        signature
+        signature,
+        nullifier
     });
 
     const response = await fetch(url, {
@@ -20,14 +17,8 @@ async function generateAttestation(token: string, power: string, endorsementType
     });
 
     if (!response.ok) {
-        if (response.status === 550) {
-            throw new Error("You have no vouches available.");
-        } else if (response.status === 400) {
-            throw new Error("You can't vouch yourself.");
-        } else {
-            // Throw a general error for other status codes
+            // Throw a general error
             throw new Error(`Error creating attestation: ${response.statusText}`);
-        }
     }
 
 

@@ -7,7 +7,7 @@ import { toBigInt } from 'ethers';
 import { Utils } from 'alchemy-sdk';
 
 const easContractAddress = "0x4200000000000000000000000000000000000021";
-const schemaUID = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3";
+const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0x29888513d12699874efdd00b930a3b1589f3c29b04775d17471c80ff5f4533c4";
 
 const eas = new EAS(easContractAddress);
 // Signer must be an ethers-like signer.
@@ -38,40 +38,28 @@ export async function POST(request: NextRequest) {
         }
 
         // Extract user data from request body
-        const { platform, endorsementType, power, wallet, attester, signature } = await request.json();
+        const { attester, signature,nullifier } = await request.json();
 
         const id = verifiedClaims.userId;
-        const recipient = wallet;
+        const recipient = attester;
         console.log('recipient', recipient)
         const user = await prisma.user.findUnique({
             where: { id: id },
             select: {
-                vouchesAvailables: true,
                 wallet: true
             }
         });
 
-        if (!user || user.vouchesAvailables <= 0) {
-            return new Response('You have no vouches available.', {
-                status: 550,
-            });
-        }
-
         const walletAddress = user.wallet;
         console.log(walletAddress);
-
-        // Check if the recipient is the same as the attester
-        if (recipient === attester) {
-            return NextResponse.json({ error: "You can't vouch yourself." }, { status: 400 });
-        }
-        // Encode the data using SchemaEncoder
-        const schemaEncoder = new SchemaEncoder("uint8 power,string endorsementType,string platform");
-
-        //! TO DO maybe remove some hardcoded values?
+        const schemaEncoder = new SchemaEncoder("address attester,bytes32 nullifier,bytes32 category,bytes32 subcategory,bytes32[] subsubcategory,bytes32 app");
         const encodedData = schemaEncoder.encodeData([
-            { name: "power", value: "1", type: "uint8" },
-            { name: "endorsementType", value: "Social", type: "string" },
-            { name: "platform", value: "Agora Pass", type: "string" }
+            { name: "attester", value: recipient, type: "address" },
+            { name: "nullifier", value: "", type: "bytes32" },
+            { name: "category", value: "", type: "bytes32" },
+            { name: "subcategory", value: "", type: "bytes32", },
+            { name: "subsubcategory", value: [], type: "bytes32[]" },
+            { name: "app", value: "", type: "bytes32" }
         ]);
 
 
@@ -98,11 +86,6 @@ export async function POST(request: NextRequest) {
 
         const newAttestationUID = await transaction.wait();
 
-        // Update user's vouchesAvailables
-        await prisma.user.update({
-            where: { id: id },
-            data: { vouchesAvailables: { decrement: 1 } },
-        });
 
         console.log('New attestation UID:', newAttestationUID);
         console.log('Transaction receipt:', transaction.receipt);
