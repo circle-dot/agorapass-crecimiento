@@ -7,7 +7,7 @@ import { toBigInt } from 'ethers';
 import { Utils } from 'alchemy-sdk';
 
 const easContractAddress = "0x4200000000000000000000000000000000000021";
-const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0x59251879048d8c4ff9fce9a1cb10fbde1fa50eb50dfcaf531d057031b87dbcce";
+const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0x9075dee7661b8b445a2f0caa3fc96223b8cc2593c796c414aed93f43d022b0f9";
 
 const eas = new EAS(easContractAddress);
 // Signer must be an ethers-like signer.
@@ -58,16 +58,15 @@ export async function POST(request: NextRequest) {
         console.log(walletAddress);
         console.log('nullifier route', nullifier)
 
-        const schemaEncoder = new SchemaEncoder("address attester,string nullifier,bytes32 category,bytes32 subcategory,bytes32[] subsubcategory,bytes32 app");
+        const schemaEncoder = new SchemaEncoder("string nullifier,bytes32 category,bytes32 subcategory,bytes32[] subsubcategory,bytes32 issuer,bytes32 credentialType,bytes32 platform");
         const encodedData = schemaEncoder.encodeData([
-            { name: "attester", value: recipient, type: "address" },
-            //!TODO change schema to be string instead of bytes32
-            // { name: "nullifier", value: ethers.encodeBytes32String(nullifier), type: "bytes32" },
             { name: "nullifier", value: nullifier, type: "string" },
             { name: "category", value: ethers.encodeBytes32String('Community'), type: "bytes32" },
             { name: "subcategory", value: ethers.encodeBytes32String('Pop-up cities'), type: "bytes32" },
             { name: "subsubcategory", value: [ethers.encodeBytes32String('short')], type: "bytes32[]" },
-            { name: "app", value: ethers.encodeBytes32String('Crecimiento'), type: "bytes32" }
+            { name: "issuer", value: ethers.encodeBytes32String('AgoraCore'), type: "bytes32" },
+            { name: "credentialType", value: ethers.encodeBytes32String('Ticket'), type: "bytes32" },
+            { name: "platform", value: "Zupass", type: "bytes32" }
         ]);
 
 
