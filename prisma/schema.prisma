@@ -42,4 +42,5 @@ model Zupass {
   nullifier   String
   groups      String
   SemaphoreId String
+  Issuer      String
 }

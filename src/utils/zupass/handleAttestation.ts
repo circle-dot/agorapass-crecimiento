@@ -32,7 +32,7 @@ export const handleVouch = async (
         }
 
         const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '84532', 10);
-        const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0xdfa51aa622a107536859abd08fce30783cd75df398628449a4e6eec4a7fe0d06";
+        const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0x59251879048d8c4ff9fce9a1cb10fbde1fa50eb50dfcaf531d057031b87dbcce";
         const attester = user?.wallet.address;
         const nullifier = payload.nullifiers[0];
         const schemaEncoder = new SchemaEncoder("address attester,string nullifier,bytes32 category,bytes32 subcategory,bytes32[] subsubcategory,bytes32 app");
@@ -76,7 +76,7 @@ export const handleVouch = async (
             schema: schemaUID,
             recipient: attester,
             expirationTime: 0,
-            revocable: false,
+            revocable: true,
             refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
             data: encodedData,
             deadline: 0,

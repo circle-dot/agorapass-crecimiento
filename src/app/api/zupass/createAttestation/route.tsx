@@ -7,7 +7,7 @@ import { toBigInt } from 'ethers';
 import { Utils } from 'alchemy-sdk';
 
 const easContractAddress = "0x4200000000000000000000000000000000000021";
-const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0xdfa51aa622a107536859abd08fce30783cd75df398628449a4e6eec4a7fe0d06";
+const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0x59251879048d8c4ff9fce9a1cb10fbde1fa50eb50dfcaf531d057031b87dbcce";
 
 const eas = new EAS(easContractAddress);
 // Signer must be an ethers-like signer.
@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
             data: {
                 recipient: recipient,
                 expirationTime: toBigInt(0), // Unix timestamp of when attestation expires (0 for no expiration)
-                revocable: false,
+                revocable: true,
                 refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
                 data: encodedData
             },
