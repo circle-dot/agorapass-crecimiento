@@ -7,7 +7,7 @@ import { toBigInt } from 'ethers';
 import { Utils } from 'alchemy-sdk';
 
 const easContractAddress = "0x4200000000000000000000000000000000000021";
-const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0x29888513d12699874efdd00b930a3b1589f3c29b04775d17471c80ff5f4533c4";
+const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0xdfa51aa622a107536859abd08fce30783cd75df398628449a4e6eec4a7fe0d06";
 
 const eas = new EAS(easContractAddress);
 // Signer must be an ethers-like signer.
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Extract user data from request body
-        const { attester, signature,nullifier } = await request.json();
+        const { attester, signature, nullifier } = await request.json();
 
         const id = verifiedClaims.userId;
         const recipient = attester;
@@ -54,18 +54,18 @@ export async function POST(request: NextRequest) {
         console.log(walletAddress);
         console.log('nullifier route', nullifier)
 
-        const schemaEncoder = new SchemaEncoder("address attester,bytes32 nullifier,bytes32 category,bytes32 subcategory,bytes32[] subsubcategory,bytes32 app");
+        const schemaEncoder = new SchemaEncoder("address attester,string nullifier,bytes32 category,bytes32 subcategory,bytes32[] subsubcategory,bytes32 app");
         const encodedData = schemaEncoder.encodeData([
             { name: "attester", value: recipient, type: "address" },
             //!TODO change schema to be string instead of bytes32
             // { name: "nullifier", value: ethers.encodeBytes32String(nullifier), type: "bytes32" },
-            { name: "nullifier", value: ethers.encodeBytes32String(''), type: "bytes32" },
+            { name: "nullifier", value: nullifier, type: "string" },
             { name: "category", value: ethers.encodeBytes32String('Community'), type: "bytes32" },
             { name: "subcategory", value: ethers.encodeBytes32String('Pop-up cities'), type: "bytes32" },
             { name: "subsubcategory", value: [ethers.encodeBytes32String('short')], type: "bytes32[]" },
             { name: "app", value: ethers.encodeBytes32String('Crecimiento'), type: "bytes32" }
         ]);
-        
+
 
         let flatSig = signature
         console.log('Signature', flatSig)
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
             data: {
                 recipient: recipient,
                 expirationTime: toBigInt(0), // Unix timestamp of when attestation expires (0 for no expiration)
-                revocable: true,
+                revocable: false,
                 refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
                 data: encodedData
             },

@@ -8,7 +8,7 @@ export const handleVouch = async (
     user: any,
     wallets: any,
     getAccessToken: any,
-    payload:any
+    payload: any
 ) => {
     if (!user?.wallet?.address) {
         showErrorAlert('User wallet address is not defined.');
@@ -21,35 +21,35 @@ export const handleVouch = async (
         showErrorAlert('Failed to fetch nonce.');
         return;
     }
-    console.log('payload',payload)
+    console.log('payload', payload)
     showLoadingAlert();
 
     try {
-        const token =getAccessToken;
+        const token = getAccessToken;
         if (!token) {
             showErrorAlert('Something went wrong. Try reloading the page.');
             return;
         }
 
         const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '84532', 10);
-        const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0x29888513d12699874efdd00b930a3b1589f3c29b04775d17471c80ff5f4533c4";
+        const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0xdfa51aa622a107536859abd08fce30783cd75df398628449a4e6eec4a7fe0d06";
         const attester = user?.wallet.address;
-        const nullifier= payload.nullifiers[0];
-        const schemaEncoder = new SchemaEncoder("address attester,bytes32 nullifier,bytes32 category,bytes32 subcategory,bytes32[] subsubcategory,bytes32 app");
+        const nullifier = payload.nullifiers[0];
+        const schemaEncoder = new SchemaEncoder("address attester,string nullifier,bytes32 category,bytes32 subcategory,bytes32[] subsubcategory,bytes32 app");
         const encodedData = schemaEncoder.encodeData([
             { name: "attester", value: attester, type: "address" },
             //!TODO change schema to be string instead of bytes32
             // { name: "nullifier", value: ethers.encodeBytes32String(nullifier), type: "bytes32" },
-            { name: "nullifier", value: ethers.encodeBytes32String(''), type: "bytes32" },
+            { name: "nullifier", value: nullifier, type: "string" },
             { name: "category", value: ethers.encodeBytes32String('Community'), type: "bytes32" },
             { name: "subcategory", value: ethers.encodeBytes32String('Pop-up cities'), type: "bytes32" },
             { name: "subsubcategory", value: [ethers.encodeBytes32String('short')], type: "bytes32[]" },
             { name: "app", value: ethers.encodeBytes32String('Crecimiento'), type: "bytes32" }
-            ]);
-            
-            console.log('encodedData', encodedData);
-            console.log('nullifier handler', nullifier)
-            console.log('skipped')
+        ]);
+
+        console.log('encodedData', encodedData);
+        console.log('nullifier handler', nullifier)
+        console.log('skipped')
 
         const domain = {
             name: 'EAS',
@@ -76,7 +76,7 @@ export const handleVouch = async (
             schema: schemaUID,
             recipient: attester,
             expirationTime: 0,
-            revocable: true,
+            revocable: false,
             refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
             data: encodedData,
             deadline: 0,
@@ -100,6 +100,6 @@ export const handleVouch = async (
     } catch (error) {
         // const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
         console.log(error)
-            showErrorAlert('An error occurred while creating the vouch.');
+        showErrorAlert('An error occurred while creating the vouch.');
     }
 };
