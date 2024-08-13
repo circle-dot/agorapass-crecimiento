@@ -1,10 +1,11 @@
-async function generateAttestation(token: string, attester: string, signature: string, nullifier:any) {
+async function generateAttestation(token: string, attester: string, signature: string, nullifier: any, payload: any) {
     const url = '/api/zupass/createAttestation';
 
     const body = JSON.stringify({
         attester,
         signature,
-        nullifier
+        nullifier,
+        payload
     });
 
     const response = await fetch(url, {
@@ -17,8 +18,8 @@ async function generateAttestation(token: string, attester: string, signature: s
     });
 
     if (!response.ok) {
-            // Throw a general error
-            throw new Error(`Error creating attestation: ${response.statusText}`);
+        // Throw a general error
+        throw new Error(`Error creating attestation: ${response.statusText}`);
     }
 
 

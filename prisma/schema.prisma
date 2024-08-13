@@ -21,9 +21,6 @@ model User {
   wallet              String    @unique
   twitter             String?
   farcaster           String?
-  // displayTwitter      Boolean?  @default(false)
-  // displayFarcaster    Boolean?  @default(false)
-  // privyId             String    @unique
   chainType           String?   @default("ethereum")
   vouchesAvailables   Int       @default(3)
   vouchReset          DateTime?
@@ -41,6 +38,6 @@ model Zupass {
   email       String
   nullifier   String
   groups      String
-  SemaphoreId String
-  Issuer      String
+  semaphoreId String
+  issuer      String
 }

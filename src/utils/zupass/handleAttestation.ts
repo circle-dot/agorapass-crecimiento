@@ -46,9 +46,6 @@ export const handleVouch = async (
             { name: "platform", value: "Zupass", type: "bytes32" }
         ]);
 
-        console.log('encodedData', encodedData);
-        console.log('nullifier handler', nullifier)
-        console.log('skipped')
 
         const domain = {
             name: 'EAS',
@@ -92,7 +89,7 @@ export const handleVouch = async (
 
         const signature = await signTypedData(user, wallets, chainId, typedData);
         console.log('signature', signature)
-        const resultAttestation = await generateAttestation(token, attester, signature, nullifier);
+        const resultAttestation = await generateAttestation(token, attester, signature, nullifier, payload);
 
         showSuccessAlert('Zupass connected succesfully.', 'Go to profile', `/vouch/${resultAttestation.newAttestationUID}`);
 

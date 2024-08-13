@@ -39,22 +39,13 @@ export async function POST(request: NextRequest) {
         }
 
         // Extract user data from request body
-        const { attester, signature, nullifier } = await request.json();
+        const { attester, signature, nullifier, payload } = await request.json();
 
         const id = verifiedClaims.userId;
         const recipient = attester;
         console.log('recipient', recipient)
-        const user = await prisma.user.findUnique({
-            where: { id: id },
-            select: {
-                wallet: true
-            }
-        });
-        if (!user) {
-            console.error('User not found');
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
-        }
-        const walletAddress = user.wallet;
+
+        const walletAddress = attester;
         console.log(walletAddress);
         console.log('nullifier route', nullifier)
 
@@ -97,6 +88,38 @@ export async function POST(request: NextRequest) {
         console.log('New attestation UID:', newAttestationUID);
         console.log('Transaction receipt:', transaction.receipt);
 
+
+        const user = await prisma.user.findUnique({
+            where: { id: id }
+        });
+
+        if (!user) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        }
+
+
+        // Write to the Zupass table
+        const newZupass = await prisma.zupass.upsert({
+            where: { userId: user.id },
+            update: {
+                email: payload.email,
+                nullifier: nullifier,
+                groups: payload.add_groups,
+                semaphoreId: payload.external_id,
+                issuer: 'Zupass'
+            },
+            create: {
+                userId: user.id,
+                email: payload.email,
+                nullifier: nullifier,
+                groups: payload.add_groups,
+                semaphoreId: payload.external_id,
+                issuer: 'Zupass'
+            }
+        });
+        console.log('newZupass', newZupass);
+
+        //here i want to write to zupass table
         // Return success response with the newly created attestation UID
         return NextResponse.json({ newAttestationUID });
     } catch (error) {
