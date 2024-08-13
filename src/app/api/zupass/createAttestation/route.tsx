@@ -28,6 +28,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Authorization header missing or invalid' }, { status: 401 });
         }
 
+
         let verifiedClaims;
         try {
             verifiedClaims = await privy.verifyAuthToken(authorization);
@@ -49,7 +50,10 @@ export async function POST(request: NextRequest) {
                 wallet: true
             }
         });
-
+        if (!user) {
+            console.error('User not found');
+            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        }
         const walletAddress = user.wallet;
         console.log(walletAddress);
         console.log('nullifier route', nullifier)
