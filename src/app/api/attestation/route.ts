@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import privy from '@/lib/privy';
 import { EAS, SchemaEncoder } from '@ethereum-attestation-service/eas-sdk';
 import { ethers } from 'ethers';
-import prisma from '@/lib/db';
 
 const easContractAddress = "0x4200000000000000000000000000000000000021";
 const schemaUID =

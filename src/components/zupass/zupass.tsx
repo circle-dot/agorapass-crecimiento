@@ -3,7 +3,7 @@ import { TicketTypeName } from "./types";
 import { whitelistedTickets } from "./zupass-config";
 import crypto from "crypto";
 import { handleVouch } from "@/utils/zupass/handleAttestation";
-async function login(user:any, wallets:any, token:any) {
+async function login(user: any, wallets: any, token: any) {
 
     // Define or retrieve your nonce here
     const nonce = crypto.randomBytes(16).toString("hex");
@@ -47,8 +47,8 @@ async function login(user:any, wallets:any, token:any) {
         returnUrl: window.location.origin,
         watermark,
         config,
-        proofTitle: "Sign-In with Zupass",
-        proofDescription: "**Use Zupass to login to Agora Pass**",
+        proofTitle: "Connect with Zupass",
+        proofDescription: "**Connect your Zupass to Agora Pass**",
         multi: true
     };
 
@@ -76,19 +76,19 @@ async function login(user:any, wallets:any, token:any) {
         console.log("PCDs and nonce sent successfully:", response.status);
         const responseData = await response.json();
         console.log("Response data from server:", responseData);
-        console.log('responseData.payload',responseData.payload)
-        handleVouch(user,wallets,token,responseData.payload)
+        console.log('responseData.payload', responseData.payload)
+        handleVouch(user, wallets, token, responseData.payload)
         // Access fields
         // const { attendeeEmail } = responseData;
         // console.log("Attendee Email:", attendeeEmail);
-        
+
     } else {
         console.error("Invalid or missing PCDs in the result from zuAuthPopup");
     }
 }
 
 export function useZupass(): {
-    login: (user:any, wallets:any, token:any) => Promise<void>;
+    login: (user: any, wallets: any, token: any) => Promise<void>;
 } {
     return { login };
 }
