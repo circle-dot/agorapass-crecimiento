@@ -1,11 +1,10 @@
-"use client"
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -19,7 +18,8 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { getAvatar } from '../ui/users/getAvatarImg';
 import { useFetchUser } from '@/hooks/useFetchUser';
 import ZupassButton from '../layout/ZupassButton';
-function ProfileAvatar() {
+
+const ProfileAvatar = () => {
     const [updateTrigger, setUpdateTrigger] = useState(false);
     const { data, isLoading, error } = useFetchUser(updateTrigger);
     const { authenticated, logout, ready } = usePrivy();
@@ -32,48 +32,40 @@ function ProfileAvatar() {
     const attestationReceived = data?.attestationReceived || 0;
     const avatarType = data?.avatarType || 'blockies';
 
-    // Check if running on client side before calling getAvatar
-    const avatar = typeof window !== 'undefined' ? getAvatar(wallet, avatarType) : null;
+    const isClient = typeof window !== 'undefined';
+    const avatar = useMemo(() => isClient ? getAvatar(wallet, avatarType) : null, [wallet, avatarType]);
+
+    const handleNewUserCreation = useCallback(async (user: any) => {
+        Swal.fire({
+            title: 'Creating user...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        try {
+            await createUser(user);
+            Swal.fire({
+                icon: 'success',
+                title: 'User created successfully!',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => window.location.reload());
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to create user. Please try again.'
+            });
+        }
+    }, []);
 
     const { login } = useLogin({
         onComplete: async (user, isNewUser) => {
-            if (isNewUser) {
-                // Show loading Swal
-                Swal.fire({
-                    title: 'Creating user...',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-                try {
-                    // Call createUser function for new users
-                    await createUser(user);
-
-                    // Show success Swal
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'User created successfully!',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        // Trigger component update or redirect
-                        window.location.reload();
-                    });
-                } catch (error) {
-                    // Show error Swal
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Failed to create user. Please try again.'
-                    });
-                }
-            }
+            if (isNewUser) await handleNewUserCreation(user);
         },
-        onError: (error) => {
-            console.log(error);
-            // Show error Swal
+        onError: () => {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -82,8 +74,7 @@ function ProfileAvatar() {
         },
     });
 
-    // Disable login when Privy is not ready or the user is already authenticated
-    const disableLogin = !ready || (ready && authenticated);
+    const disableLogin = !ready || authenticated;
 
     return (
         <>
@@ -97,15 +88,20 @@ function ProfileAvatar() {
                                 ) : (
                                     avatar
                                 )}
-                                {/* <AvatarFallback className="flex items-center justify-center">{email?.charAt(0)}</AvatarFallback> */}
                             </Avatar>
                             <span className="sr-only">Toggle user menu</span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuItem asChild><Link href='/me' className='cursor-pointer'>My Profile</Link></DropdownMenuItem>
-                        <DropdownMenuItem ><ZupassButton /></DropdownMenuItem>
-                        <DropdownMenuItem asChild><a href={"mailto:" + process.env.NEXT_PUBLIC_MAIL_SUPPORT} className='cursor-pointer'>Support</a></DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <Link href='/me' className='cursor-pointer'>My Profile</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <a href={"mailto:" + process.env.NEXT_PUBLIC_MAIL_SUPPORT} className='cursor-pointer'>Support</a>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <ZupassButton />
+                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={logout} className='cursor-pointer'>
                             Log out
@@ -120,6 +116,6 @@ function ProfileAvatar() {
             )}
         </>
     );
-}
+};
 
 export default ProfileAvatar;

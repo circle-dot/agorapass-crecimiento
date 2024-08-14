@@ -6,18 +6,18 @@ import { Button } from "@/components/ui/button";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 
 export default function ZupassButton() {
-    
+
     const [loading, setLoading] = useState(false);
     const { login } = useZupass();
     const [multiPCDs] = useZupassPopupMessages();
 
-    
+
     useEffect(() => {
         if (multiPCDs) {
             console.log("🚀 ~ multiPCDs:", multiPCDs);
         }
     }, [multiPCDs]);
-    
+
     const { getAccessToken, user } = usePrivy();
     const { wallets } = useWallets();
     const loginHandler = async () => {
@@ -34,6 +34,7 @@ export default function ZupassButton() {
     }
 
     return (
+        // <Button onClick={loginHandler} className="bg-accentdark hover:bg-accentdarker text-[#19473f] font-semibold font-[Tahoma]">Connect Zupass</Button>
         <Button onClick={loginHandler} className="bg-accentdark hover:bg-accentdarker text-[#19473f] font-semibold font-[Tahoma]">Connect Zupass</Button>
     );
 }
