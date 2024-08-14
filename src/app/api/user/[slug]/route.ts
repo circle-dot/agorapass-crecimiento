@@ -15,7 +15,12 @@ export async function GET(
             twitter: true,
             farcaster: true,
             createdAt: true,
-            name: true
+            name: true,
+            Zupass: {
+                select: {
+                    groups: true,
+                },
+            },
         },
     });
 

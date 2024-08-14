@@ -240,6 +240,18 @@ export default function Page({ params }: { params: { slug: string } }) {
                             </>
                         )}
 
+                        {userData?.Zupass?.groups ? 
+                        
+                        (
+                            <>
+                            <p>Zupass connected:</p>
+                            {'Member of ' + userData?.Zupass.groups.split(',').join(', ')}
+                            <hr className="my-4 border-gray-300" />
+                            </>
+                        )
+                        : null}
+
+
 
                         <VouchButtonCustom recipient={address} className='!w-full py-1' authStatus={authStatus} />
                     </div>
