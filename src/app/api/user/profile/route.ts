@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import privy from '@/lib/privy';
 
+export const dynamic = 'force-dynamic'; // Force Next.js to treat this route as dynamic
 export async function GET(request: NextRequest) {
     try {
         // Verify Privy token
