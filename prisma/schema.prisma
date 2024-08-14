@@ -38,6 +38,6 @@ model Zupass {
   email       String
   nullifier   String
   groups      String
-  semaphoreId String
+  semaphoreId String @unique
   issuer      String
 }

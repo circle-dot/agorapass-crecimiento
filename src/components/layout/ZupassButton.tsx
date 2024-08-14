@@ -4,7 +4,7 @@ import { useZupassPopupMessages } from "@pcd/passport-interface";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
-
+import { showLoadingAlert } from "@/utils/alertUtils";
 export default function ZupassButton() {
 
     const [loading, setLoading] = useState(false);
@@ -22,6 +22,7 @@ export default function ZupassButton() {
     const { wallets } = useWallets();
     const loginHandler = async () => {
         setLoading(true);
+        showLoadingAlert();
         const token = await getAccessToken();
         await login(user, wallets, token);
         setLoading(false);

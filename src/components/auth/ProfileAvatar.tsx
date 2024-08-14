@@ -16,25 +16,20 @@ import createUser from '@/utils/createUser';
 import Swal from 'sweetalert2';
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { getAvatar } from '../ui/users/getAvatarImg';
-import { useFetchUser } from '@/hooks/useFetchUser';
+import { useFetchUserProfile } from '@/hooks/useFetchUser';
 import ZupassButton from '../layout/ZupassButton';
 
 const ProfileAvatar = () => {
     const [updateTrigger, setUpdateTrigger] = useState(false);
-    const { data, isLoading, error } = useFetchUser(updateTrigger);
+    const { data, isLoading, error } = useFetchUserProfile(updateTrigger);
     const { authenticated, logout, ready } = usePrivy();
 
-    const name = data?.name || 'Unknown';
     const wallet = data?.wallet || 'Unknown';
-    const bio = data?.bio || '';
-    const twitter = data?.twitter || '';
-    const rankScore = data?.rankScore || 0;
-    const attestationReceived = data?.attestationReceived || 0;
     const avatarType = data?.avatarType || 'blockies';
-
+    const zupassUser = data?.Zupass
     const isClient = typeof window !== 'undefined';
     const avatar = useMemo(() => isClient ? getAvatar(wallet, avatarType) : null, [wallet, avatarType]);
-
+    console.log('zupassUser', data)
     const handleNewUserCreation = useCallback(async (user: any) => {
         Swal.fire({
             title: 'Creating user...',
@@ -99,9 +94,17 @@ const ProfileAvatar = () => {
                         <DropdownMenuItem asChild>
                             <a href={"mailto:" + process.env.NEXT_PUBLIC_MAIL_SUPPORT} className='cursor-pointer'>Support</a>
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <ZupassButton />
-                        </DropdownMenuItem>
+                        {zupassUser ? (
+                            <DropdownMenuItem disabled={true}>
+                                Zupass connected 🎉
+                            </DropdownMenuItem>
+                        ) : (
+                            <DropdownMenuItem>
+                                <ZupassButton />
+                            </DropdownMenuItem>
+                        )}
+
+
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={logout} className='cursor-pointer'>
                             Log out
