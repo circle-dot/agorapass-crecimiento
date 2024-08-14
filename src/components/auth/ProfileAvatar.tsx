@@ -29,7 +29,6 @@ const ProfileAvatar = () => {
     const zupassUser = data?.Zupass
     const isClient = typeof window !== 'undefined';
     const avatar = useMemo(() => isClient ? getAvatar(wallet, avatarType) : null, [wallet, avatarType]);
-    console.log('zupassUser', data)
     const handleNewUserCreation = useCallback(async (user: any) => {
         Swal.fire({
             title: 'Creating user...',

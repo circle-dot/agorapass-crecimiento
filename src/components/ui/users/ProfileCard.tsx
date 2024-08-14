@@ -44,7 +44,6 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
 
     const { linkTwitter, linkFarcaster } = useLinkAccount({
         onSuccess: (user, linkMethod, linkedAccount) => {
-            console.log(user, linkMethod, linkedAccount);
 
             getAccessToken()
                 .then((token) => {
@@ -97,7 +96,7 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
     });
 
 
-    const { email, wallet, rankScore, vouchesAvailables, createdAt, vouchReset, name, bio, avatarType } = data || {};
+    const { email, wallet, vouchesAvailables, createdAt, vouchReset, name, bio, avatarType, Zupass } = data || {};
     const [remainingTime, setRemainingTime] = useState('00:00:00');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -236,7 +235,8 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                             />
 
                         </div>
-                    </motion.div>
+                        {Zupass?.groups ? 'Member of ' + Zupass.groups.split(',').join(', ') : null}
+                        </motion.div>
                 </CardHeader>
                 <CardContent className="text-center">
                     <motion.div

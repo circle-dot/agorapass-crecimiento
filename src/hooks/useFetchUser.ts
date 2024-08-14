@@ -109,7 +109,7 @@ export const useFetchUserProfile = (updateTrigger?: boolean) => {
     const { getAccessToken, user: privyUser } = usePrivy();
 
     return useQuery({
-        queryKey: ['user', updateTrigger],  // Include `updateTrigger` in the query key
+        queryKey: ['userProfile', updateTrigger],  // Include `updateTrigger` in the query key
         queryFn: () => fetchUserProfile(getAccessToken, privyUser),
         placeholderData: true,  // Keep previous data while fetching new data
         refetchOnWindowFocus: false,  // Prevent refetch on window focus, if desired

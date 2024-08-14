@@ -96,6 +96,6 @@ export const handleVouch = async (
     } catch (error) {
         // const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
         console.log(error)
-        showErrorAlert('An error occurred while creating the vouch.');
+        showErrorAlert('An error occurred while attesting to connect your zupass');
     }
 };

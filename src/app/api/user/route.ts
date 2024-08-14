@@ -23,7 +23,23 @@ export async function GET(request: NextRequest) {
             where: {
                 id: verifiedClaims.userId,
             },
+            select: {
+                email: true,
+                vouchesAvailables: true,
+                createdAt:true,
+                vouchReset:true,
+                name:true,
+                bio:true,
+                avatarType: true,
+                wallet: true,
+                Zupass: {
+                    select: {
+                        groups: true,
+                    },
+                },
+            },
         });
+        
 
         if (!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });

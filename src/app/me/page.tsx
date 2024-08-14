@@ -18,7 +18,6 @@ export default function Page() {
   const [updateTrigger, setUpdateTrigger] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const { data, isLoading, error } = useFetchUser(updateTrigger);
-
   // Define schemaId and address to be used in the query
   const schemaId = process.env.NEXT_PUBLIC_SCHEMA_ID || "0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"; // Replace with your schemaId
   const attester = data?.wallet;
@@ -80,7 +79,6 @@ export default function Page() {
   if (error) return <p>Error loading profile: {error.message}</p>;
   if (!data) return <p>User not found</p>;
   if (receivedError) return <p>Error loading attestations: {receivedError.message}</p>;
-
   // Render the content once data is loaded
   return (
     <div className="p-6 bg-gray-100 w-full">
