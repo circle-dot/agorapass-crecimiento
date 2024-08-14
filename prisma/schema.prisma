@@ -40,4 +40,5 @@ model Zupass {
   groups      String
   semaphoreId String @unique
   issuer      String
+  attestationUID String
 }

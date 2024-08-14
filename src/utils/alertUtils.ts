@@ -38,3 +38,19 @@ export const showSuccessAlert = (message: string, confirmText: string, redirectU
         }
     });
 };
+
+export const showOnlySucessWithRedirect = (message: string, confirmText: string, redirectUrl: string) => {
+    MySwal.fire({
+        title: "Zupass connected!",
+        text: message,
+        confirmButtonText: confirmText,
+        allowOutsideClick: false,
+        icon: "success"
+      }).then((result) => {
+        if (result.isConfirmed) {
+            // router.push(redirectUrl)
+            window.location.href = redirectUrl;
+        }
+    });
+
+}

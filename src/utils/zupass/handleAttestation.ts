@@ -1,9 +1,10 @@
 import generateAttestation from './generateAttestation';
 import { signTypedData } from '../signTypedData';
 import fetchNonce from '../fetchNonce';
-import { showLoadingAlert, showErrorAlert, showSuccessAlert } from '../alertUtils';
+import { showLoadingAlert, showErrorAlert, showOnlySucessWithRedirect } from '../alertUtils';
 import { SchemaEncoder } from '@ethereum-attestation-service/eas-sdk';
 import { ethers } from 'ethers';
+
 export const handleVouch = async (
     user: any,
     wallets: any,
@@ -91,7 +92,7 @@ export const handleVouch = async (
         console.log('signature', signature)
         const resultAttestation = await generateAttestation(token, attester, signature, nullifier, payload);
 
-        showSuccessAlert('Zupass connected succesfully.', 'Go to profile', `/vouch/${resultAttestation.newAttestationUID}`);
+        showOnlySucessWithRedirect('Zupass connected succesfully.', 'Go to profile', `/me`);
 
     } catch (error) {
         // const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';

@@ -106,7 +106,8 @@ export async function POST(request: NextRequest) {
                 nullifier: nullifier,
                 groups: payload.add_groups,
                 semaphoreId: payload.external_id,
-                issuer: 'Zupass'
+                issuer: 'Zupass',
+                attestationUID: newAttestationUID
             },
             create: {
                 userId: user.id,
@@ -114,7 +115,8 @@ export async function POST(request: NextRequest) {
                 nullifier: nullifier,
                 groups: payload.add_groups,
                 semaphoreId: payload.external_id,
-                issuer: 'Zupass'
+                issuer: 'Zupass',
+                attestationUID: newAttestationUID
             }
         });
         console.log('newZupass', newZupass);
