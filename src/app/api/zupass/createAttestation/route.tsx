@@ -45,6 +45,8 @@ export async function POST(request: NextRequest) {
         const recipient = attester;
 
         const walletAddress = attester;
+        const groups = payload.add_groups
+        console.log('groups1',groups)
 
         const schemaEncoder = new SchemaEncoder("string nullifier,bytes32 category,bytes32 subcategory,bytes32[] subsubcategory,bytes32 issuer,bytes32 credentialType,bytes32 platform");
         const encodedData = schemaEncoder.encodeData([
@@ -52,7 +54,7 @@ export async function POST(request: NextRequest) {
             { name: "category", value: ethers.encodeBytes32String('Community'), type: "bytes32" },
             { name: "subcategory", value: ethers.encodeBytes32String('Pop-up cities'), type: "bytes32" },
             { name: "subsubcategory", value: [ethers.encodeBytes32String('short')], type: "bytes32[]" },
-            { name: "issuer", value: ethers.encodeBytes32String('AgoraCore'), type: "bytes32" },
+            { name: "issuer", value: ethers.encodeBytes32String(groups), type: "bytes32" },
             { name: "credentialType", value: ethers.encodeBytes32String('Ticket'), type: "bytes32" },
             { name: "platform", value: "Zupass", type: "bytes32" }
         ]);
