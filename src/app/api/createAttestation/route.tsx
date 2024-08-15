@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
         let verifiedClaims;
         try {
             verifiedClaims = await privy.verifyAuthToken(authorization);
-            console.log('verifiedClaims', verifiedClaims);
+            // console.log('verifiedClaims', verifiedClaims);
         } catch (error) {
             console.error('Token verification failed:', error);
             return NextResponse.json({ error: 'Token verification failed' }, { status: 401 });
@@ -42,7 +42,6 @@ export async function POST(request: NextRequest) {
 
         const id = verifiedClaims.userId;
         const recipient = wallet;
-        console.log('recipient', recipient)
         const user = await prisma.user.findUnique({
             where: { id: id },
             select: {
@@ -58,7 +57,6 @@ export async function POST(request: NextRequest) {
         }
 
         const walletAddress = user.wallet;
-        console.log(walletAddress);
 
         // Check if the recipient is the same as the attester
         if (recipient === attester) {
@@ -76,9 +74,9 @@ export async function POST(request: NextRequest) {
 
 
         let flatSig = signature
-        console.log('Signature', flatSig)
+        // console.log('Signature', flatSig)
         let expandedSig = Utils.splitSignature(flatSig);
-        console.log('expandedSig', expandedSig)
+        // console.log('expandedSig', expandedSig)
 
 
         // Create the delegated attestation
@@ -104,8 +102,8 @@ export async function POST(request: NextRequest) {
             data: { vouchesAvailables: { decrement: 1 } },
         });
 
-        console.log('New attestation UID:', newAttestationUID);
-        console.log('Transaction receipt:', transaction.receipt);
+        // console.log('New attestation UID:', newAttestationUID);
+        // console.log('Transaction receipt:', transaction.receipt);
 
         // Return success response with the newly created attestation UID
         return NextResponse.json({ newAttestationUID });

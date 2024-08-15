@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
         let verifiedClaims;
         try {
             verifiedClaims = await privy.verifyAuthToken(authorization);
-            console.log('verifiedClaims', verifiedClaims);
+            // console.log('verifiedClaims', verifiedClaims);
         } catch (error) {
             console.error('Token verification failed:', error);
             return NextResponse.json({ error: 'Token verification failed' }, { status: 401 });
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
         // Extract user data from request body
         const { name, email, bio, wallet } = await request.json();
-        console.log('Received data:', { name, email, bio, wallet });
+        // console.log('Received data:', { name, email, bio, wallet });
 
 
 
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
             },
         });
         const newAttestationUID = await tx.wait();
-        console.log("New attestation UID:", newAttestationUID);
+        // console.log("New attestation UID:", newAttestationUID);
 
 
 

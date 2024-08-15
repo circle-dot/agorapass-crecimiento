@@ -22,7 +22,6 @@ export const handleVouch = async (
         showErrorAlert('Failed to fetch nonce.');
         return;
     }
-    console.log('payload', payload)
     showLoadingAlert();
 
     try {
@@ -90,7 +89,7 @@ export const handleVouch = async (
         };
 
         const signature = await signTypedData(user, wallets, chainId, typedData);
-        console.log('signature', signature)
+        // console.log('signature', signature)
         const resultAttestation = await generateAttestation(token, attester, signature, nullifier, payload);
 
         showOnlySucessWithRedirect('Zupass connected succesfully.', 'Go to profile', `/me`);

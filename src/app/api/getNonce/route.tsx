@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     const signer = new ethers.Wallet(PRIVATE_KEY, provider);
     await eas.connect(signer);
     const easNonce = await eas.getNonce(attester);
-    console.log('easNonce', easNonce);
+    // console.log('easNonce', easNonce);
 
     return NextResponse.json({ easNonce: easNonce.toString() });
 }

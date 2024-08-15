@@ -76,7 +76,7 @@ async function login(user: any, wallets: any, token: any) {
         console.log("PCDs and nonce sent successfully:", response.status);
         const responseData = await response.json();
         console.log("Response data from server:", responseData);
-        console.log('responseData.payload', responseData.payload)
+        // console.log('responseData.payload', responseData.payload)
         handleVouch(user, wallets, token, responseData.payload)
         // Access fields
         // const { attendeeEmail } = responseData;

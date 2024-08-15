@@ -62,7 +62,7 @@ export default function Page() {
           console.error('Error updating user:', errorData);
         } else {
           const updatedUser = await response.json();
-          console.log('User updated successfully:', updatedUser);
+          // console.log('User updated successfully:', updatedUser);
           setUpdateTrigger(prev => !prev);  // Update the trigger to refetch data
         }
       } catch (error) {

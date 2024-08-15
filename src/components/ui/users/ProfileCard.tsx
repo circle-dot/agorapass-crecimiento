@@ -73,7 +73,7 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                     return response.json();
                 })
                 .then((updatedUser) => {
-                    console.log('User updated successfully', updatedUser);
+                    // console.log('User updated successfully', updatedUser);
                     MySwal.fire({
                         icon: 'success',
                         title: 'Success!',

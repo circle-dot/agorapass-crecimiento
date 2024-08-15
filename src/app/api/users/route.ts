@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
     try {
 
         const { name, email, bio, wallet, id } = await request.json();
-        console.log('Received data:', { name, email, bio, wallet });
+        // console.log('Received data:', { name, email, bio, wallet });
 
         // const id = verifiedClaims.userId
         const userEmail = email?.address || ''

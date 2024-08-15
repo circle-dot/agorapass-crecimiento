@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
         let verifiedClaims;
         try {
             verifiedClaims = await privy.verifyAuthToken(authorization);
-            console.log('verifiedClaims', verifiedClaims);
+            // console.log('verifiedClaims', verifiedClaims);
         } catch (error) {
             console.error('Token verification failed:', error);
             return NextResponse.json({ error: 'Token verification failed' }, { status: 401 });
@@ -43,11 +43,8 @@ export async function POST(request: NextRequest) {
 
         const id = verifiedClaims.userId;
         const recipient = attester;
-        console.log('recipient', recipient)
 
         const walletAddress = attester;
-        console.log(walletAddress);
-        console.log('nullifier route', nullifier)
 
         const schemaEncoder = new SchemaEncoder("string nullifier,bytes32 category,bytes32 subcategory,bytes32[] subsubcategory,bytes32 issuer,bytes32 credentialType,bytes32 platform");
         const encodedData = schemaEncoder.encodeData([
@@ -62,9 +59,9 @@ export async function POST(request: NextRequest) {
 
 
         let flatSig = signature
-        console.log('Signature', flatSig)
+        // console.log('Signature', flatSig)
         let expandedSig = Utils.splitSignature(flatSig);
-        console.log('expandedSig', expandedSig)
+        // console.log('expandedSig', expandedSig)
 
 
         // Create the delegated attestation
@@ -85,8 +82,8 @@ export async function POST(request: NextRequest) {
         const newAttestationUID = await transaction.wait();
 
 
-        console.log('New attestation UID:', newAttestationUID);
-        console.log('Transaction receipt:', transaction.receipt);
+        // console.log('New attestation UID:', newAttestationUID);
+        // console.log('Transaction receipt:', transaction.receipt);
 
 
         const user = await prisma.user.findUnique({
@@ -119,7 +116,7 @@ export async function POST(request: NextRequest) {
                 attestationUID: newAttestationUID
             }
         });
-        console.log('newZupass', newZupass);
+        // console.log('newZupass', newZupass);
 
         //here i want to write to zupass table
         // Return success response with the newly created attestation UID

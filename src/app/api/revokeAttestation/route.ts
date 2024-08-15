@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
         let verifiedClaims;
         try {
             verifiedClaims = await privy.verifyAuthToken(authorization);
-            console.log('verifiedClaims', verifiedClaims);
+            // console.log('verifiedClaims', verifiedClaims);
         } catch (error) {
             console.error('Token verification failed:', error);
             return NextResponse.json({ error: 'Token verification failed' }, { status: 401 });
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
                 uid: uid,
             }
         });
-        console.log(revoke)
+        // console.log(revoke)
 
         const transaction = await eas.revokeByDelegation({
             schema: schemaUID,
