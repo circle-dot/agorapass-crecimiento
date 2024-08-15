@@ -46,7 +46,6 @@ export async function POST(request: NextRequest) {
 
         const walletAddress = attester;
         const groups = payload.add_groups
-        console.log('groups1',groups)
 
         const schemaEncoder = new SchemaEncoder("string nullifier,bytes32 category,bytes32 subcategory,bytes32[] subsubcategory,bytes32 issuer,bytes32 credentialType,bytes32 platform");
         const encodedData = schemaEncoder.encodeData([
