@@ -1,6 +1,7 @@
 import prisma from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
 import { DateTime } from 'luxon';
+import { Prisma } from '@prisma/client'
 
 export async function POST(request: NextRequest) {
     try {
@@ -55,18 +56,22 @@ export async function GET(req: NextRequest) {
     const skip = (pageNumber - 1) * pageSize;
 
     try {
+        const whereClause: Prisma.UserWhereInput = searchQuery
+            ? {
+                name: {
+                    contains: searchQuery,
+                    mode: 'insensitive' as Prisma.QueryMode,
+                },
+            }
+            : {};
+
         const users = await prisma.user.findMany({
             skip,
             take: pageSize,
             orderBy: {
                 rankScore: sortOrder,
             },
-            where: {
-                name: {
-                    contains: searchQuery,
-                    mode: 'insensitive', // Case-insensitive search
-                },
-            },
+            where: whereClause,
             select: {
                 email: true,
                 wallet: true,
@@ -79,15 +84,8 @@ export async function GET(req: NextRequest) {
             },
         });
 
-
-
         const totalUsers = await prisma.user.count({
-            where: {
-                name: {
-                    contains: searchQuery,
-                    mode: 'insensitive',
-                },
-            },
+            where: whereClause,
         });
 
         const hasMore = skip + pageSize < totalUsers;
