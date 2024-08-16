@@ -54,7 +54,6 @@ function Page() {
             debounceFetch.cancel();
         };
     }, [inView, fetchNextPage, hasNextPage]);
-    console.log('some cool af data', data)
     return (
         <div className='flex flex-col w-full p-4'>
             <div className='flex flex-col md:flex-row md:justify-center md:items-center gap-4 p-4'>
@@ -123,12 +122,18 @@ function Page() {
                         })
                     ) : (
                         <>
-                            {/* {data?.pages.map((page, i) =>
-                                page.rankings.map((ranking: any, index: number) => (
-                                    <><p>this is a placeholder</p></>
-                                ))
-                            )} */}
+                            {data?.pages.map((page, i) => (
+                                <div key={i}>
+                                    {page.rankings.map((ranking: any) => (
+                                        <div key={ranking.id}>
+                                            <p>Address: {ranking.address}</p>
+                                            <p>Value: {ranking.value}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            ))}
                         </>
+
                     )}
                 </div>
                 <div ref={ref}>

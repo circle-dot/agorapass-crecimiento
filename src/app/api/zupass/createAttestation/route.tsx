@@ -120,6 +120,29 @@ export async function POST(request: NextRequest) {
         // console.log('newZupass', newZupass);
 
         //here i want to write to zupass table
+
+        const EIGENSCORE_URL = process.env.EIGENSCORE_URL || 'http://localhost:8000';
+        const EIGENSCORE_API_TOKEN = process.env.EIGENSCORE_API_TOKEN || '';
+
+        // Send the POST request to the Python app
+        const response = await fetch(`${EIGENSCORE_URL}/rankings`, {
+            method: 'GET',
+            headers: {
+                'access-token': EIGENSCORE_API_TOKEN,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        // Handle the response from the Python app
+        if (!response.ok) {
+            throw new Error('Failed to update eigenScore');
+        }
+
+        const result = await response.json();
+        console.log('Data updated successfully:', result);
+
+
+
         // Return success response with the newly created attestation UID
         return NextResponse.json({ newAttestationUID });
     } catch (error) {
