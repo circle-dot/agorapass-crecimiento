@@ -48,7 +48,7 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
         }
     }, [ready, authenticated]);
 
-    const displayName = truncateName(name) || truncateWallet(wallet);
+    const displayName = name ? truncateName(name) : truncateWallet(wallet);
     const fullName = name || wallet;
     const displayBio = bio || "No bio provided";
     const avatar = getAvatar(wallet, avatarType);
