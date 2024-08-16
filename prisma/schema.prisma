@@ -33,13 +33,13 @@ model User {
 }
 
 model Zupass {
-  user        User   @relation(fields: [userId], references: [id])
-  userId      String @unique
-  email       String
-  nullifier   String
-  groups      String
-  semaphoreId String @unique
-  issuer      String
+  user           User   @relation(fields: [userId], references: [id])
+  userId         String @unique
+  email          String
+  nullifier      String
+  groups         String
+  semaphoreId    String @unique
+  issuer         String
   attestationUID String
 }
 
@@ -48,4 +48,5 @@ model Ranking {
   address   String   @unique
   value     Float
   createdAt DateTime @default(now())
+  position  String
 }
