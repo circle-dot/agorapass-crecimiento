@@ -1,6 +1,7 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { motion } from 'framer-motion';
 import useRankings from '@/hooks/useRankings';
 import { Button } from '@/components/ui/button';
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
@@ -13,8 +14,16 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Skeleton } from '@/components/ui/skeleton';
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Avatar } from "@/components/ui/avatar";
+
+import {
+    CardHeader
+} from "@/components/ui/card";
+import { MetaMaskAvatar } from 'react-metamask-avatar';
+import truncateWallet from '@/utils/truncateWallet';
+import { BlendIcon } from 'lucide-react';
+import { normalizeAddress } from '@/utils/normalizeAddress';
 
 const filters = [
     { valueFilter: "desc", label: "Order by: Desc" },
@@ -46,6 +55,10 @@ function Page() {
 
     return (
         <div className='flex flex-col w-full p-4'>
+            <div className='flex flex-row font-semibold justify-center items-center'>
+                <p>  Wanna see who vouched for who and when?
+                    <Link href='/vouches' className='font-bold text-blue-600 hover:underline ml-0.5'>Check the vouch history</Link></p>
+            </div>
             <div className='flex flex-col md:flex-row md:justify-center md:items-center gap-4 p-4'>
                 <Popover open={openFilter} onOpenChange={setOpenFilter}>
                     <PopoverTrigger asChild>
@@ -90,70 +103,68 @@ function Page() {
                 </Popover>
             </div>
 
-            <div className='flex flex-col justify-center'>
-                <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Ranking
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Address
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Value
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                            {isLoading ? (
-                                Array.from({ length: 12 }).map((_, key) => (
-                                    <tr key={key}>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <Skeleton className="h-4 w-[250px]" />
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <Skeleton className="h-4 w-[250px]" />
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <Skeleton className="h-4 w-[200px]" />
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <>
-                                    {data?.pages.flatMap((page, i) =>
-                                        page.rankings.map((ranking: any) => (
-                                            <tr key={ranking.id}>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    {ranking.position}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <Link href={'/address/' + ranking.address}>{ranking.address}</Link>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    {ranking.value}
-                                                </td>
-                                            </tr>
-                                        ))
-                                    )}
-                                </>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-                <div ref={ref}>
-                    {isFetchingNextPage && (
-                        <div className="flex items-start justify-start space-x-4">
-                            <Skeleton className="h-12 w-12 rounded-full" />
-                            <div className="space-y-2">
-                                <Skeleton className="h-4 w-[250px]" />
-                                <Skeleton className="h-4 w-[200px]" />
-                            </div>
+            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4'>
+                {isLoading ? (
+                    Array.from({ length: 12 }).map((_, key) => (
+                        <motion.div
+                            key={key}
+                            className="bg-white shadow rounded-lg p-4"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            <Skeleton className="h-4 w-[250px] mb-2" />
+                            <Skeleton className="h-4 w-[200px]" />
+                        </motion.div>
+                    ))
+                ) : (
+                    data?.pages.flatMap((page, i) =>
+                        page.rankings.map((ranking: any) => (
+                            <motion.div
+                                key={ranking.id}
+                                className="bg-white shadow rounded-lg p-4"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <CardHeader className="flex flex-col items-center gap-4 space-y-2">
+                                    <Avatar>
+                                        <MetaMaskAvatar address={normalizeAddress(ranking.address)} size={100} className='!w-full !h-full' />
+                                    </Avatar>
+                                    <div className="flex flex-col items-center">
+                                        <Link href={'/address/' + normalizeAddress(ranking.address)} className="text-lg font-semibold">
+                                            {truncateWallet(normalizeAddress(ranking.address))}
+                                        </Link>
+                                        <div className="flex items-center text-sm text-gray-500 mt-1">
+                                            <BlendIcon className="mr-1 h-3 w-3" />
+                                            Position #{ranking.position}
+                                        </div>
+                                    </div>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        asChild
+                                    >
+                                        <Link href={'/address/' + normalizeAddress(ranking.address)}>View</Link>
+                                    </Button>
+                                </CardHeader>
+                            </motion.div>
+                        ))
+                    )
+                )}
+            </div>
+
+            <div ref={ref}>
+                {isFetchingNextPage && (
+                    <div className="flex items-start justify-start space-x-4">
+                        <Skeleton className="h-12 w-12 rounded-full" />
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-[250px]" />
+                            <Skeleton className="h-4 w-[200px]" />
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
         </div>
     );

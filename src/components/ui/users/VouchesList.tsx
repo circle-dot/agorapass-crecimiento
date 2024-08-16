@@ -5,7 +5,7 @@ import { CheckCircle } from 'lucide-react';
 import Link from "next/link";
 import { motion } from "framer-motion";
 import RevokeButton from "../RevokeButton";
-
+import truncateWallet from "@/utils/truncateWallet";
 interface Vouch {
     id: string;
     schemaId: string;
@@ -20,10 +20,7 @@ interface VouchesListProps {
 }
 
 export function VouchesList({ vouches }: VouchesListProps) {
-    function truncateWallet(wallet: string) {
-        // Keep the first 6 characters and the last 4 characters
-        return wallet.slice(0, 6) + '...' + wallet.slice(-4);
-    }
+
     return (
         <div className="bg-white p-4 rounded-lg shadow-md">
             <h2 className="text-xl font-bold mb-4">Your latest vouches</h2>

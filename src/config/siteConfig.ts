@@ -11,8 +11,8 @@ export const navSections = [
         className: "transition-colors hover:text-foreground"
     },
     {
-        label: "History",
-        href: "/vouches",
+        label: "Rankings",
+        href: "/rankings",
         className: "transition-colors hover:text-foreground"
     },
     {
