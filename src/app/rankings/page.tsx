@@ -16,14 +16,12 @@ import { cn } from "@/lib/utils";
 import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
 import { Avatar } from "@/components/ui/avatar";
-
-import {
-    CardHeader
-} from "@/components/ui/card";
+import { CardHeader } from "@/components/ui/card";
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import truncateWallet from '@/utils/truncateWallet';
 import { BlendIcon } from 'lucide-react';
 import { normalizeAddress } from '@/utils/normalizeAddress';
+import { usePrivy } from '@privy-io/react-auth';
 
 const filters = [
     { valueFilter: "desc", label: "Order by: Desc" },
@@ -34,7 +32,8 @@ function Page() {
     const [openFilter, setOpenFilter] = useState(false);
     const [valueFilter, setValueFilter] = useState<'asc' | 'desc'>("asc");
     const [searchQuery, setSearchQuery] = useState<string>("");
-
+    const { user } = usePrivy();
+    console.log('user', user?.wallet?.address);
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useRankings(valueFilter, searchQuery);
     const { ref, inView } = useInView();
 
@@ -56,8 +55,9 @@ function Page() {
     return (
         <div className='flex flex-col w-full p-4'>
             <div className='flex flex-row font-semibold justify-center items-center'>
-                <p>  Wanna see who vouched for who and when?
-                    <Link href='/vouches' className='font-bold text-blue-600 hover:underline ml-0.5'>Check the vouch history</Link></p>
+                <p>Wanna see who vouched for who and when?
+                    <Link href='/vouches' className='font-bold text-blue-600 hover:underline ml-0.5'>Check the vouch history</Link>
+                </p>
             </div>
             <div className='flex flex-col md:flex-row md:justify-center md:items-center gap-4 p-4'>
                 <Popover open={openFilter} onOpenChange={setOpenFilter}>
@@ -118,39 +118,51 @@ function Page() {
                     ))
                 ) : (
                     data?.pages.flatMap((page, i) =>
-                        page.rankings.map((ranking: any) => (
-                            <motion.div
-                                key={ranking.id}
-                                className="bg-white shadow rounded-lg p-4"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                <CardHeader className="flex flex-col items-center gap-4 space-y-2">
-                                    <Avatar>
-                                        <MetaMaskAvatar address={normalizeAddress(ranking.address)} size={100} className='!w-full !h-full' />
-                                    </Avatar>
-                                    <div className="flex flex-col items-center">
-                                        <Link href={'/address/' + normalizeAddress(ranking.address)} className="text-lg font-semibold">
-                                            {truncateWallet(normalizeAddress(ranking.address))}
-                                        </Link>
-                                        <div className="flex items-center text-sm text-gray-500 mt-1">
-                                            <BlendIcon className="mr-1 h-3 w-3" />
-                                            Position #{ranking.position}
+                        page.rankings.map((ranking: any) => {
+                            const isCurrentUser = normalizeAddress(user?.wallet?.address ?? '') === normalizeAddress(ranking.address);
+
+                            return (
+                                <motion.div
+                                    key={ranking.id}
+                                    className={cn(
+                                        "shadow rounded-lg p-4",
+                                        isCurrentUser ? "bg-green-100" : "bg-white"
+                                    )}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <CardHeader className="flex flex-col items-center gap-4 space-y-2">
+                                        <Avatar>
+                                            <MetaMaskAvatar address={normalizeAddress(ranking.address)} size={100} className='!w-full !h-full' />
+                                        </Avatar>
+                                        <div className="flex flex-col items-center">
+                                            <Link href={'/address/' + normalizeAddress(ranking.address)} className="text-lg font-semibold">
+                                                {truncateWallet(normalizeAddress(ranking.address))}
+                                            </Link>
+                                            {isCurrentUser && (
+                                                <div className="text-green-600 font-bold">
+                                                    This is you!
+                                                </div>
+                                            )}
+                                            <div className="flex items-center text-sm text-gray-500 mt-1">
+                                                <BlendIcon className="mr-1 h-3 w-3" />
+                                                Position #{ranking.position}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        asChild
-                                    >
-                                        <Link href={'/address/' + normalizeAddress(ranking.address)}>View</Link>
-                                    </Button>
-                                </CardHeader>
-                            </motion.div>
-                        ))
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            asChild
+                                        >
+                                            <Link href={'/address/' + normalizeAddress(ranking.address)}>View</Link>
+                                        </Button>
+                                    </CardHeader>
+                                </motion.div>
+                            );
+                        })
                     )
                 )}
             </div>
