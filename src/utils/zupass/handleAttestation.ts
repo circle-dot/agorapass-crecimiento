@@ -16,6 +16,22 @@ export const handleVouch = async (
         return;
     }
 
+    // Check if semaphoreId already exists using the API route
+    const response = await fetch('/api/zupass/checkSemaphore', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ semaphoreId: payload.external_id }),
+    });
+
+    const result = await response.json();
+
+    if (result.exists) {
+        showErrorAlert('Zupass already connected to another account.');
+        return;
+    }
+
     const nonce = await fetchNonce(user.wallet.address);
 
     if (nonce === undefined) {
