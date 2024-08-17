@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { usePrivy } from '@privy-io/react-auth';
-import { DateTime } from "luxon";
 import { useFetchUser } from '@/hooks/useFetchUser';
 import { ProfileCard } from "@/components/ui/users/ProfileCard";
 import { VouchesList } from "@/components/ui/users/VouchesList";
@@ -14,7 +13,6 @@ import Loader from "@/components/ui/Loader";
 
 export default function Page() {
   const { getAccessToken } = usePrivy();
-  const [remainingTime, setRemainingTime] = useState('');
   const [updateTrigger, setUpdateTrigger] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const { data, isLoading, error } = useFetchUser(updateTrigger);
