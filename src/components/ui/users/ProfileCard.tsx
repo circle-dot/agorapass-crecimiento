@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,6 +25,8 @@ import withReactContent from 'sweetalert2-react-content';
 import LinkedButton from './LinkedButton';
 import UnlinkAccounts from './UnlinkAccounts';
 import truncateWallet from '@/utils/truncateWallet'
+const ShareProfile = lazy(() => import('./ShareProfile'));
+
 
 const MySwal = withReactContent(Swal);
 
@@ -35,12 +37,12 @@ export const FormSchema = z.object({
 });
 
 interface ProfileCardProps {
-    data: any;  // Replace `any` with the actual type if available
+    data: any;
     onSubmit: (data: z.infer<typeof FormSchema>) => void;
 }
 
 export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
-    const { ready, authenticated, user, unlinkTwitter, unlinkFarcaster, getAccessToken } = usePrivy();
+    const { user, unlinkTwitter, unlinkFarcaster, getAccessToken } = usePrivy();
 
     const { linkTwitter, linkFarcaster } = useLinkAccount({
         onSuccess: (user, linkMethod, linkedAccount) => {
@@ -236,7 +238,7 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
 
                         </div>
                         {Zupass?.groups ? 'Member of ' + Zupass.groups.split(',').join(', ') : null}
-                        </motion.div>
+                    </motion.div>
                 </CardHeader>
                 <CardContent className="text-center">
                     <motion.div
@@ -257,11 +259,17 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.8, duration: 0.5, ease: "easeOut" }}
+                        className='w-full'
                     >
                         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                            <DialogTrigger asChild>
-                                <Button variant="outline">Edit my profile</Button>
-                            </DialogTrigger>
+                            <div className='flex justify-between items-center w-full'>
+                                <DialogTrigger asChild>
+                                    <Button variant="outline">Edit profile</Button>
+                                </DialogTrigger>
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    <ShareProfile address={wallet} />
+                                </Suspense>
+                            </div>
                             <DialogContent>
                                 <DialogHeader>
                                     <DialogTitle>Edit Profile</DialogTitle>
