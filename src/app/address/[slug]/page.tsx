@@ -1,6 +1,5 @@
 "use client";
 
-import React from 'react';
 import { useEffect, useState } from "react";
 import { usePrivy } from '@privy-io/react-auth';
 import { useQuery } from '@tanstack/react-query';
@@ -30,6 +29,8 @@ import TwitterLogo from '@/../../public/X.svg'
 import { View } from 'lucide-react';
 import FarcasterLogo from '@/../../public/farcaster.svg'
 import Image from 'next/image';
+import React, { lazy, Suspense } from 'react';
+const ShareProfile = lazy(() => import('@/components/ui/users/ShareProfile'));
 //!TODO replace this schemaId
 const schemaId = process.env.NEXT_PUBLIC_SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3"; // Replace with your schemaId
 
@@ -209,6 +210,9 @@ export default function Page({ params }: { params: { slug: string } }) {
                         )} */}
 
                         <h3 className="text-2xl font-semibold truncate">
+                        <Suspense fallback={<div>Loading...</div>}>
+                                    <ShareProfile address={address} />
+                                </Suspense>
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild onClick={handleCopy}>
