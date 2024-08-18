@@ -26,7 +26,7 @@ import LinkedButton from './LinkedButton';
 import UnlinkAccounts from './UnlinkAccounts';
 import truncateWallet from '@/utils/truncateWallet'
 const ShareProfile = lazy(() => import('./ShareProfile'));
-
+import ConnectQuarkId from '../ConnectQuarkId';
 
 const MySwal = withReactContent(Swal);
 
@@ -237,6 +237,7 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                             />
 
                         </div>
+                        <ConnectQuarkId />
                         {Zupass?.groups ? 'Member of ' + Zupass.groups.split(',').join(', ') : null}
                     </motion.div>
                 </CardHeader>
