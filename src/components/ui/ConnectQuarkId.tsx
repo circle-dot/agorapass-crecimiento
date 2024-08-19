@@ -12,40 +12,59 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import QRCode from 'react-qr-code';
+import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { handleVouchQuarkId } from '@/utils/quarkId/handleAttestation';
 
 function ConnectQuarkId() {
+    const { getAccessToken, user } = usePrivy();
+    const { wallets } = useWallets();
     const [qrValue, setQrValue] = useState('placeholder');
     const [ws, setWs] = useState<WebSocket | null>(null);
     const [invitationId, setInvitationId] = useState<string | null>(null);
 
     useEffect(() => {
-        if (ws) {
-            ws.onopen = () => {
-                console.log('WebSocket connection opened');
-                if (invitationId) {
-                    ws.send(JSON.stringify({ invitationId }));
-                }
-            };
+        const setupWebSocket = async () => {
+            if (ws) {
+                const token = await getAccessToken();
 
-            ws.onmessage = (event: MessageEvent) => {
-                const messageData = JSON.parse(event.data);
-                console.log('Message from server: ', messageData);
+                ws.onopen = () => {
+                    console.log('WebSocket connection opened');
+                    if (invitationId) {
+                        ws.send(JSON.stringify({ invitationId }));
+                    }
+                };
 
-                if (messageData.data && messageData.data.invitationId === invitationId) {
-                    console.log('The invitationId matches:', invitationId);
-                    // Additional logic can be added here
-                }
-            };
+                ws.onmessage = (event: MessageEvent) => {
+                    const messageData = JSON.parse(event.data);
+                    console.log('Message from server: ', messageData);
 
-            ws.onerror = (event: Event) => {
-                console.error('WebSocket error: ', event);
-            };
+                    if (messageData.data && messageData.data.invitationId === invitationId) {
+                        console.log('The invitationId matches:', invitationId);
+                        // Additional logic can be added here
+                        const holderDID = messageData.data.rawData.holderDID;
+                        const email = messageData.data.rawData.verifiableCredentials[0].credentialSubject.email;
+                        const proofValue = messageData.data.rawData.verifiableCredentials[0].proof.proofValue;
+                        const payload = {
+                            holderDID,
+                            email,
+                            proofValue
+                        }
+                        handleVouchQuarkId(user, wallets, token, payload);
+                    }
+                };
 
-            ws.onclose = () => {
-                console.log('WebSocket connection closed');
-            };
-        }
-    }, [ws, invitationId]);
+                ws.onerror = (event: Event) => {
+                    console.error('WebSocket error: ', event);
+                };
+
+                ws.onclose = () => {
+                    console.log('WebSocket connection closed');
+                };
+            }
+        };
+
+        setupWebSocket();
+    }, [ws, invitationId, getAccessToken, user, wallets]);
 
     const generateQRCode = async () => {
         try {
