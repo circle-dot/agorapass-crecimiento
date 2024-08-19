@@ -21,6 +21,7 @@ function ConnectQuarkId() {
     const [qrValue, setQrValue] = useState('placeholder');
     const [ws, setWs] = useState<WebSocket | null>(null);
     const [invitationId, setInvitationId] = useState<string | null>(null);
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         const setupWebSocket = async () => {
@@ -34,13 +35,12 @@ function ConnectQuarkId() {
                     }
                 };
 
-                ws.onmessage = (event: MessageEvent) => {
+                ws.onmessage = async (event: MessageEvent) => {
                     const messageData = JSON.parse(event.data);
                     console.log('Message from server: ', messageData);
 
                     if (messageData.data && messageData.data.invitationId === invitationId) {
                         console.log('The invitationId matches:', invitationId);
-                        // Additional logic can be added here
                         const holderDID = messageData.data.rawData.holderDID;
                         const email = messageData.data.rawData.verifiableCredentials[0].credentialSubject.email;
                         const proofValue = messageData.data.rawData.verifiableCredentials[0].proof.proofValue;
@@ -48,8 +48,9 @@ function ConnectQuarkId() {
                             holderDID,
                             email,
                             proofValue
-                        }
-                        handleVouchQuarkId(user, wallets, token, payload);
+                        };
+                        await handleVouchQuarkId(user, wallets, token, payload);
+                        setIsOpen(false); // Close the modal after handling VouchQuarkId
                     }
                 };
 
@@ -77,6 +78,7 @@ function ConnectQuarkId() {
                 const wsUrl = `wss://api.stamp.network/ws/${id}`;
                 const websocket = new WebSocket(wsUrl);
                 setWs(websocket);
+                setIsOpen(true); // Open the modal
             } else {
                 setQrValue('error');
             }
@@ -87,7 +89,7 @@ function ConnectQuarkId() {
     };
 
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline" onClick={generateQRCode}>
                     Connect QuarkId
