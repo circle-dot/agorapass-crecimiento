@@ -5,6 +5,7 @@ import { ethers } from 'ethers';
 import prisma from '@/lib/db';
 import { toBigInt } from 'ethers';
 import { Utils } from 'alchemy-sdk';
+import { updateEigenScore } from '@/utils/updateEigenScore';
 
 const easContractAddress = "0x4200000000000000000000000000000000000021";
 const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0x9075dee7661b8b445a2f0caa3fc96223b8cc2593c796c414aed93f43d022b0f9";
@@ -120,28 +121,14 @@ export async function POST(request: NextRequest) {
         // console.log('newZupass', newZupass);
 
         //here i want to write to zupass table
-
-        const EIGENSCORE_URL = process.env.EIGENSCORE_URL || 'http://localhost:8000';
-        const EIGENSCORE_API_TOKEN = process.env.EIGENSCORE_API_TOKEN || '';
-
-        // Send the POST request to the Python app
-        const response = await fetch(`${EIGENSCORE_URL}/rankings`, {
-            method: 'GET',
-            headers: {
-                'access-token': EIGENSCORE_API_TOKEN,
-                'Content-Type': 'application/json',
-            },
-        });
-
-        // Handle the response from the Python app
-        if (!response.ok) {
-            throw new Error('Failed to update eigenScore');
+        // Inside your POST request handler
+        try {
+            const result = await updateEigenScore();
+            console.log('Data updated successfully:', result);
+            // Handle result if needed
+        } catch (error) {
+            console.error('Error updating eigenScore:', error);
         }
-
-        const result = await response.json();
-        console.log('Data updated successfully:', result);
-
-
 
         // Return success response with the newly created attestation UID
         return NextResponse.json({ newAttestationUID });

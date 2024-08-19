@@ -1,8 +1,6 @@
 export const handleQuark = async () => {
     try {
-        const URL = 'placeholder'
-
-        const response = await fetch(URL, {
+        const response = await fetch('/api/quarkid', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -14,7 +12,7 @@ export const handleQuark = async () => {
         }
 
         const data = await response.json();
-        return data; // Assuming the data contains the deeplink you want to use
+        return data;
     } catch (error) {
         console.error('Error:', error);
         return null;

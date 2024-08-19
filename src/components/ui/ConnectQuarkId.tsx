@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { handleQuark } from '@/utils/quarkId/connectQuark';
 import { Button } from './button';
 import {
@@ -15,54 +15,57 @@ import QRCode from 'react-qr-code';
 
 function ConnectQuarkId() {
     const [qrValue, setQrValue] = useState('placeholder');
-    const [invitationId, setInvitationId] = useState(null);
-    const websocketRef = useRef(null);
+    const [ws, setWs] = useState<WebSocket | null>(null);
+    const [invitationId, setInvitationId] = useState<string | null>(null);
 
-    // Function to handle WebSocket messages
-    const handleWebSocketMessage = (event) => {
-        const message = JSON.parse(event.data);
-        if (message.invitationId === invitationId) {
-            console.log("Matching invitationId received:", message);
-            // Handle the data received from the WebSocket
-        } else {
-            console.log("invitationId does not match");
+    useEffect(() => {
+        if (ws) {
+            ws.onopen = () => {
+                console.log('WebSocket connection opened');
+                if (invitationId) {
+                    ws.send(JSON.stringify({ invitationId }));
+                }
+            };
+
+            ws.onmessage = (event: MessageEvent) => {
+                const messageData = JSON.parse(event.data);
+                console.log('Message from server: ', messageData);
+
+                if (messageData.data && messageData.data.invitationId === invitationId) {
+                    console.log('The invitationId matches:', invitationId);
+                    // Additional logic can be added here
+                }
+            };
+
+            ws.onerror = (event: Event) => {
+                console.error('WebSocket error: ', event);
+            };
+
+            ws.onclose = () => {
+                console.log('WebSocket connection closed');
+            };
         }
-    };
-
-    const connectWebSocket = (id) => {
-        const wsUrl = `ws://placeholder:8000/ws/${id}`;
-        websocketRef.current = new WebSocket(wsUrl);
-
-        websocketRef.current.onopen = () => {
-            console.log('WebSocket connection established');
-        };
-
-        websocketRef.current.onmessage = handleWebSocketMessage;
-
-        websocketRef.current.onclose = () => {
-            console.log('WebSocket connection closed');
-        };
-    };
+    }, [ws, invitationId]);
 
     const generateQRCode = async () => {
-        const data = await handleQuark();
-        if (data && data.oobContentData && data.invitationId) {
-            setQrValue(data.oobContentData);
-            setInvitationId(data.invitationId);
-            connectWebSocket(data.invitationId);  // Connect to WebSocket with the received invitationId
-        } else {
-            // Handle case where no deeplink is returned
+        try {
+            const data = await handleQuark();
+            if (data && data.oobContentData) {
+                setQrValue(data.oobContentData);
+
+                const id = data.invitationId;
+                setInvitationId(id); // Save the invitationId
+                const wsUrl = `wss://api.stamp.network/ws/${id}`;
+                const websocket = new WebSocket(wsUrl);
+                setWs(websocket);
+            } else {
+                setQrValue('error');
+            }
+        } catch (error) {
+            console.error('Error generating QR code:', error);
             setQrValue('error');
         }
     };
-
-    useEffect(() => {
-        return () => {
-            if (websocketRef.current) {
-                websocketRef.current.close();  // Close WebSocket connection when component unmounts
-            }
-        };
-    }, []);
 
     return (
         <Dialog>
