@@ -18,10 +18,11 @@ import { handleVouchQuarkId } from '@/utils/quarkId/handleAttestation';
 function ConnectQuarkId() {
     const { getAccessToken, user } = usePrivy();
     const { wallets } = useWallets();
-    const [qrValue, setQrValue] = useState('placeholder');
+    const [qrValue, setQrValue] = useState('');
     const [ws, setWs] = useState<WebSocket | null>(null);
     const [invitationId, setInvitationId] = useState<string | null>(null);
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // State for loading
 
     useEffect(() => {
         const setupWebSocket = async () => {
@@ -68,6 +69,10 @@ function ConnectQuarkId() {
     }, [ws, invitationId, getAccessToken, user, wallets]);
 
     const generateQRCode = async () => {
+        setIsLoading(true); // Start loading
+        setQrValue(''); // Clear QR value
+        setIsOpen(true); // Open the dialog
+
         try {
             const data = await handleQuark();
             if (data && data.oobContentData) {
@@ -78,13 +83,14 @@ function ConnectQuarkId() {
                 const wsUrl = `wss://api.stamp.network/ws/${id}`;
                 const websocket = new WebSocket(wsUrl);
                 setWs(websocket);
-                setIsOpen(true); // Open the modal
             } else {
                 setQrValue('error');
             }
         } catch (error) {
             console.error('Error generating QR code:', error);
             setQrValue('error');
+        } finally {
+            setIsLoading(false); // Stop loading
         }
     };
 
@@ -103,14 +109,18 @@ function ConnectQuarkId() {
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex items-center space-x-2 flex-col gap-y-2">
-                    <div className="h-auto my mx-auto w-full">
-                        <QRCode
-                            size={256}
-                            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                            value={qrValue}
-                            viewBox={`0 0 256 256`}
-                        />
-                    </div>
+                    {isLoading ? (
+                        <p>Loading...</p>
+                    ) : (
+                        <div className="h-auto my mx-auto w-full">
+                            <QRCode
+                                size={256}
+                                style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                                value={qrValue || 'placeholder'} // Show the placeholder if qrValue is empty
+                                viewBox={`0 0 256 256`}
+                            />
+                        </div>
+                    )}
                 </div>
                 <DialogFooter className="sm:justify-start">
                     <DialogClose asChild>
