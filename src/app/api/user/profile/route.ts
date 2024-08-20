@@ -33,9 +33,15 @@ export async function GET(request: NextRequest) {
                         semaphoreId: true,
                     },
                 },
+                Quarkid: {
+                    select: {
+                        //We only bring the holderDID atm, just to check that some Quarkid in connected
+                        holderDID: true,
+                    },
+                },
             },
         });
-        
+
 
         if (!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });

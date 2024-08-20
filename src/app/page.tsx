@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { HeroHighlight } from "@/components/ui/hero-highlight";
 import {
   Card,
-  CardDescription,
   CardHeader,
 } from "@/components/ui/card"
 import Image from "next/image";
