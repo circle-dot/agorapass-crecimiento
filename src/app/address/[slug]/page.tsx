@@ -115,6 +115,23 @@ export default function Page({ params }: { params: { slug: string } }) {
     const handleReceivedOpen = () => {
         setDialogOpenedReceived(true);
     };
+
+
+    const zupassGroups = userData?.Zupass?.groups ? userData?.Zupass.groups.split(',') : [];
+    const quarkidIssuers = userData?.Quarkid?.issuer ? userData?.Quarkid.issuer.split(',') : [];
+    const allGroups = [...zupassGroups, ...quarkidIssuers];
+
+    let memberText = '';
+
+    if (allGroups.length > 0) {
+        if (allGroups.length === 1) {
+            memberText = `Member of ${allGroups[0]}`;
+        } else {
+            const lastGroup = allGroups.pop();
+            memberText = `Member of ${allGroups.join(', ')} and ${lastGroup}`;
+        }
+    }
+
     return (
         <div className="flex items-center justify-center bg-gray-100 w-full p-4">
             <motion.div
@@ -210,9 +227,9 @@ export default function Page({ params }: { params: { slug: string } }) {
                         )} */}
 
                         <h3 className="text-2xl font-semibold truncate">
-                        <Suspense fallback={<div>Loading...</div>}>
-                                    <ShareProfile address={address} />
-                                </Suspense>
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <ShareProfile address={address} />
+                            </Suspense>
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild onClick={handleCopy}>
@@ -244,16 +261,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                             </>
                         )}
 
-                        {userData?.Zupass?.groups ? 
-                        
-                        (
-                            <>
-                            <p>Zupass connected:</p>
-                            {'Member of ' + userData?.Zupass.groups.split(',').join(', ')}
-                            <hr className="my-4 border-gray-300" />
-                            </>
-                        )
-                        : null}
+                        {memberText}
 
 
 

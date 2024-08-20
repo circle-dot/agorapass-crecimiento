@@ -100,11 +100,15 @@ const ProfileAvatar = () => {
                                 </DropdownMenuItem>
                             )}
                             <DropdownMenuItem asChild>
-                                <Dialog>
-                                    <DialogTrigger asChild>
-                                        {quarkidUser ? "QuarkId connected 🎉" : <ConnectQuarkId />}
-                                    </DialogTrigger>
-                                </Dialog>
+                                {quarkidUser ? (
+                                    <div>QuarkId connected 🎉</div>
+                                ) : (
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <ConnectQuarkId />
+                                        </DialogTrigger>
+                                    </Dialog>
+                                )}
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -151,6 +155,7 @@ const ProfileAvatar = () => {
                     </p>
                 </button>
             )}
+
         </>
     );
 };

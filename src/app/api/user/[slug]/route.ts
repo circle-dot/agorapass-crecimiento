@@ -21,6 +21,11 @@ export async function GET(
                     groups: true,
                 },
             },
+            Quarkid: {
+                select: {
+                    issuer: true,
+                },
+            },
         },
     });
 
