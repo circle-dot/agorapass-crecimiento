@@ -16,7 +16,6 @@ import Swal from "sweetalert2";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { getAvatar } from "../ui/users/getAvatarImg";
 import { useFetchUserProfile } from "@/hooks/useFetchUser";
-import ZupassButton from "../layout/ZupassButton";
 import ConnectQuarkId from "../ui/ConnectQuarkId";
 import { ChevronDown, WalletCards, Wallet } from "lucide-react";
 import {
@@ -90,15 +89,6 @@ const ProfileAvatar = () => {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="flex !flex-column justify-center items-center">
-                            {zupassUser ? (
-                                <DropdownMenuItem disabled={true}>
-                                    Zupass connected 🎉
-                                </DropdownMenuItem>
-                            ) : (
-                                <DropdownMenuItem>
-                                    <ZupassButton />
-                                </DropdownMenuItem>
-                            )}
                             <DropdownMenuItem asChild>
                                 {quarkidUser ? (
                                     <div>QuarkId connected 🎉</div>
