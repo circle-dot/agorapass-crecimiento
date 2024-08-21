@@ -17,7 +17,9 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { getAvatar } from "../ui/users/getAvatarImg";
 import { useFetchUserProfile } from "@/hooks/useFetchUser";
 import ConnectQuarkId from "../ui/ConnectQuarkId";
-import { ChevronDown, WalletCards, Wallet } from "lucide-react";
+import { ChevronDown, Wallet } from "lucide-react";
+import Image from "next/image";
+import QuarkIdLogo from '@/../../public/quarkid.webp';
 import {
     Dialog,
     DialogTrigger,
@@ -84,8 +86,10 @@ const ProfileAvatar = () => {
                 <>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="secondary" className="px-0.5 mr-1">
-                                <WalletCards /> <ChevronDown />
+                            <Button variant="secondary" className="px-0.5 font-bold mr-1" asChild>
+                                <div className="flex flex-row min-w-12 ">
+                                    <Image src={QuarkIdLogo} alt="QuarkId logo" className="w-6 h-6" /> <ChevronDown className="!w-6 !h-6" />
+                                </div>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="flex !flex-column justify-center items-center">
