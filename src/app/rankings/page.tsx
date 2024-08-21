@@ -147,7 +147,7 @@ function Page() {
                                                     This is you!
                                                 </div>
                                             )}
-                                            <div className="flex items-center text-sm text-gray-500 mt-1">
+                                            <div className="flex items-center text-lg text-gray-500 mt-1">
                                                 <BlendIcon className="mr-1 h-3 w-3" />
                                                 Position #{ranking.position}
                                             </div>
