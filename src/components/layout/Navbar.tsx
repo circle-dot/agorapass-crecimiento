@@ -7,7 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import React from "react";
 import { navSections } from '@/config/siteConfig';
 import Image from "next/image";
-import Logo from "../../../public/agora.png";
+import Logo from "../../../public/logo.png";
 import ProfileAvatar from '@/components/auth/ProfileAvatar'
 import SearchBar from "../ui/users/searchBar";
 
@@ -27,7 +27,7 @@ export default function Navbar() {
                             width={48}
                             height={48}
                         />
-                        <span className="sr-only">Agora Pass</span>
+                        <span className="sr-only">CreciScore</span>
                     </Link>
                     {navSections.map((section, index) => (
                         <Link
@@ -62,7 +62,7 @@ export default function Navbar() {
                                     width={48}
                                     height={48}
                                 />
-                                <span className="sr-only">Agora Pass</span>
+                                <span className="sr-only">CreciScore</span>
                             </Link>
                             {navSections.map((section, index) => (
                                 <Link

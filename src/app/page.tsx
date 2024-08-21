@@ -33,14 +33,14 @@ export default function Page() {
           <Card className="p-8 bg-white bg-opacity-90 shadow-lg mt-8 flex flex-col items-center justify-center w-full">
             <CardHeader className="items-center justify-center w-full">
               <Image
-                src="/agora.png"
+                src="/logo.png"
                 alt="Logo"
                 width={130}
                 height={130}
                 className="select-none pointer-events-none"
               />
               <div className="text-4xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-                Agora Pass
+                CreciScore
               </div>
               <sup className="text-xs">
                 Beta

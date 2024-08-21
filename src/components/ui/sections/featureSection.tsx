@@ -11,9 +11,9 @@ import Link from "next/link";
 export default function FeaturesSection() {
     const features = [
         {
-            title: "Agora Pass",
+            title: "CreciScore",
             description:
-                "Agora Pass enables community members to vouch for each other and increase their trust score within the Zuzalu community. By vouching for new members, you are inviting them to become part of the ecosystem. Once you get over a certain trust score you will be able to get an Agora Pass Zupass enabled.This pass will grant you access to the Agora.City forum and other perks.",
+                "CreciScore enables community members to vouch for each other and increase their trust score within the Crecimiento community. By vouching for new members, you are inviting them to become part of the ecosystem. Once you get over a certain trust score you will be able to get an CreciScore Zupass enabled.This pass will grant you access to the Agora.City forum and other perks.",
             skeleton: < SkeletonOne />,
             className:
                 "col-span-1 lg:col-span-4 border-b lg:border-r ",
@@ -21,7 +21,7 @@ export default function FeaturesSection() {
         {
             title: "Be part of a global community",
             description:
-                "Join the conversation to to decrease the dependency on trust in centralized authorities in our community, and to collaboratively work on tools, concepts and a potential game plan for the future of Zuzalu..",
+                "Join the conversation to to decrease the dependency on trust in centralized authorities in our community, and to collaboratively work on tools, concepts and a potential game plan for the future of Crecimiento..",
             skeleton: <SkeletonTwo />,
             className: "border-b col-span-1 lg:col-span-2 ",
         },
@@ -36,7 +36,7 @@ export default function FeaturesSection() {
         {
             title: "Connect all around the world",
             description:
-                "Connect with other members of the Zuzalu community and build meaningful connections",
+                "Connect with other members of the Crecimiento community and build meaningful connections",
             skeleton: <SkeletonFour />,
             className: "col-span-1 lg:col-span-3 border-b lg:border-none",
         },
@@ -45,11 +45,11 @@ export default function FeaturesSection() {
         <div className="relative z-20 pb-10  max-w-7xl mx-auto">
             <div className="px-8">
                 <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-bold text-black ">
-                    About Agora Pass
+                    About CreciScore
                 </h4>
 
                 <p className="text-sm lg:text-base  max-w-2xl  my-4 mx-auto text-neutral-500 text-center font-normal ">
-                    Join the solution to decentralize invitations into communities, such as Zuzalu and decrease the dependency on trust in centralized authorities in our community.
+                    Join the solution to decentralize invitations into communities, such as Crecimiento and decrease the dependency on trust in centralized authorities in our community.
                 </p>
             </div>
 
@@ -193,7 +193,7 @@ export const SkeletonTwo = () => {
                     >
                         <Image
                             src={image}
-                            alt="zuzalu images"
+                            alt="Crecimiento images"
                             width="500"
                             height="500"
                             className="rounded-lg h-20 w-20 md:h-40 md:w-40 object-cover flex-shrink-0"
@@ -217,7 +217,7 @@ export const SkeletonTwo = () => {
                     >
                         <Image
                             src={image}
-                            alt="zuzalu images"
+                            alt="Crecimiento images"
                             width="500"
                             height="500"
                             className="rounded-lg h-20 w-20 md:h-40 md:w-40 object-cover flex-shrink-0"

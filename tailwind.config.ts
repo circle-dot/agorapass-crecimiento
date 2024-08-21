@@ -36,8 +36,8 @@ const config = {
     extend: {
       colors: {
         link: "#4C63B6",
-        primarydark: "#468c80",
-        accentdark: "#fcd270",
+        primarydark: "#1D93D5",
+        accentdark: "#f2f2f2",
         accentdarker: "#f4c24d",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

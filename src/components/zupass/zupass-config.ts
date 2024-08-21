@@ -17,7 +17,7 @@ export const whitelistedTickets: Record<
   TicketTypeName,
   PipelineEdDSATicketZuAuthConfig[]
 > = {
-  Zuzalu: [
+  Crecimiento: [
     {
       pcdType: "eddsa-ticket-pcd",
       publicKey: [
@@ -25,7 +25,7 @@ export const whitelistedTickets: Record<
         "29ae64b615383a0ebb1bc37b3a642d82d37545f0f5b1444330300e4c4eedba3f"
       ],
       eventId: "5de90d09-22db-40ca-b3ae-d934573def8b",
-      eventName: "Zuzalu",
+      eventName: "Crecimiento",
       productId: "5ba4cd9e-893c-4a4a-b15b-cf36ceda1938",
       productName: "Resident"
     },
@@ -36,7 +36,7 @@ export const whitelistedTickets: Record<
         "29ae64b615383a0ebb1bc37b3a642d82d37545f0f5b1444330300e4c4eedba3f"
       ],
       eventId: "5de90d09-22db-40ca-b3ae-d934573def8b",
-      eventName: "Zuzalu",
+      eventName: "Crecimiento",
       productId: "10016d35-40df-4033-a171-7d661ebaccaa",
       productName: "Organizer"
     },
@@ -47,7 +47,7 @@ export const whitelistedTickets: Record<
         "29ae64b615383a0ebb1bc37b3a642d82d37545f0f5b1444330300e4c4eedba3f"
       ],
       eventId: "5de90d09-22db-40ca-b3ae-d934573def8b",
-      eventName: "Zuzalu",
+      eventName: "Crecimiento",
       productId: "53b518ed-e427-4a23-bf36-a6e1e2764256",
       productName: "Visitor"
     }

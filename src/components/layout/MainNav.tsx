@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import ProfileAvatar from "@/components/auth/ProfileAvatar";
-import Logo from "../../../public/agora.png";
+import Logo from "../../../public/logo.png";
 import Image from "next/image";
 import { navSections } from "@/config/siteConfig";
 import { usePathname } from "next/navigation";
@@ -33,7 +33,7 @@ function MainNav() {
                         className="flex items-center gap-2 text-lg font-semibold md:text-base shrink-0"
                     >
                         <Image src={Logo} alt="Company Logo" width={20} height={20} />
-                        <span className="hidden lg:flex">Agora Pass </span>
+                        <span className="hidden lg:flex">CreciScore </span>
                         <sup>Beta</sup>
                     </Link>
                 </div>

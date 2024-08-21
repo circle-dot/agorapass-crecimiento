@@ -102,7 +102,7 @@ export const SkeletonThree = () => {
                     {/* TODO */}
                     {/* <IconBrandYoutubeFilled className="h-20 w-20 absolute z-10 inset-0 text-red-500 m-auto " /> */}
                     <Image
-                        src="/agora.png"
+                        src="/logo.png"
                         alt="header"
                         width={800}
                         height={800}

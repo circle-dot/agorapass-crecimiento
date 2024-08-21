@@ -957,11 +957,11 @@
       "locked": false,
       "fontSize": 36,
       "fontFamily": 1,
-      "text": "Agora Pass",
+      "text": "CreciScore",
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "Agora Pass",
+      "originalText": "CreciScore",
       "lineHeight": 1.25,
       "baseline": 32
     },

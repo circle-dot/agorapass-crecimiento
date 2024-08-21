@@ -48,7 +48,7 @@ async function login(user: any, wallets: any, token: any) {
         watermark,
         config,
         proofTitle: "Connect with Zupass",
-        proofDescription: "**Connect your Zupass to Agora Pass**",
+        proofDescription: "**Connect your Zupass to CreciScore**",
         multi: true
     };
 

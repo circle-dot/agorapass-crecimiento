@@ -22,7 +22,7 @@ export const EVERYONE_SEMAPHORE_GROUP_URL = IS_PROD
     : "http://localhost:3002/semaphore/5";
 
 export const ticketTypeNames = [
-  "Zuzalu",
+  "Crecimiento",
   "ZuConnect",
   "Vitalia",
   "ZuVillage",
