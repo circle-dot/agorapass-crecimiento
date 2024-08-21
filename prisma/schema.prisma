@@ -52,6 +52,7 @@ model Quarkid {
   issuer         String
   holderDID      String @unique
   attestationUID String
+  ticketType     String
 }
 
 model Ranking {

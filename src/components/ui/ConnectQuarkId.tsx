@@ -45,10 +45,12 @@ function ConnectQuarkId() {
                         const holderDID = messageData.data.rawData.holderDID;
                         const email = messageData.data.rawData.verifiableCredentials[0].credentialSubject.email;
                         const proofValue = messageData.data.rawData.verifiableCredentials[0].proof.proofValue;
+                        const ticketType = messageData.data.rawData.verifiableCredentials[0].credentialSubject.category;
                         const payload = {
                             holderDID,
                             email,
-                            proofValue
+                            proofValue,
+                            ticketType
                         };
                         await handleVouchQuarkId(user, wallets, token, payload);
                         setIsOpen(false); // Close the modal after handling VouchQuarkId

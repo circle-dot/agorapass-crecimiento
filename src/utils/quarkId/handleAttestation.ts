@@ -51,12 +51,13 @@ export const handleVouchQuarkId = async (
         const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0x9075dee7661b8b445a2f0caa3fc96223b8cc2593c796c414aed93f43d022b0f9";
         const attester = user?.wallet.address;
         const nullifier = payload.proofValue;
+        const ticketType = payload.ticketType;
 
         const schemaEncoder = new SchemaEncoder("string nullifier,bytes32 category,bytes32 subcategory,bytes32[] subsubcategory,bytes32 issuer,bytes32 credentialType,bytes32 platform");
         const encodedData = schemaEncoder.encodeData([
             { name: "nullifier", value: nullifier, type: "string" },
-            { name: "category", value: ethers.encodeBytes32String('Community'), type: "bytes32" },
-            { name: "subcategory", value: ethers.encodeBytes32String('Pop-up cities'), type: "bytes32" },
+            { name: "category", value: ethers.encodeBytes32String('Aleph'), type: "bytes32" },
+            { name: "subcategory", value: ethers.encodeBytes32String(ticketType), type: "bytes32" },
             { name: "subsubcategory", value: [ethers.encodeBytes32String('short')], type: "bytes32[]" },
             { name: "issuer", value: ethers.encodeBytes32String('Aleph'), type: "bytes32" },
             { name: "credentialType", value: ethers.encodeBytes32String('Ticket'), type: "bytes32" },
