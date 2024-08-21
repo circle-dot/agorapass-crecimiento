@@ -46,17 +46,16 @@ export async function POST(request: NextRequest) {
         const recipient = attester;
 
         const walletAddress = attester;
-        const groups = payload.add_groups
-
+        const ticketType = payload.ticketType;
         const schemaEncoder = new SchemaEncoder("string nullifier,bytes32 category,bytes32 subcategory,bytes32[] subsubcategory,bytes32 issuer,bytes32 credentialType,bytes32 platform");
         const encodedData = schemaEncoder.encodeData([
             { name: "nullifier", value: nullifier, type: "string" },
-            { name: "category", value: ethers.encodeBytes32String('Community'), type: "bytes32" },
-            { name: "subcategory", value: ethers.encodeBytes32String('Pop-up cities'), type: "bytes32" },
+            { name: "category", value: ethers.encodeBytes32String('Aleph'), type: "bytes32" },
+            { name: "subcategory", value: ethers.encodeBytes32String(ticketType), type: "bytes32" },
             { name: "subsubcategory", value: [ethers.encodeBytes32String('short')], type: "bytes32[]" },
-            { name: "issuer", value: ethers.encodeBytes32String(groups), type: "bytes32" },
+            { name: "issuer", value: ethers.encodeBytes32String('Aleph'), type: "bytes32" },
             { name: "credentialType", value: ethers.encodeBytes32String('Ticket'), type: "bytes32" },
-            { name: "platform", value: "Zupass", type: "bytes32" }
+            { name: "platform", value: "QuarkId", type: "bytes32" }
         ]);
 
 
@@ -98,24 +97,23 @@ export async function POST(request: NextRequest) {
 
 
         // Write to the Zupass table
-        const newZupass = await prisma.zupass.upsert({
+        const newZupass = await prisma.quarkid.upsert({
             where: { userId: user.id },
             update: {
                 email: payload.email,
-                nullifier: nullifier,
-                groups: payload.add_groups,
-                semaphoreId: payload.external_id,
-                issuer: 'Zupass',
+                holderDID: payload.holderDID,
+                proofValue: payload.proofValue,
+                issuer: 'Aleph',
                 attestationUID: newAttestationUID
             },
             create: {
                 userId: user.id,
                 email: payload.email,
-                nullifier: nullifier,
-                groups: payload.add_groups,
-                semaphoreId: payload.external_id,
-                issuer: 'Zupass',
-                attestationUID: newAttestationUID
+                holderDID: payload.holderDID,
+                proofValue: payload.proofValue,
+                issuer: 'Aleph',
+                attestationUID: newAttestationUID,
+                ticketType: ticketType
             }
         });
         // console.log('newZupass', newZupass);

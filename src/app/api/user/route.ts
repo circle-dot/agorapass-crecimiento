@@ -26,10 +26,10 @@ export async function GET(request: NextRequest) {
             select: {
                 email: true,
                 vouchesAvailables: true,
-                createdAt:true,
-                vouchReset:true,
-                name:true,
-                bio:true,
+                createdAt: true,
+                vouchReset: true,
+                name: true,
+                bio: true,
                 avatarType: true,
                 wallet: true,
                 Zupass: {
@@ -37,9 +37,14 @@ export async function GET(request: NextRequest) {
                         groups: true,
                     },
                 },
+                Quarkid: {
+                    select: {
+                        issuer: true,
+                    },
+                },
             },
         });
-        
+
 
         if (!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });

@@ -27,7 +27,6 @@ import UnlinkAccounts from './UnlinkAccounts';
 import truncateWallet from '@/utils/truncateWallet'
 const ShareProfile = lazy(() => import('./ShareProfile'));
 
-
 const MySwal = withReactContent(Swal);
 
 export const FormSchema = z.object({
@@ -98,7 +97,7 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
     });
 
 
-    const { email, wallet, vouchesAvailables, createdAt, vouchReset, name, bio, avatarType, Zupass } = data || {};
+    const { email, wallet, vouchesAvailables, createdAt, vouchReset, name, bio, avatarType, Zupass, Quarkid } = data || {};
     const [remainingTime, setRemainingTime] = useState('00:00:00');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -173,6 +172,22 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
         });
     };
 
+    const zupassGroups = Zupass?.groups ? Zupass.groups.split(',') : [];
+    const quarkidIssuers = Quarkid?.issuer ? Quarkid.issuer.split(',') : [];
+    const allGroups = [...zupassGroups, ...quarkidIssuers];
+
+    let memberText = '';
+
+    if (allGroups.length > 0) {
+        if (allGroups.length === 1) {
+            memberText = `Member of ${allGroups[0]}`;
+        } else {
+            const lastGroup = allGroups.pop();
+            memberText = `Member of ${allGroups.join(', ')} and ${lastGroup}`;
+        }
+    }
+
+
 
     return (
         <>
@@ -237,7 +252,7 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                             />
 
                         </div>
-                        {Zupass?.groups ? 'Member of ' + Zupass.groups.split(',').join(', ') : null}
+                        {memberText}
                     </motion.div>
                 </CardHeader>
                 <CardContent className="text-center">

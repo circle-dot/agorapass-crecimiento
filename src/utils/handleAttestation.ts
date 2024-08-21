@@ -2,7 +2,6 @@ import generateAttestation from './generateAttestation';
 import { signTypedData } from './signTypedData';
 import fetchNonce from './fetchNonce';
 import { showLoadingAlert, showErrorAlert, showSuccessAlert } from './alertUtils';
-import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { SchemaEncoder } from '@ethereum-attestation-service/eas-sdk';
 
 export const handleVouch = async (

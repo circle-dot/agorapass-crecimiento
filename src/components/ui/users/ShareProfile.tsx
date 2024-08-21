@@ -45,9 +45,9 @@ export default function ShareProfile({ address }: string | any) {
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Share your profile</DialogTitle>
+                    <DialogTitle>Share profile</DialogTitle>
                     <DialogDescription>
-                        Anyone who has this link will be able to see your profile.
+                        Anyone who has this link will be able to see this profile.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex items-center space-x-2 flex-col gap-y-2">
