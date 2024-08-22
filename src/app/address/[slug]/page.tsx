@@ -102,7 +102,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         staleTime: Infinity,
     });
 
-    const avatarType = userData ? userData.avatarType || 'metamask' : 'metamask';
+    const avatarType = userData ? userData?.user.avatarType || 'metamask' : 'metamask';
     const avatar = getAvatar(address, avatarType);
 
     if (madeLoading || receivedLoading || ensNameLoading || rankScoreLoading) return <div className="w-screen flex items-center justify-center"><Loader /></div>;
@@ -145,8 +145,8 @@ export default function Page({ params }: { params: { slug: string } }) {
                 </div>
                 <div className="text-center">
                     <div>
-                        {userData?.name && (
-                            <h1>{userData.name}</h1>
+                        {userData?.user?.name && (
+                            <h1>{userData.user?.name}</h1>
                         )}
                         {userData?.ranking ? (
                             <>
@@ -240,24 +240,25 @@ export default function Page({ params }: { params: { slug: string } }) {
                         </div>
 
                         <div className='flex items-center justify-center flex-row'>
-                            {userData?.twitter && (
+                            {userData?.user?.twitter && (
                                 <a target="_blank" href={'https://x.com/' + userData.twitter} className='flex flex-row justify-center items-center  text-sky-400'><Image src={TwitterLogo} alt='User with Farcaster' className='mx-1 h-6 w-6 ' />@{userData.twitter}</a>
                             )}
-                            {userData?.farcaster && (
+                            {userData?.user?.farcaster && (
                                 <a target="_blank" href={'https://warpcast.com/' + userData.farcaster} className='flex items-center justify-center flex-row text-[#8a63d2]'><Image src={FarcasterLogo} alt='User with Farcaster' className='mx-1 h-6 w-6 ' />@{userData.farcaster}</a>
                             )}
                         </div>
                         <hr className="my-4 border-gray-300" />
-                        {userData?.bio && (
+                        {userData?.user?.bio && (
                             <>
-                                <div>{userData.bio}</div>
+                                <div>{userData.user.bio}</div>
                                 <hr className="my-4 border-gray-300" />
                             </>
                         )}
 
-                        {userData?.Quarkid?.ticketType && (
+                        {userData?.user?.Quarkid?.ticketType && (
                             <>
-                                Member of Aleph | {userData?.Quarkid?.ticketType}
+                                Member of Aleph | {userData?.user?.Quarkid?.ticketType}
+                                <hr className="my-4 border-gray-300" />
                             </>
                         )
 
