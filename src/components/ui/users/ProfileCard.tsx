@@ -215,8 +215,15 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                         className="flex flex-col items-center space-y-2"
                     >
                         <p className="text-lg font-medium">{name ? name : email}</p>
-                            <p>Rank # {ranking.position	 ? ranking.position : 'N/A'}</p>
-                            <p>Score  {ranking.value	 ? displayRanking(ranking.value): 'N/A'}</p>
+                        {ranking ? (
+  <>
+    <p>Rank # {ranking.position}</p>
+    <p>Score {displayRanking(ranking.value)}</p>
+  </>
+) : (
+  <p>Ranking not yet assigned, start vouching!</p>
+)}
+
                         <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger asChild>
