@@ -164,8 +164,16 @@ export default function Page({ params }: { params: { slug: string } }) {
                         {userData?.name && (
                             <h1>{userData.name}</h1>
                         )}
-                        <h1>Position #{userData?.ranking.position  ?? 'N/A'}</h1>
-                        <h2>Rank Score: {displayRanking(userData?.ranking.value) ?? 'N/A'}</h2>
+                        {userData?.ranking ? (
+                            <>
+                                <p>Rank # {userData.ranking.position}</p>
+                                <p>Score {displayRanking(userData.ranking.value)}</p>
+                            </>
+                        ) : (
+                            <p>Ranking not yet assigned</p>
+                        )}
+
+
                     </div>
                     <div className="flex flex-col gap-4 items-center">
 
