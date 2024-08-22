@@ -105,7 +105,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     const avatarType = userData ? userData.avatarType || 'metamask' : 'metamask';
     const avatar = getAvatar(address, avatarType);
 
-    if (madeLoading || receivedLoading || ensNameLoading) return <div className="w-screen flex items-center justify-center"><Loader /></div>;
+    if (madeLoading || receivedLoading || ensNameLoading || rankScoreLoading) return <div className="w-screen flex items-center justify-center"><Loader /></div>;
     if (madeError || receivedError || ensNameerror) return <div>Error: {madeError?.message || receivedError?.message}</div>;
     const handleCopy = () => {
         copyToClipboard(address);
@@ -116,22 +116,6 @@ export default function Page({ params }: { params: { slug: string } }) {
     const handleReceivedOpen = () => {
         setDialogOpenedReceived(true);
     };
-
-
-    const zupassGroups = userData?.Zupass?.groups ? userData?.Zupass.groups.split(',') : [];
-    const quarkidIssuers = userData?.Quarkid?.issuer ? userData?.Quarkid.issuer.split(',') : [];
-    const allGroups = [...zupassGroups, ...quarkidIssuers];
-
-    let memberText = '';
-
-    if (allGroups.length > 0) {
-        if (allGroups.length === 1) {
-            memberText = `Member of ${allGroups[0]}`;
-        } else {
-            const lastGroup = allGroups.pop();
-            memberText = `Member of ${allGroups.join(', ')} and ${lastGroup}`;
-        }
-    }
 
     return (
         <div className="flex items-center justify-center bg-gray-100 w-full p-4">
@@ -271,7 +255,14 @@ export default function Page({ params }: { params: { slug: string } }) {
                             </>
                         )}
 
-                        {memberText}
+                        {userData?.Quarkid?.ticketType && (
+                            <>
+                                Member of Aleph | {userData?.Quarkid?.ticketType}
+                            </>
+                        )
+
+
+                        }
 
 
 

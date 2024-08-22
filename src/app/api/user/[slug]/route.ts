@@ -4,11 +4,11 @@ export async function GET(
     request: Request,
     { params }: { params: { slug: string } }
 ) {
-    const slug = params.slug.toLowerCase();
-
+    const slug = params.slug
+    const LowercaseAddress = slug.toLowerCase();
     // Fetch ranking information based on the wallet address
     const ranking = await prisma.ranking.findUnique({
-        where: { address: slug },
+        where: { address: LowercaseAddress },
         select: {
             position: true,
             value: true,
@@ -33,6 +33,7 @@ export async function GET(
             Quarkid: {
                 select: {
                     issuer: true,
+                    ticketType:true,
                 },
             },
         },
