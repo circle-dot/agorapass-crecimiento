@@ -4,12 +4,21 @@ export async function GET(
     request: Request,
     { params }: { params: { slug: string } }
 ) {
-    const slug = params.slug;
+    const slug = params.slug.toLowerCase();
 
+    // Fetch ranking information based on the wallet address
+    const ranking = await prisma.ranking.findUnique({
+        where: { address: slug },
+        select: {
+            position: true,
+            value: true,
+        },
+    });
+
+    // Fetch user information
     const user = await prisma.user.findUnique({
         where: { wallet: slug },
         select: {
-            rankScore: true,
             avatarType: true,
             bio: true,
             twitter: true,
@@ -29,13 +38,18 @@ export async function GET(
         },
     });
 
-    if (!user) {
-        return new Response('User not found', { status: 404 });
+    // Combine user and ranking data
+    const response = {
+        user: user || null,
+        ranking: ranking || null,
+    };
+
+    // Handle cases where neither user nor ranking is found
+    if (!user && !ranking) {
+        return new Response('User and ranking not found', { status: 404 });
     }
 
-
-
-    return new Response(JSON.stringify(user), {
+    return new Response(JSON.stringify(response), {
         headers: { 'Content-Type': 'application/json' },
     });
 }

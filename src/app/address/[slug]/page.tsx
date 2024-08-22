@@ -31,6 +31,7 @@ import FarcasterLogo from '@/../../public/farcaster.svg'
 import Image from 'next/image';
 import React, { lazy, Suspense } from 'react';
 const ShareProfile = lazy(() => import('@/components/ui/users/ShareProfile'));
+import displayRanking from "@/utils/displayRanking";
 //!TODO replace this schemaId
 const schemaId = process.env.NEXT_PUBLIC_SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3"; // Replace with your schemaId
 
@@ -163,7 +164,8 @@ export default function Page({ params }: { params: { slug: string } }) {
                         {userData?.name && (
                             <h1>{userData.name}</h1>
                         )}
-                        <h1>Trust Score: {userData?.rankScore ?? 'N/A'}</h1>
+                        <h1>Position #{userData?.ranking.position  ?? 'N/A'}</h1>
+                        <h2>Rank Score: {displayRanking(userData?.ranking.value) ?? 'N/A'}</h2>
                     </div>
                     <div className="flex flex-col gap-4 items-center">
 
