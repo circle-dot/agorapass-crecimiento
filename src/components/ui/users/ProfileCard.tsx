@@ -25,6 +25,7 @@ import withReactContent from 'sweetalert2-react-content';
 import LinkedButton from './LinkedButton';
 import UnlinkAccounts from './UnlinkAccounts';
 import truncateWallet from '@/utils/truncateWallet'
+import displayRanking from '@/utils/displayRanking';
 const ShareProfile = lazy(() => import('./ShareProfile'));
 
 const MySwal = withReactContent(Swal);
@@ -97,7 +98,7 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
     });
 
 
-    const { email, wallet, vouchesAvailables, createdAt, vouchReset, name, bio, avatarType, Zupass, Quarkid } = data || {};
+    const { email, wallet, vouchesAvailables, createdAt, vouchReset, name, bio, avatarType, Zupass, Quarkid, ranking } = data || {};
     const [remainingTime, setRemainingTime] = useState('00:00:00');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -214,7 +215,8 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                         className="flex flex-col items-center space-y-2"
                     >
                         <p className="text-lg font-medium">{name ? name : email}</p>
-
+                            <p>Rank # {ranking.position	 ? ranking.position : 'N/A'}</p>
+                            <p>Score  {ranking.value	 ? displayRanking(ranking.value): 'N/A'}</p>
                         <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger asChild>

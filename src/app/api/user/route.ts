@@ -45,14 +45,31 @@ export async function GET(request: NextRequest) {
             },
         });
 
-
         if (!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
-        return NextResponse.json(user);
+
+        const normalizedAddress = user.wallet.toLowerCase();
+
+        // Fetch ranking information based on the wallet address
+        const ranking = await prisma.ranking.findUnique({
+            where: { address: normalizedAddress },
+            select: {
+                position: true,
+                value: true,
+            },
+        });
+
+        // Create a new response object combining user and ranking
+        const response = {
+            ...user,
+            ranking: ranking || null,
+        };
+
+        return NextResponse.json(response);
     } catch (error) {
-        console.error('Error fetching users:', error);
-        return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 });
+        console.error('Error fetching user:', error);
+        return NextResponse.json({ error: 'Failed to fetch user' }, { status: 500 });
     }
 }
 
@@ -74,12 +91,12 @@ export async function PATCH(request: NextRequest) {
             return NextResponse.json({ error: 'Token verification failed' }, { status: 401 });
         }
 
-
         const { name, bio, avatarType } = await request.json();
 
         if (!name || typeof name !== 'string' || name.trim().length < 2) {
             return NextResponse.json({ error: 'Invalid name' }, { status: 400 });
         }
+
         const updatedUser = await prisma.user.update({
             where: {
                 id: verifiedClaims.userId,
@@ -87,7 +104,7 @@ export async function PATCH(request: NextRequest) {
             data: {
                 name: name.trim(),
                 bio,
-                avatarType
+                avatarType,
             },
         });
 
@@ -97,4 +114,3 @@ export async function PATCH(request: NextRequest) {
         return NextResponse.json({ error: 'Failed to update user' }, { status: 500 });
     }
 }
-
