@@ -125,10 +125,10 @@ function Page() {
                                 <motion.div
                                     key={ranking.id}
                                     className={cn(
-                                        "shadow rounded-lg p-4",
+                                        "shadow rounded-lg p-4 hover:text-primarydark",
                                         isCurrentUser ? "bg-green-100" : "bg-white"
                                     )}
-                                    whileHover={{ scale: 1.05 }}
+                                    // whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
