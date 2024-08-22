@@ -102,9 +102,6 @@ export default function Page({ params }: { params: { slug: string } }) {
         staleTime: Infinity,
     });
 
-    const avatarType = userData ? userData?.user.avatarType || 'metamask' : 'metamask';
-    const avatar = getAvatar(address, avatarType);
-
     if (madeLoading || receivedLoading || ensNameLoading || rankScoreLoading) return <div className="w-screen flex items-center justify-center"><Loader /></div>;
     if (madeError || receivedError || ensNameerror) return <div>Error: {madeError?.message || receivedError?.message}</div>;
     const handleCopy = () => {
@@ -116,6 +113,8 @@ export default function Page({ params }: { params: { slug: string } }) {
     const handleReceivedOpen = () => {
         setDialogOpenedReceived(true);
     };
+    const avatarType = userData?.user ? userData.user.avatarType || 'metamask' : 'metamask';
+    const avatar = getAvatar(address, avatarType);
 
     return (
         <div className="flex items-center justify-center bg-gray-100 w-full p-4">
