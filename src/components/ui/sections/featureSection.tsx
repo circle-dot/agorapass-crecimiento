@@ -11,9 +11,9 @@ import Link from "next/link";
 export default function FeaturesSection() {
     const features = [
         {
-            title: "CreciScore",
+            title: "CreciStamp",
             description:
-                "CreciScore enables community members to vouch for each other and increase their trust score within the Crecimiento community. By vouching for new members, you are inviting them to become part of the ecosystem. Once you get over a certain trust score you will be able to get an CreciScore Zupass enabled.This pass will grant you access to the Agora.City forum and other perks.",
+                "CreciStamp enables community members to vouch for each other and increase their trust score within the Crecimiento community. By vouching for new members, you are inviting them to become part of the ecosystem. Once you get over a certain trust score you will be able to get an CreciStamp Zupass enabled.This pass will grant you access to the Agora.City forum and other perks.",
             skeleton: < SkeletonOne />,
             className:
                 "col-span-1 lg:col-span-4 border-b lg:border-r ",
@@ -45,7 +45,7 @@ export default function FeaturesSection() {
         <div className="relative z-20 pb-10  max-w-7xl mx-auto">
             <div className="px-8">
                 <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-bold text-black ">
-                    About CreciScore
+                    About CreciStamp
                 </h4>
 
                 <p className="text-sm lg:text-base  max-w-2xl  my-4 mx-auto text-neutral-500 text-center font-normal ">

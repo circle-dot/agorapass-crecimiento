@@ -11,7 +11,7 @@ const Plex_Sans = IBM_Plex_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "CreciScore",
+  title: "CreciStamp",
   description: "Join the solution to decentralize invitations into communities, such as Crecimiento and decrease the dependency on trust in centralized authorities in our community.",
   icons: '/favicon.ico',
 };

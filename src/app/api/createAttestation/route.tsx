@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
         const encodedData = schemaEncoder.encodeData([
             { name: "power", value: "1", type: "uint8" },
             { name: "endorsementType", value: "Social", type: "string" },
-            { name: "platform", value: "CreciScore", type: "string" }
+            { name: "platform", value: "CreciStamp", type: "string" }
         ]);
 
 

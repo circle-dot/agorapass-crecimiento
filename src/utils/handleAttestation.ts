@@ -23,7 +23,7 @@ export const handleVouch = async (
 
     const power = "1";
     const endorsementType = "Social";
-    const platform = "CreciScore";
+    const platform = "CreciStamp";
     const nonce = await fetchNonce(user.wallet.address);
 
     if (nonce === undefined) {
@@ -48,7 +48,7 @@ export const handleVouch = async (
         const encodedData = schemaEncoder.encodeData([
             { name: "power", value: "1", type: "uint8" },
             { name: "endorsementType", value: "Social", type: "string" },
-            { name: "platform", value: "CreciScore", type: "string" }
+            { name: "platform", value: "CreciStamp", type: "string" }
         ]);
 
         const domain = {
