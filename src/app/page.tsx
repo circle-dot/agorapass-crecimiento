@@ -40,7 +40,7 @@ export default function Page() {
                 className="select-none pointer-events-none"
               />
               <div className="text-4xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-                CreciScore
+                CreciStamp
               </div>
               <sup className="text-xs">
                 Beta

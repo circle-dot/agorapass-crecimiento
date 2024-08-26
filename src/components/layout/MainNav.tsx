@@ -33,7 +33,7 @@ function MainNav() {
                         className="flex items-center gap-2 text-lg font-semibold md:text-base shrink-0"
                     >
                         <Image src={Logo} alt="Company Logo" width={20} height={20} />
-                        <span className="hidden lg:flex">CreciScore </span>
+                        <span className="hidden lg:flex">CreciStamp </span>
                         <sup>Beta</sup>
                     </Link>
                 </div>

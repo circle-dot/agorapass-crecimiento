@@ -27,7 +27,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                     theme: 'light',
                     accentColor: '#19473f',
                     logo: '/logo.png',
-                    landingHeader: 'Hop into CreciScore',
+                    landingHeader: 'Hop into CreciStamp',
                 },
                 // Create embedded wallets for users who don't have a wallet
                 embeddedWallets: {

@@ -27,7 +27,7 @@ export default function Navbar() {
                             width={48}
                             height={48}
                         />
-                        <span className="sr-only">CreciScore</span>
+                        <span className="sr-only">CreciStamp</span>
                     </Link>
                     {navSections.map((section, index) => (
                         <Link
@@ -62,7 +62,7 @@ export default function Navbar() {
                                     width={48}
                                     height={48}
                                 />
-                                <span className="sr-only">CreciScore</span>
+                                <span className="sr-only">CreciStamp</span>
                             </Link>
                             {navSections.map((section, index) => (
                                 <Link
