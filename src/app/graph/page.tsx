@@ -3,11 +3,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
-import { fetchAttestations, fetchAggregateAttestations } from "@/lib/fetchers/attestations";
+import { fetchAttestations } from "@/lib/fetchers/attestations";
 import ReactDOM from 'react-dom';
 import { useRouter } from 'next/navigation';
-import * as THREE from 'three';
-import * as d3 from 'd3';
 
 const ForceGraph3DWrapper = dynamic(() => import('react-force-graph').then(mod => mod.ForceGraph3D), {
     ssr: false,
