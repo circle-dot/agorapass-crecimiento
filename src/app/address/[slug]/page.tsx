@@ -240,10 +240,10 @@ export default function Page({ params }: { params: { slug: string } }) {
 
                         <div className='flex items-center justify-center flex-row'>
                             {userData?.user?.twitter && (
-                                <a target="_blank" href={'https://x.com/' + userData.twitter} className='flex flex-row justify-center items-center  text-sky-400'><Image src={TwitterLogo} alt='User with Farcaster' className='mx-1 h-6 w-6 ' />@{userData.twitter}</a>
+                                <a target="_blank" href={'https://x.com/' + userData.user.twitter} className='flex flex-row justify-center items-center  text-sky-400'><Image src={TwitterLogo} alt='User with Farcaster' className='mx-1 h-6 w-6 ' />@{userData.user.twitter}</a>
                             )}
                             {userData?.user?.farcaster && (
-                                <a target="_blank" href={'https://warpcast.com/' + userData.farcaster} className='flex items-center justify-center flex-row text-[#8a63d2]'><Image src={FarcasterLogo} alt='User with Farcaster' className='mx-1 h-6 w-6 ' />@{userData.farcaster}</a>
+                                <a target="_blank" href={'https://warpcast.com/' + userData.user.farcaster} className='flex items-center justify-center flex-row text-[#8a63d2]'><Image src={FarcasterLogo} alt='User with Farcaster' className='mx-1 h-6 w-6 ' />@{userData.user.farcaster}</a>
                             )}
                         </div>
                         <hr className="my-4 border-gray-300" />
