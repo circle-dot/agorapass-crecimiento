@@ -22,6 +22,17 @@ import { Skeleton } from '@/components/ui/skeleton';
 import {
     useEffect, useMemo, useState
 } from 'react';
+
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Search } from "lucide-react";
+import SearchBar from '@/components/ui/users/searchBar';
 const filters = [
     {
         valueFilter: "desc" as const,
@@ -72,6 +83,18 @@ function Page() {
                         className="border p-2 rounded-md w-full"
                     />
                 </div>
+                <Dialog>
+                    <DialogTrigger asChild><Button variant="outline"><Search className="pr-0.5 h-4 w-4 text-muted-foreground" />On-chain search</Button></DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Want to vouch for a user that is not in the app yet? Looking for a specific vouch?</DialogTitle>
+                            <DialogDescription className='flex items-center justify-center flex-col gap-y-2 pt-2'>
+                                <p>Write here the <b className='font-bold'>Address/Vouch Id</b>  and we will find it!</p>
+                                <SearchBar />
+                            </DialogDescription>
+                        </DialogHeader>
+                    </DialogContent>
+                </Dialog>
 
                 <Popover open={openFilter} onOpenChange={setOpenFilter}>
                     <PopoverTrigger asChild>
