@@ -5,8 +5,8 @@
   "elements": [
     {
       "type": "text",
-      "version": 49,
-      "versionNonce": 101850251,
+      "version": 50,
+      "versionNonce": 609056205,
       "isDeleted": false,
       "id": "49lC1gU3aPQMk7XAJMUw2",
       "fillStyle": "solid",
@@ -26,7 +26,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1723374866986,
+      "updated": 1724724243472,
       "link": null,
       "locked": false,
       "fontSize": 28,
@@ -41,8 +41,8 @@
     },
     {
       "type": "text",
-      "version": 179,
-      "versionNonce": 823395749,
+      "version": 180,
+      "versionNonce": 700930435,
       "isDeleted": false,
       "id": "jIHtTvth1uqgtOM6CShC7",
       "fillStyle": "solid",
@@ -62,7 +62,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1723374866986,
+      "updated": 1724724243472,
       "link": null,
       "locked": false,
       "fontSize": 28,
@@ -121,8 +121,8 @@
     },
     {
       "type": "text",
-      "version": 397,
-      "versionNonce": 508842795,
+      "version": 398,
+      "versionNonce": 1008153645,
       "isDeleted": false,
       "id": "kO8qFQxAqZu0epaTV2Ygk",
       "fillStyle": "solid",
@@ -142,7 +142,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1723374866986,
+      "updated": 1724724243473,
       "link": null,
       "locked": false,
       "fontSize": 28,
@@ -201,8 +201,8 @@
     },
     {
       "type": "text",
-      "version": 520,
-      "versionNonce": 1580075269,
+      "version": 521,
+      "versionNonce": 457650467,
       "isDeleted": false,
       "id": "JH1Z-MszvK_t1CCkxHGwB",
       "fillStyle": "solid",
@@ -222,7 +222,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1723374866986,
+      "updated": 1724724243473,
       "link": null,
       "locked": false,
       "fontSize": 28,
@@ -351,7 +351,7 @@
       "containerId": "yurF-ZLpWHOOH4g6R9tV6",
       "originalText": "Account Creation",
       "lineHeight": 1.25,
-      "baseline": 48
+      "baseline": 50
     },
     {
       "type": "arrow",
@@ -633,7 +633,7 @@
       "containerId": "kubIOk7yxysr1-y-jY4LO",
       "originalText": "Store on Agora Database",
       "lineHeight": 1.25,
-      "baseline": 69
+      "baseline": 71
     },
     {
       "type": "rectangle",
@@ -707,7 +707,7 @@
       "containerId": "rRtIaUkL722ncq83H_jLz",
       "originalText": "Store on Agora Database",
       "lineHeight": 1.25,
-      "baseline": 69
+      "baseline": 71
     },
     {
       "type": "rectangle",
@@ -781,7 +781,7 @@
       "containerId": "NSctYlKIf2gpdjo1OQ2f7",
       "originalText": "Resolver Contract",
       "lineHeight": 1.25,
-      "baseline": 44
+      "baseline": 46
     },
     {
       "type": "rectangle",
@@ -855,12 +855,12 @@
       "containerId": "m9J-MCSRdRx6Y1FvhDPg6",
       "originalText": "Resolver Contract",
       "lineHeight": 1.25,
-      "baseline": 44
+      "baseline": 46
     },
     {
       "type": "text",
-      "version": 429,
-      "versionNonce": 1784067531,
+      "version": 430,
+      "versionNonce": 81405581,
       "isDeleted": false,
       "id": "m9XnciLaUEWpYp5QapG0j",
       "fillStyle": "solid",
@@ -880,7 +880,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1723374866986,
+      "updated": 1724724243474,
       "link": null,
       "locked": false,
       "fontSize": 36,
@@ -895,8 +895,8 @@
     },
     {
       "type": "text",
-      "version": 641,
-      "versionNonce": 334536805,
+      "version": 642,
+      "versionNonce": 1781208259,
       "isDeleted": false,
       "id": "OVPlJ5P4uMDaxg2deikKJ",
       "fillStyle": "solid",
@@ -916,7 +916,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1723374866987,
+      "updated": 1724724243475,
       "link": null,
       "locked": false,
       "fontSize": 36,
@@ -931,8 +931,8 @@
     },
     {
       "type": "text",
-      "version": 687,
-      "versionNonce": 1496564843,
+      "version": 700,
+      "versionNonce": 1550284835,
       "isDeleted": false,
       "id": "-EccZCSULh0uvbcc2LZTU",
       "fillStyle": "solid",
@@ -945,23 +945,23 @@
       "y": -1791.592368109689,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
-      "width": 205.991943359375,
+      "width": 191.08792114257812,
       "height": 45,
       "seed": 987091399,
       "groupIds": [],
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1723374866987,
+      "updated": 1724724258595,
       "link": null,
       "locked": false,
       "fontSize": 36,
       "fontFamily": 1,
-      "text": "CreciScore",
+      "text": "CreciStamp",
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "CreciScore",
+      "originalText": "CreciStamp",
       "lineHeight": 1.25,
       "baseline": 32
     },
@@ -1037,7 +1037,7 @@
       "containerId": "p-XoUdhPEyAEoIMU0DUSn",
       "originalText": "Connect Socials",
       "lineHeight": 1.25,
-      "baseline": 48
+      "baseline": 50
     },
     {
       "type": "rectangle",
@@ -1111,7 +1111,7 @@
       "containerId": "NEjx-sMDLoS4wMa8fm7Li",
       "originalText": "Connect ZuPass",
       "lineHeight": 1.25,
-      "baseline": 48
+      "baseline": 50
     },
     {
       "type": "rectangle",
@@ -1185,7 +1185,7 @@
       "containerId": "nslM-nr1QuANWzT7tnocE",
       "originalText": "Vouches",
       "lineHeight": 1.25,
-      "baseline": 19
+      "baseline": 21
     },
     {
       "type": "diamond",
@@ -1259,7 +1259,7 @@
       "containerId": "D3CEDJNMN1zNN7wkp9VKp",
       "originalText": "Verifies PCD proof",
       "lineHeight": 1.25,
-      "baseline": 55
+      "baseline": 56
     },
     {
       "type": "diamond",
@@ -1333,7 +1333,7 @@
       "containerId": "Ooii9tVMylf0T_rZyGmd7",
       "originalText": "Verifies\naddress has valid vouches",
       "lineHeight": 1.25,
-      "baseline": 75
+      "baseline": 76
     },
     {
       "type": "arrow",
@@ -1515,7 +1515,7 @@
       "containerId": "hUcautd55atWfNuFHBlEK",
       "originalText": "Delegated Attestation\nw/ Ticket + Eth Address",
       "lineHeight": 1.25,
-      "baseline": 94
+      "baseline": 96
     },
     {
       "type": "rectangle",
@@ -1593,12 +1593,12 @@
       "containerId": "ZJon4LtxXOJRHmECPOQZt",
       "originalText": "Delegated Attestation\nw/ Eth Address",
       "lineHeight": 1.25,
-      "baseline": 69
+      "baseline": 71
     },
     {
       "type": "text",
-      "version": 656,
-      "versionNonce": 1479101381,
+      "version": 657,
+      "versionNonce": 1712424035,
       "isDeleted": false,
       "id": "Mbi3DmkpF4OPwiHdGhIo4",
       "fillStyle": "solid",
@@ -1618,7 +1618,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1723374866987,
+      "updated": 1724724243475,
       "link": null,
       "locked": false,
       "fontSize": 28,
@@ -1707,7 +1707,7 @@
       "containerId": "D0c_CW33LkyVGrr_mtfqz",
       "originalText": "Seed Peers (PreTrust)\nTrust Score",
       "lineHeight": 1.25,
-      "baseline": 69
+      "baseline": 71
     },
     {
       "type": "arrow",
@@ -1887,7 +1887,7 @@
       "containerId": "BdDMqfbc1-ja1COwCtjmn",
       "originalText": "Trust Score\nUpdated",
       "lineHeight": 1.25,
-      "baseline": 48
+      "baseline": 50
     },
     {
       "type": "rectangle",
@@ -1965,7 +1965,7 @@
       "containerId": "kq6hPfGSVUGnknrS3TCe9",
       "originalText": "EigenTrust\nTrust Score Calculated",
       "lineHeight": 1.25,
-      "baseline": 69
+      "baseline": 71
     },
     {
       "type": "arrow",
@@ -2093,7 +2093,7 @@
       "containerId": "r7P6X0kIpULZ961JWQ4ME",
       "originalText": "Trust Score\nUpdated",
       "lineHeight": 1.25,
-      "baseline": 48
+      "baseline": 50
     },
     {
       "type": "arrow",
@@ -2219,7 +2219,7 @@
       "containerId": "3lPAzfd6VYPNf9nJON7uW",
       "originalText": "Trust Score > XYZ",
       "lineHeight": 1.25,
-      "baseline": 44
+      "baseline": 46
     },
     {
       "type": "arrow",
@@ -2343,12 +2343,12 @@
       "containerId": "gYD46A0tLX4oKkE226yog",
       "originalText": "AgoraPass\n(new Zupass\nticket)",
       "lineHeight": 1.25,
-      "baseline": 69
+      "baseline": 71
     },
     {
       "type": "text",
-      "version": 367,
-      "versionNonce": 313917195,
+      "version": 368,
+      "versionNonce": 1627498317,
       "isDeleted": false,
       "id": "8kavZNSMr_fbgURG6rI6x",
       "fillStyle": "solid",
@@ -2368,7 +2368,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1723374866987,
+      "updated": 1724724243476,
       "link": null,
       "locked": false,
       "fontSize": 16,
