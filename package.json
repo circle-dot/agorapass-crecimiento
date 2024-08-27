@@ -50,6 +50,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "cobe": "^0.6.3",
+    "d3": "^7.9.0",
     "ethereum-blockies": "^0.1.1",
     "ethers": "^6.13.2",
     "framer-motion": "^11.3.21",
@@ -72,6 +73,7 @@
     "sweetalert2-react-content": "^5.0.7",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
+    "three": "^0.167.1",
     "viem": "^2.18.8",
     "zod": "^3.23.8"
   },

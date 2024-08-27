@@ -6,6 +6,8 @@ import dynamic from 'next/dynamic';
 import { fetchAttestations, fetchAggregateAttestations } from "@/lib/fetchers/attestations";
 import ReactDOM from 'react-dom';
 import { useRouter } from 'next/navigation';
+import * as THREE from 'three';
+import * as d3 from 'd3';
 
 const ForceGraph3DWrapper = dynamic(() => import('react-force-graph').then(mod => mod.ForceGraph3D), {
     ssr: false,
@@ -45,6 +47,12 @@ interface Node {
 interface Link {
     source: string;
     target: string;
+}
+
+interface Coords {
+    x: number;
+    y: number;
+    z: number;
 }
 
 const RankingsGraph: React.FC = () => {
@@ -88,6 +96,8 @@ const RankingsGraph: React.FC = () => {
 
             if (graphRef.current) {
                 const Graph = ForceGraph3DWrapper;
+                const nodeColorScale = d3.scaleOrdinal(d3.schemeRdYlGn[4]);
+
                 const graphElement = (
                     <Graph
                         graphData={data}
@@ -96,19 +106,6 @@ const RankingsGraph: React.FC = () => {
                         linkDirectionalParticles={2}
                         linkDirectionalParticleSpeed={0.005}
                         onNodeClick={(node: any) => {
-                            // Handle node click (e.g., focus camera on node)
-                            if (typeof node.x === 'number' && typeof node.y === 'number' && typeof node.z === 'number') {
-                                // // Access the graph instance through ref instead of using graphInstance
-                                // if (graphRef.current) {
-                                //     const graphInstance = (graphRef.current as any).__graphInstance;
-                                //     graphInstance.cameraPosition(
-                                //         { x: node.x, y: node.y, z: node.z },
-                                //         node,
-                                //         3000
-                                //     );
-                                // }
-                            }
-                            // Direct to the user's profile
                             const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001';
                             router.push(`${baseUrl}/address/${node.id}`);
                         }}
@@ -116,8 +113,9 @@ const RankingsGraph: React.FC = () => {
                         height={height}
                         d3AlphaDecay={0.01}
                         d3VelocityDecay={0.1}
-                        backgroundColor="#c2c2c2"
-                        linkColor={() => "blue"}
+                        backgroundColor="#003f5c"
+                        linkColor={(link) => '#54F7C5'}
+                        nodeColor={(node) => nodeColorScale(node.id)}
                         nodeVal={(node) => node.score}
                         // @ts-ignore
                         nodeLabel={(node) => `
@@ -125,9 +123,9 @@ const RankingsGraph: React.FC = () => {
                                 background-color: rgba(0,0,0,0.8);
                                 color: white;
                                 padding: 5px;
-                                border-radius: 5px;
+                                border-radius: 20px;
                                 font-weight: bold;
-                                transform: translateY(-20px);
+                                transform: translateY(20px);
                             ">
                                 ${node.id} 
                                 </br>
