@@ -88,7 +88,10 @@ const ProfileAvatar = () => {
                         <DropdownMenuTrigger asChild>
                             <Button variant="secondary" className="px-0.5 font-bold mr-1" asChild>
                                 <div className="flex flex-row min-w-12 ">
+                                    <span className="flex-row flex">
+                                        <p className="hidden md:flex pl-0.5 !font-extrabold">Connect QuarkId</p>
                                     <Image src={QuarkIdLogo} alt="QuarkId logo" className="w-6 h-6" /> <ChevronDown className="!w-6 !h-6" />
+                                    </span>
                                 </div>
                             </Button>
                         </DropdownMenuTrigger>

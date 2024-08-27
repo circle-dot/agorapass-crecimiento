@@ -3,6 +3,7 @@ import { signTypedData } from './signTypedData';
 import fetchNonce from './fetchNonce';
 import { showLoadingAlert, showErrorAlert, showSuccessAlert } from './alertUtils';
 import { SchemaEncoder } from '@ethereum-attestation-service/eas-sdk';
+import checkQuark from './checkQuarkIdConection';
 
 export const handleVouch = async (
     recipient: string,
@@ -37,6 +38,14 @@ export const handleVouch = async (
         const token = await getAccessToken();
         if (!token) {
             showErrorAlert('Something went wrong. Try reloading the page.');
+            return;
+        }
+
+        // Check QuarkId connection
+        const quarkStatus = await checkQuark(token);
+        if (quarkStatus === 404) {
+            showErrorAlert('Please connect your QuarkId.');
+            // Optionally, render the <ConnectQuarkId /> component here
             return;
         }
 
@@ -111,3 +120,4 @@ export const handleVouch = async (
         }
     }
 };
+
