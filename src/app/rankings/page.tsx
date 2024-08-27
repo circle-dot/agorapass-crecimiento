@@ -52,6 +52,13 @@ function Page() {
         };
     }, [inView, fetchNextPage, hasNextPage]);
 
+    const getEmoji = (position: number) => {
+        if (position == 1) return '🥇';
+        if (position == 2) return '🥈';
+        if (position == 3) return '🥉';
+        return '🇦 ';
+    }
+
     return (
         <div className='flex flex-col w-full p-4'>
             <div className='flex flex-row font-semibold justify-center items-center'>
@@ -125,7 +132,6 @@ function Page() {
                                 <motion.div
                                     key={ranking.id}
                                     className={cn(
-                                        "shadow rounded-lg p-4 hover:text-primarydark",
                                         isCurrentUser ? "bg-green-100" : "bg-white"
                                     )}
                                     // whileHover={{ scale: 1.05 }}
@@ -133,8 +139,15 @@ function Page() {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.3 }}
+                                    style={{
+                                        position: 'relative',
+                                    }}
                                 >
-                                    <CardHeader className="flex flex-col items-center gap-4 space-y-2">
+                                    <CardHeader className="flex flex-row items-center justify-center gap-4 space-y-2">
+                                        <div className="flex items-center text-lg text-gray-500 mt-1">
+                                            {getEmoji(ranking.position)} {ranking.position}
+                                        </div>
+
                                         <Avatar>
                                             <MetaMaskAvatar address={normalizeAddress(ranking.address)} size={100} className='!w-full !h-full' />
                                         </Avatar>
@@ -147,10 +160,6 @@ function Page() {
                                                     This is you!
                                                 </div>
                                             )}
-                                            <div className="flex items-center text-lg text-gray-500 mt-1">
-                                                <BlendIcon className="mr-1 h-3 w-3" />
-                                                Position #{ranking.position}
-                                            </div>
                                         </div>
                                         <Button
                                             variant="outline"

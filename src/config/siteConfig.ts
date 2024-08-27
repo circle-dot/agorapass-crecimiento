@@ -11,13 +11,18 @@ export const navSections = [
         className: "transition-colors hover:text-foreground"
     },
     {
+        label: "Graph",
+        href: "/graph",
+        className: "transition-colors hover:text-foreground"
+    },
+    {
         label: "Leaderboard",
         href: "/rankings",
         className: "transition-colors hover:text-foreground"
     },
-    {
-        label: "About",
-        href: "/about",
-        className: "transition-colors hover:text-foreground"
-    },
+    // {
+    //     label: "About",
+    //     href: "/about",
+    //     className: "transition-colors hover:text-foreground"
+    // },
 ];
