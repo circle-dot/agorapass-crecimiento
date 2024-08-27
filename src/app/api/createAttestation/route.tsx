@@ -8,8 +8,7 @@ import { Utils } from 'alchemy-sdk';
 
 const easContractAddress = "0x21d8d4eE83b80bc0Cc0f2B7df3117Cf212d02901";
 const schemaUID = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3";
-console.log('easContractAddress', easContractAddress)
-console.log('schemaUID', schemaUID)
+
 const eas = new EAS(easContractAddress);
 // Signer must be an ethers-like signer.
 const PRIVATE_KEY = process.env.PRIVATE_KEY!;
@@ -77,40 +76,6 @@ export async function POST(request: NextRequest) {
         let expandedSig = Utils.splitSignature(flatSig);
         // console.log('expandedSig', expandedSig)
 
-        const delegated = await eas.getDelegated();
-
-        const response = await delegated.signDelegatedAttestation(
-            {
-                schema: schemaUID,
-                recipient: recipient,
-                expirationTime: toBigInt(0),
-                revocable: true,
-                refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
-                data: encodedData,
-                deadline: 0n, // Unix timestamp of when signature expires (0 for no expiration)
-                value: 0n
-            },
-            signer
-        );
-        console.log('response', response)
-        console.log('responseType', response.types.Attest)
-
-
-        console.log('recipient:', recipient);
-        console.log('attester:', attester);
-        console.log('encodedData:', encodedData);
-        console.log('signature:', expandedSig);
-        console.log('attestation data:', {
-            schema: schemaUID,
-            recipient: recipient,
-            expirationTime: toBigInt(0),
-            revocable: true,
-            refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
-            data: encodedData,
-            signature: expandedSig,
-            attester: attester,
-            deadline: toBigInt(0)
-        });
         // Create the delegated attestation
         const transaction = await eas.attestByDelegation({
             schema: schemaUID,
@@ -126,7 +91,6 @@ export async function POST(request: NextRequest) {
             deadline: toBigInt(0) // Unix timestamp of when signature expires (0 for no expiration)
         });
         const newAttestationUID = await transaction.wait();
-        console.log('newAttestationUID', newAttestationUID)
 
         // Update user's vouchesAvailables
         await prisma.user.update({
