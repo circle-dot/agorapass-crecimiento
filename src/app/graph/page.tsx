@@ -114,7 +114,7 @@ const RankingsGraph: React.FC = () => {
                         d3VelocityDecay={0.1}
                         backgroundColor="#003f5c"
                         linkColor={(link) => '#54F7C5'}
-                        nodeColor={(node) => nodeColorScale(node.id)}
+                        nodeColor={(node) => nodeColorScale(String(node.id))}
                         nodeVal={(node) => node.score}
                         // @ts-ignore
                         nodeLabel={(node) => `
