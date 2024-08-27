@@ -7,7 +7,7 @@ import { toBigInt } from 'ethers';
 import { Utils } from 'alchemy-sdk';
 import { updateEigenScore } from '@/utils/updateEigenScore';
 
-const easContractAddress = "0x4200000000000000000000000000000000000021";
+const easContractAddress = "0x21d8d4eE83b80bc0Cc0f2B7df3117Cf212d02901";
 const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0x9075dee7661b8b445a2f0caa3fc96223b8cc2593c796c414aed93f43d022b0f9";
 
 const eas = new EAS(easContractAddress);

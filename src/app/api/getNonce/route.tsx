@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Attester is required' }, { status: 400 });
     }
 
-    const easContractAddress = "0x4200000000000000000000000000000000000021";
+    const easContractAddress = "0x21d8d4eE83b80bc0Cc0f2B7df3117Cf212d02901";
     const eas = new EAS(easContractAddress);
     const PRIVATE_KEY = process.env.PRIVATE_KEY!;
     const ALCHEMY_URL = process.env.ALCHEMY_URL!;

@@ -13,7 +13,7 @@ interface RevokeButtonCustomProps {
 const RevokeButton: React.FC<RevokeButtonCustomProps> = ({ UID, className }) => {
     const { getAccessToken, user } = usePrivy();
     const { wallets } = useWallets();
-    const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '84532', 10);
+    const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '324', 10);
     const schemaUID = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3";
 
     const handleClick = async () => {
