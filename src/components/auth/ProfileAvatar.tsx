@@ -24,7 +24,7 @@ import {
     Dialog,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import ZupassButton from "../layout/ZupassButton";
+
 const ProfileAvatar = () => {
     const [updateTrigger, setUpdateTrigger] = useState(false);
     const { data, isLoading, error } = useFetchUserProfile(updateTrigger);
@@ -99,7 +99,7 @@ const ProfileAvatar = () => {
                                 ) : (
                                     <Dialog>
                                         <DialogTrigger asChild>
-                                            <ZupassButton />
+                                            <ConnectQuarkId />
                                         </DialogTrigger>
                                     </Dialog>
                                 )}
