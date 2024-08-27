@@ -4,7 +4,7 @@ import fetchNonce from './fetchNonce';
 import { showLoadingAlert, showErrorAlert, showSuccessAlert } from './alertUtils';
 import { SchemaEncoder } from '@ethereum-attestation-service/eas-sdk';
 import checkQuark from './checkQuarkIdConection';
-
+import Swal from 'sweetalert2';
 export const handleVouch = async (
     recipient: string,
     authStatus: boolean,
@@ -12,6 +12,7 @@ export const handleVouch = async (
     wallets: any,
     getAccessToken: any
 ) => {
+    showLoadingAlert();
     if (!user?.wallet?.address) {
         showErrorAlert('User wallet address is not defined.');
         return;
@@ -32,7 +33,7 @@ export const handleVouch = async (
         return;
     }
 
-    showLoadingAlert();
+
 
     try {
         const token = await getAccessToken();
@@ -44,9 +45,8 @@ export const handleVouch = async (
         // Check QuarkId connection
         const quarkStatus = await checkQuark(token);
         if (quarkStatus === 404) {
-            showErrorAlert('Please connect your QuarkId.');
-            // Optionally, render the <ConnectQuarkId /> component here
-            return;
+            Swal.close();
+            return 404; // Return 404 to indicate QuarkId is not connected
         }
 
         const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '324', 10);
