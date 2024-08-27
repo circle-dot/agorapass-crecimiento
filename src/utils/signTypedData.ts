@@ -1,5 +1,5 @@
 import { createWalletClient, custom } from 'viem';
-import { base, baseSepolia } from 'viem/chains';
+import { zkSync } from 'viem/chains';
 
 export const signTypedData = async (user: { wallet: { walletClientType: string; }; }, wallets: any[], chainId: number, typedData: { types: any; domain: any; primaryType: any; message: any; }) => {
     let signature;
@@ -21,7 +21,7 @@ export const signTypedData = async (user: { wallet: { walletClientType: string; 
         await wallet.switchChain(chainId);
         const provider = await wallet.getEthereumProvider();
         const address = wallet.address;
-        const defaultChain = chainId === 8453 ? base : baseSepolia;
+        const defaultChain = zkSync;
 
         const walletClient = createWalletClient({
             account: address as `0x${string}`,

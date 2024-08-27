@@ -37,9 +37,9 @@ export async function handleRevokeAttestation({ user, wallets, chainId, schemaUI
         const typedData = {
             domain: {
                 name: 'EAS',
-                version: '1.2.0',
+                version: '1.3.0',
                 chainId,
-                verifyingContract: '0x4200000000000000000000000000000000000021'
+                verifyingContract: '0x21d8d4eE83b80bc0Cc0f2B7df3117Cf212d02901'
             },
             primaryType: 'Revoke',
             message,

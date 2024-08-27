@@ -47,7 +47,7 @@ export const handleVouch = async (
             return;
         }
 
-        const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '84532', 10);
+        const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '324', 10);
         const schemaUID = process.env.SCHEMA_ID_ZUPASS || "0x9075dee7661b8b445a2f0caa3fc96223b8cc2593c796c414aed93f43d022b0f9";
         const attester = user?.wallet.address;
         const nullifier = payload.nullifiers[0];
@@ -67,13 +67,14 @@ export const handleVouch = async (
 
         const domain = {
             name: 'EAS',
-            version: '1.2.0',
+            version: '1.3.0',
             chainId: chainId,
-            verifyingContract: '0x4200000000000000000000000000000000000021'
+            verifyingContract: '0x21d8d4eE83b80bc0Cc0f2B7df3117Cf212d02901'
         };
 
         const types = {
             Attest: [
+                { name: 'attester', type: 'address' },
                 { name: 'schema', type: 'bytes32' },
                 { name: 'recipient', type: 'address' },
                 { name: 'expirationTime', type: 'uint64' },
@@ -87,6 +88,7 @@ export const handleVouch = async (
         };
 
         const value = {
+            attester: attester,
             schema: schemaUID,
             recipient: attester,
             expirationTime: 0,

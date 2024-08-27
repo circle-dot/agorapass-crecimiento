@@ -40,10 +40,11 @@ export const handleVouch = async (
             return;
         }
 
-        const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '84532', 10);
+        const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '324', 10);
         const schemaUID = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3";
         const attester = user?.wallet.address;
 
+        // Initialize SchemaEncoder with the schema string
         const schemaEncoder = new SchemaEncoder("uint8 power,string endorsementType,string platform");
         const encodedData = schemaEncoder.encodeData([
             { name: "power", value: "1", type: "uint8" },
@@ -53,13 +54,14 @@ export const handleVouch = async (
 
         const domain = {
             name: 'EAS',
-            version: '1.2.0',
+            version: '1.3.0',
             chainId: chainId,
-            verifyingContract: '0x4200000000000000000000000000000000000021'
+            verifyingContract: '0x21d8d4eE83b80bc0Cc0f2B7df3117Cf212d02901'
         };
 
         const types = {
             Attest: [
+                { name: 'attester', type: 'address' },
                 { name: 'schema', type: 'bytes32' },
                 { name: 'recipient', type: 'address' },
                 { name: 'expirationTime', type: 'uint64' },
@@ -73,6 +75,7 @@ export const handleVouch = async (
         };
 
         const value = {
+            attester: attester,
             schema: schemaUID,
             recipient: recipient,
             expirationTime: 0,

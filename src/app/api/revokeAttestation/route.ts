@@ -6,7 +6,7 @@ import prisma from '@/lib/db';
 import { toBigInt } from 'ethers';
 import { Utils } from 'alchemy-sdk';
 
-const easContractAddress = "0x4200000000000000000000000000000000000021";
+const easContractAddress = "0x21d8d4eE83b80bc0Cc0f2B7df3117Cf212d02901";
 const schemaUID = process.env.SCHEMA_ID || "0x5ee00c7a6606190e090ea17749ec77fe23338387c23c0643c4251380f37eebc3";
 
 const eas = new EAS(easContractAddress);
