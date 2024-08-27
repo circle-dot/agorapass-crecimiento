@@ -26,6 +26,7 @@ import VouchButtonCustom from '@/components/ui/VouchButton';
 import FarcasterLogo from '@/../../public/farcaster.svg'
 import Image from 'next/image';
 import truncateWallet from '@/utils/truncateWallet'
+import displayRanking from '@/utils/displayRanking';
 
 function truncateName(name: string) {
     const maxLength = 30; // Maximum characters to display before truncating
@@ -76,10 +77,13 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
                         {/* TODO: Add ENS / Address sliced */}
                     </TooltipProvider>
 
-                    <div className="flex items-center text-sm">
-                        <BlendIcon className="mr-1 h-3 w-3" />
-                        Rank Score {rankScore}
-                    </div>
+                 {rankScore && (
+                       <div className="flex items-center text-sm">
+                       <BlendIcon className="mr-1 h-3 w-3" />
+                       Rank Score {displayRanking(rankScore?.toString())}
+                   </div>
+                 )
+                 }
                 </div>
             </CardHeader>
 
