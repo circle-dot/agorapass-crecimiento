@@ -54,7 +54,7 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
     const avatar = getAvatar(wallet, avatarType);
 
     return (
-        <Card className="w-full">
+        <Card className="w-full flex flex-col">
             <CardHeader className="flex flex-row items-start gap-4 space-y-0">
                 <Avatar>
                     {typeof avatar === 'string' ? (
@@ -122,13 +122,13 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
                 </div>
             </CardContent>
 
-            {authStatus && <div className="flex space-y-1 justify-end">
-                <div className="flex items-center rounded-md bg-secondary text-secondary-foreground">
-                    <VouchButtonCustom recipient={wallet} authStatus={authStatus} />
-                </div>
-            </div>
-            }
-
+            <CardFooter className="mt-auto">
+                {authStatus && (
+                    <div className="ml-auto">
+                        <VouchButtonCustom recipient={wallet} authStatus={authStatus} />
+                    </div>
+                )}
+            </CardFooter>
         </Card>
     );
 }
