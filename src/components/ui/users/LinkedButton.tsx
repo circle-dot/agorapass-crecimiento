@@ -1,9 +1,4 @@
 import { FC, ReactNode } from 'react';
-import Link from 'next/link';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-
-const MySwal = withReactContent(Swal);
 
 interface LinkedButtonProps {
     isLinked: boolean;
@@ -33,10 +28,10 @@ const LinkedButton: FC<LinkedButtonProps> = ({
 
     return isLinked ? (
         <div>
-            <Link href={linkUrl} className={`flex flex-row items-center ${linkedColor}`}>
+            <a href={linkUrl} target='_blank' className={`flex flex-row items-center ${linkedColor}`}>
                 {icon}
                 @{username}
-            </Link>
+            </a>
         </div>
     ) : (
         <button
