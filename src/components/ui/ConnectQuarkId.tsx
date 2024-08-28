@@ -15,6 +15,7 @@ import QRCode from 'react-qr-code';
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { handleVouchQuarkId } from '@/utils/quarkId/handleAttestation';
 import ShinyButton from './ShinyButton';
+import { LoaderCircle } from 'lucide-react'; // Import the spinner icon
 
 function ConnectQuarkId() {
     const { getAccessToken, user } = usePrivy();
@@ -24,7 +25,8 @@ function ConnectQuarkId() {
     const [invitationId, setInvitationId] = useState<string | null>(null);
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [statusData, setStatusData] = useState<any>(null); // State to manage status data
+    const [statusLoading, setStatusLoading] = useState(false); // State for status check loading
+    const [statusData, setStatusData] = useState<any>(null);
 
     useEffect(() => {
         const setupWebSocket = async () => {
@@ -101,6 +103,8 @@ function ConnectQuarkId() {
     const checkStatus = async () => {
         if (!invitationId) return;
 
+        setStatusLoading(true); // Start status check loading
+
         try {
             const response = await fetch('/api/quarkid/pendingQuark', {
                 method: 'POST',
@@ -128,6 +132,8 @@ function ConnectQuarkId() {
             }
         } catch (error) {
             console.error('Error checking status:', error);
+        } finally {
+            setStatusLoading(false); // Stop status check loading
         }
     };
 
@@ -164,7 +170,19 @@ function ConnectQuarkId() {
                                             Click here to connect QuarkId
                                         </ShinyButton>
                                     </a>
-                                    <p>Once you do it, click bellow </p><Button className='bg-accentdarker hover:bg-accentdarker' variant='outline' onClick={checkStatus}>Check the status!</Button>
+                                    <p>Once you do it, click below</p>
+                                    <Button 
+                                        className='bg-accentdarker hover:bg-accentdarker' 
+                                        variant='outline' 
+                                        onClick={checkStatus}
+                                        disabled={statusLoading} // Disable the button while loading
+                                    >
+                                        {statusLoading ? (
+                                            <LoaderCircle className="animate-spin w-5 h-5 mr-2" /> // Spinner icon
+                                        ) : (
+                                            'Check the status!'
+                                        )}
+                                    </Button>
                                 </div>
                             )}
                         </div>
