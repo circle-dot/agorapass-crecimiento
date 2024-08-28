@@ -14,6 +14,7 @@ import {
 import QRCode from 'react-qr-code';
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { handleVouchQuarkId } from '@/utils/quarkId/handleAttestation';
+import ShinyButton from './ShinyButton';
 
 function ConnectQuarkId() {
     const { getAccessToken, user } = usePrivy();
@@ -118,9 +119,17 @@ function ConnectQuarkId() {
                             <QRCode
                                 size={256}
                                 style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                                value={qrValue || 'placeholder'} // Show the placeholder if qrValue is empty
+                                value={qrValue || 'placeholder'}
                                 viewBox={`0 0 256 256`}
                             />
+                            {qrValue && (
+                            <div className='lg:hidden flex flex-col pt-2 gap-y-1 items-center justify-center'>
+                                <b className='font-bold'>In mobile?</b>
+                                <ShinyButton className='bg-primarydark '>
+                                <a href={qrValue}>Click here</a>
+                                </ShinyButton>
+                            </div>
+                            )}
                         </div>
                     )}
                 </div>
