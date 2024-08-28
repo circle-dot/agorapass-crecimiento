@@ -84,6 +84,15 @@ function MainNav() {
                     <ProfileAvatar />
                 </div>
             </div>
+            <a
+                href="https://stamp.network"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="fixed bottom-4 right-4 p-2 bg-gray-700 text-white hover:bg-primarydark hover:text-white rounded-tl-lg rounded-br-lg transition-colors "
+                style={{ zIndex: 9999 }}
+            >
+                Powered by Stamp ⊙
+            </a>
         </div>
     );
 }
