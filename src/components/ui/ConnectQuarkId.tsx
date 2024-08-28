@@ -56,7 +56,7 @@ function ConnectQuarkId() {
                             proofValue,
                             ticketType
                         };
-                        await handleVouchQuarkId(user, wallets, token, payload);
+                        await handleVouchQuarkId(user, wallets, token, payload, true);
                         setIsOpen(false); // Close the modal after handling VouchQuarkId
                     }
                 };
@@ -124,7 +124,7 @@ function ConnectQuarkId() {
                     proofValue,
                     ticketType
                 };
-                await handleVouchQuarkId(user, wallets, await getAccessToken(), payload);
+                await handleVouchQuarkId(user, wallets, await getAccessToken(), payload, false);
                 setIsOpen(false); // Close the dialog after handling VouchQuarkId
             } else {
                 console.log('No existing QuarkId found');

@@ -56,10 +56,11 @@ model Quarkid {
 }
 
 model pendingQuarkId {
+  id        Int      @id @default(autoincrement())
   proofValue     String 
   holderDID      String
   ticketType     String
-  invitationId   String @unique
+  invitationId   String 
   createdAt      DateTime @default(now())
   email          String
 }

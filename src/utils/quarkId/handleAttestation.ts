@@ -9,11 +9,25 @@ export const handleVouchQuarkId = async (
     user: any,
     wallets: any,
     getAccessToken: any,
-    payload: any
+    payload: any,
+    websocket: boolean
 ) => {
     if (!user?.wallet?.address) {
         showErrorAlert('User wallet address is not defined.');
         return;
+    }
+
+    if (websocket){
+        const url = new URL('/api/quarkid/pendingQuark');
+        url.searchParams.append('invitationId', payload.invitationId);
+            const pendingQuarkId = await fetch(url.toString(), {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ invitationId: payload.invitationId }),
+            });
+            console.log('pendingQuarkId',pendingQuarkId)
     }
 
     // Check if semaphoreId already exists using the API route
