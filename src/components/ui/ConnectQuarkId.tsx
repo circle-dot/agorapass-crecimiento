@@ -125,9 +125,9 @@ function ConnectQuarkId() {
                             {qrValue && (
                             <div className='lg:hidden flex flex-col pt-2 gap-y-1 items-center justify-center'>
                                 <b className='font-bold'>In mobile?</b>
-                                <ShinyButton className='bg-primarydark '>
-                                <a href={qrValue}>Click here</a>
-                                </ShinyButton>
+                                <a href={qrValue}> <ShinyButton className='bg-primarydark '>
+                               Click here
+                                </ShinyButton></a>
                             </div>
                             )}
                         </div>
