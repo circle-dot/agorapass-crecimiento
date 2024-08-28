@@ -55,7 +55,9 @@ const ProfileAvatar = () => {
                 title: "User created successfully!",
                 showConfirmButton: false,
                 timer: 1500,
-            }).then(() => window.location.reload());
+            }).then(() => {
+                window.location.href = "/how-to";
+            });
         } catch (error) {
             Swal.fire({
                 icon: "error",
