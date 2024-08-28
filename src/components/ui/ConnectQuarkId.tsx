@@ -23,7 +23,8 @@ function ConnectQuarkId() {
     const [ws, setWs] = useState<WebSocket | null>(null);
     const [invitationId, setInvitationId] = useState<string | null>(null);
     const [isOpen, setIsOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false); // State for loading
+    const [isLoading, setIsLoading] = useState(false);
+    const [statusData, setStatusData] = useState<any>(null); // State to manage status data
 
     useEffect(() => {
         const setupWebSocket = async () => {
@@ -72,9 +73,9 @@ function ConnectQuarkId() {
     }, [ws, invitationId, getAccessToken, user, wallets]);
 
     const generateQRCode = async () => {
-        setIsLoading(true); // Start loading
-        setQrValue(''); // Clear QR value
-        setIsOpen(true); // Open the dialog
+        setIsLoading(true);
+        setQrValue('');
+        setIsOpen(true);
 
         try {
             const data = await handleQuark();
@@ -82,7 +83,7 @@ function ConnectQuarkId() {
                 setQrValue(data.oobContentData);
 
                 const id = data.invitationId;
-                setInvitationId(id); // Save the invitationId
+                setInvitationId(id);
                 const wsUrl = `wss://api.stamp.network/ws/${id}`;
                 const websocket = new WebSocket(wsUrl);
                 setWs(websocket);
@@ -93,7 +94,40 @@ function ConnectQuarkId() {
             console.error('Error generating QR code:', error);
             setQrValue('error');
         } finally {
-            setIsLoading(false); // Stop loading
+            setIsLoading(false);
+        }
+    };
+
+    const checkStatus = async () => {
+        if (!invitationId) return;
+
+        try {
+            const response = await fetch('/api/quarkid/pendingQuark', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ invitationId: invitationId }),
+            });
+
+            const result = await response.json();
+            if (response.ok && result.existingQuarkId) {
+                setStatusData(result.existingQuarkId);
+                const { proofValue, holderDID, ticketType, invitationId, email } = result.existingQuarkId;
+                const payload = {
+                    holderDID,
+                    email,
+                    proofValue,
+                    ticketType
+                };
+                await handleVouchQuarkId(user, wallets, await getAccessToken(), payload);
+                setIsOpen(false); // Close the dialog after handling VouchQuarkId
+            } else {
+                console.log('No existing QuarkId found');
+                setStatusData(null);
+            }
+        } catch (error) {
+            console.error('Error checking status:', error);
         }
     };
 
@@ -123,12 +157,15 @@ function ConnectQuarkId() {
                                 viewBox={`0 0 256 256`}
                             />
                             {qrValue && (
-                            <div className='lg:hidden flex flex-col pt-2 gap-y-1 items-center justify-center'>
-                                <b className='font-bold'>In mobile?</b>
-                                <a href={qrValue}> <ShinyButton className='bg-primarydark '>
-                               Click here
-                                </ShinyButton></a>
-                            </div>
+                                <div className='lg:hidden flex flex-col pt-2 gap-y-1 items-center justify-center'>
+                                    <b className='font-bold'>In mobile?</b>
+                                    <a href={qrValue}>
+                                        <ShinyButton className='bg-primarydark '>
+                                            Click here
+                                        </ShinyButton>
+                                    </a>
+                                    <Button onClick={checkStatus}>Check status</Button>
+                                </div>
                             )}
                         </div>
                     )}

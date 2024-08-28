@@ -55,6 +55,15 @@ model Quarkid {
   ticketType     String
 }
 
+model pendingQuarkId {
+  proofValue     String 
+  holderDID      String
+  ticketType     String
+  invitationId   String @unique
+  createdAt      DateTime @default(now())
+  email          String
+}
+
 model Ranking {
   id        Int      @id @default(autoincrement())
   address   String   @unique
