@@ -6,8 +6,9 @@ export async function POST(request: NextRequest) {
     const { invitationId } = await request.json();
 
     try {
-        const existingQuarkId = await prisma.pendingQuarkId.findUnique({
-            where: { invitationId }
+        const existingQuarkId = await prisma.pendingQuarkId.findFirst({
+            where: { invitationId },
+            orderBy: { createdAt: 'desc' }  // Replace with the appropriate field for sorting
         });
 
         if (existingQuarkId) {
