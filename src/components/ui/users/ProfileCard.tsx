@@ -31,7 +31,7 @@ const ShareProfile = lazy(() => import('./ShareProfile'));
 const MySwal = withReactContent(Swal);
 
 export const FormSchema = z.object({
-    username: z.string().min(2, { message: "Username must be at least 2 characters." }),
+    username: z.string().max(20, { message: "Username must be less than 20 characters." }),
     bio: z.string().max(160, { message: "Bio must not be longer than 160 characters." }).optional(),
     avatarType: z.enum(['metamask', 'blockies']).default('metamask'),
 });
@@ -377,6 +377,7 @@ export function ProfileCard({ data, onSubmit }: ProfileCardProps) {
                                             user={user}
                                             unlinkTwitter={unlinkTwitter}
                                             unlinkFarcaster={unlinkFarcaster}
+                                            setDialogOpen={setIsDialogOpen}
                                         />
 
                                         <DialogFooter>

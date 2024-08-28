@@ -9,9 +9,10 @@ interface UnlinkAccountsProps {
     user?: User | null | undefined;
     unlinkTwitter: (subject: string) => Promise<User>;
     unlinkFarcaster: (fid: number) => Promise<User>;
+    setDialogOpen: (isOpen: boolean) => void;  // Add this line
 }
 
-const UnlinkAccounts: React.FC<UnlinkAccountsProps> = ({ user, unlinkTwitter, unlinkFarcaster }) => {
+const UnlinkAccounts: React.FC<UnlinkAccountsProps> = ({ user, unlinkTwitter, unlinkFarcaster, setDialogOpen }) => {
     const { getAccessToken } = usePrivy();
 
     const updateAccountDisplay = async (platform: string) => {
@@ -57,27 +58,29 @@ const UnlinkAccounts: React.FC<UnlinkAccountsProps> = ({ user, unlinkTwitter, un
         }).then((result) => {
             if (result.isConfirmed) {
                 if (platform === 'Twitter') {
-                    if (!user.twitter) {
-                        MySwal.fire('Error!', 'X username is missing.', 'error');
+                    if (!user.twitter || !user.twitter.subject) {
+                        MySwal.fire('Error!', 'Twitter username is missing.', 'error');
                         return;
                     }
                     unlinkTwitter(user.twitter.subject)
                         .then(() => updateAccountDisplay('Twitter'))
                         .then(() => {
-                            MySwal.fire('Unlinked!', 'Your X account has been unlinked.', 'success');
+                            MySwal.fire('Unlinked!', 'Your Twitter account has been unlinked.', 'success');
+                            setDialogOpen(false);  // Close the dialog
                         })
                         .catch((error: Error) => {
                             MySwal.fire('Error!', error.message, 'error');
                         });
                 } else if (platform === 'Farcaster') {
                     if (!user.farcaster || user.farcaster.fid === null) {
-                        MySwal.fire('Error!', 'Farcaster username is missing.', 'error');
+                        MySwal.fire('Error!', 'Farcaster ID is missing.', 'error');
                         return;
                     }
                     unlinkFarcaster(user.farcaster.fid)
                         .then(() => updateAccountDisplay('Farcaster'))
                         .then(() => {
                             MySwal.fire('Unlinked!', 'Your Farcaster account has been unlinked.', 'success');
+                            setDialogOpen(false);  // Close the dialog
                         })
                         .catch((error: Error) => {
                             MySwal.fire('Error!', error.message, 'error');
@@ -95,7 +98,7 @@ const UnlinkAccounts: React.FC<UnlinkAccountsProps> = ({ user, unlinkTwitter, un
                         onClick={() => handleUnlink('Twitter')}
                         className='w-full py-2 px-4 bg-black text-white rounded-lg hover:bg-red-700 transition-colors'
                     >
-                        Unlink X
+                        Unlink Twitter
                     </button>
                 )}
                 {user?.farcaster && (
