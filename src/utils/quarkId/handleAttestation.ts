@@ -17,18 +17,30 @@ export const handleVouchQuarkId = async (
         return;
     }
 
-    if (websocket){
-        const url = new URL('/api/quarkid/pendingQuark');
+    if (websocket) {
+        const url = new URL('/api/quarkid/pendingQuark', window.location.origin);
         url.searchParams.append('invitationId', payload.invitationId);
-            const pendingQuarkId = await fetch(url.toString(), {
+
+        try {
+            const response = await fetch(url.toString(), {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ invitationId: payload.invitationId }),
+                // Typically, DELETE requests should not have a body
             });
-            console.log('pendingQuarkId',pendingQuarkId)
+
+            if (!response.ok) {
+                throw new Error('Failed to delete pendingQuarkId');
+            }
+
+            const result = await response.json();
+            console.log('pendingQuarkId', result);
+        } catch (error) {
+            console.error('Error during DELETE request:', error);
+        }
     }
+
 
     // Check if semaphoreId already exists using the API route
     const response = await fetch('/api/quarkid/checkDID', {
