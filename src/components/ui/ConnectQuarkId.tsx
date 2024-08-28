@@ -157,14 +157,14 @@ function ConnectQuarkId() {
                                 viewBox={`0 0 256 256`}
                             />
                             {qrValue && (
-                                <div className='lg:hidden flex flex-col pt-2 gap-y-1 items-center justify-center'>
+                                <div className='lg:hidden flex flex-col pt-2 gap-y-1.5 items-center justify-center'>
                                     <b className='font-bold'>In mobile?</b>
                                     <a href={qrValue}>
                                         <ShinyButton className='bg-primarydark '>
-                                            Click here
+                                            Click here to connect QuarkId
                                         </ShinyButton>
                                     </a>
-                                    <Button onClick={checkStatus}>Check status</Button>
+                                    <p>Once you do it, click bellow </p><Button className='bg-accentdarker hover:bg-accentdarker' variant='outline' onClick={checkStatus}>Check the status!</Button>
                                 </div>
                             )}
                         </div>
