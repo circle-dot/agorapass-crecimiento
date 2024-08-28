@@ -202,7 +202,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                                             <div className="max-h-96 overflow-y-auto">
                                                 {madeVouchesData?.map((attestation: any) => (
                                                     <div key={attestation.id} className={`p-4 my-2 rounded-lg shadow-sm ${attestation.revoked ? 'bg-red-50' : 'bg-gray-50'}`}>
-                                                        Vouched for <Link href={'/address/' + attestation.recipient} className="text-blue-600 hover:underline">{attestation.recipient}</Link> on {new Date(attestation.timeCreated * 1000).toLocaleDateString()} <Link href={'/vouch/' + attestation.id}> <br /> <span className='flex flex-row justify-start items-center'>See details<View className="h-5 w-5" /></span> </Link> {attestation.revoked && <Badge variant="destructive">Revoked on {new Date(attestation.revocationTime * 1000).toLocaleDateString()}</Badge>}
+                                                        Vouched for <Link href={'/address/' + attestation.recipient} className="text-blue-600 hover:underline">{attestation.recipient}</Link> on {new Date(attestation.timeCreated * 1000).toLocaleDateString()} <Link href={'/vouch/' + attestation.id}> <br /> <span className='flex flex-row justify-start items-center text-blue-700'>See details<View className="h-5 w-5" /></span> </Link> {attestation.revoked && <Badge variant="destructive">Revoked on {new Date(attestation.revocationTime * 1000).toLocaleDateString()}</Badge>}
                                                     </div>
                                                 ))}
                                             </div>
