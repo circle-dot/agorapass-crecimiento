@@ -48,7 +48,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         }
     }, [ready, authenticated]);
 
-    const address = params.slug; // Replace with the wallet address
+    const address = params.slug;
 
     const { data: madeData, error: madeError, isLoading: madeLoading } = useQuery({
         queryKey: ['attestationsMadeCount', schemaId, address],
@@ -117,7 +117,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     const avatar = getAvatar(address, avatarType);
 
     return (
-        <div className="flex items-center justify-center bg-gray-100 w-full p-4">
+        <div className="flex items-center justify-center bg-gray-100 p-4 w-screen">
             <motion.div
                 initial={{
                     opacity: 0,
